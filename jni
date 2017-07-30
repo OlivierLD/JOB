@@ -7,7 +7,6 @@ PATH=$JAVA_HOME/bin:$PATH
 mkdir build 2> /dev/null
 mkdir build/classes 2> /dev/null
 echo \>\> Compiling Java
-mkdir classes 2> /dev/null
 javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/jhard/io/JHardNativeInterface.java
 echo \>\> Running javah
 javah -jni -cp ./build/classes -o src/C/jhard.h jhard.io.JHardNativeInterface

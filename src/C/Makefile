@@ -12,7 +12,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 jhard.h:
-	javah -classpath .. -o jhard.h jhard.io.JHardNativeInterface
+	javah -classpath ../../build/classes/main -o jhard.h jhard.io.JHardNativeInterface
 
 clean:
 	rm -f $(TARGET) $(OBJS)
