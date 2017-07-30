@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo java -cp build/libs/io-0.1.jar -Djava.library.path=src/native io.samples.LedCounter
+sudo java -cp build/libs/JavaHard-0.1.jar -Djava.library.path=src/C examples.io.LedCounter
