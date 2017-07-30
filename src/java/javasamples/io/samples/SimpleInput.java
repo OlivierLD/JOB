@@ -1,6 +1,6 @@
 package io.samples;
 
-import processing.io.*;
+import jhard.io.GPIO;
 
 /**
  * Input from a push button

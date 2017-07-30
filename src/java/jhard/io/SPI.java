@@ -22,7 +22,7 @@
 
 package jhard.io;
 
-import jhard.io.NativeInterface;
+import jhard.io.JHardNativeInterface;
 
 import java.io.File;
 import java.util.List;
@@ -75,16 +75,16 @@ public class SPI {
    *  @webref
    */
   public SPI(String dev) {
-    NativeInterface.loadLibrary();
+    JHardNativeInterface.loadLibrary();
     this.dev = dev;
 
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
-    handle = NativeInterface.openDevice("/dev/" + dev);
+    handle = JHardNativeInterface.openDevice("/dev/" + dev);
     if (handle < 0) {
-      throw new RuntimeException(NativeInterface.getError(handle));
+      throw new RuntimeException(JHardNativeInterface.getError(handle));
     }
   }
 
@@ -94,10 +94,10 @@ public class SPI {
    *  @webref
    */
   public void close() {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
-    NativeInterface.closeDevice(handle);
+    JHardNativeInterface.closeDevice(handle);
     handle = 0;
   }
 
@@ -117,7 +117,7 @@ public class SPI {
    *  @webref
    */
   public static String[] list() {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       // as on the Raspberry Pi
       return new String[]{ "spidev0.0", "spidev0.1" };
     }
@@ -160,25 +160,25 @@ public class SPI {
    *  @webref
    */
   public byte[] transfer(byte[] out) {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return new byte[out.length];
     }
 
     // track the current setting per device across multiple instances
     String curSettings = maxSpeed + "-" + dataOrder + "-" + mode;
     if (!curSettings.equals(settings.get(dev))) {
-      int ret = NativeInterface.setSpiSettings(handle, maxSpeed, dataOrder, mode);
+      int ret = JHardNativeInterface.setSpiSettings(handle, maxSpeed, dataOrder, mode);
       if (ret < 0) {
-        System.err.println(NativeInterface.getError(handle));
+        System.err.println(JHardNativeInterface.getError(handle));
         throw new RuntimeException("Error updating device configuration");
       }
       settings.put(dev, curSettings);
     }
 
     byte[] in = new byte[out.length];
-    int transferred = NativeInterface.transferSpi(handle, out, in);
+    int transferred = JHardNativeInterface.transferSpi(handle, out, in);
     if (transferred < 0) {
-      throw new RuntimeException(NativeInterface.getError(transferred));
+      throw new RuntimeException(JHardNativeInterface.getError(transferred));
     } else if (transferred < out.length) {
       throw new RuntimeException("Fewer bytes transferred than requested: " + transferred);
     }

@@ -22,7 +22,7 @@
 
 package jhard.io;
 
-import jhard.io.NativeInterface;
+import jhard.io.JHardNativeInterface;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -47,7 +47,7 @@ public class PWM {
    *  @webref
    */
   public PWM(String channel) {
-    NativeInterface.loadLibrary();
+    JHardNativeInterface.loadLibrary();
 
     int pos = channel.indexOf("/pwm");
     if (pos == -1) {
@@ -56,13 +56,13 @@ public class PWM {
     chip = channel.substring(0, pos);
     this.channel = Integer.parseInt(channel.substring(pos+4));
 
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
     // export channel through sysfs
     String fn = "/sys/class/pwm/" + chip + "/export";
-    int ret = NativeInterface.writeFile(fn, Integer.toString(this.channel));
+    int ret = JHardNativeInterface.writeFile(fn, Integer.toString(this.channel));
     if (ret < 0) {
       if (ret == -2) {    // ENOENT
         System.err.println("Make sure your kernel is compiled with PWM_SYSFS enabled and you have the necessary PWM driver for your platform");
@@ -73,7 +73,7 @@ public class PWM {
       }
       // XXX: check
       if (ret != -16) {   // EBUSY, returned when the pin is already exported
-        throw new RuntimeException(fn + ": " + NativeInterface.getError(ret));
+        throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
       }
     }
 
@@ -91,14 +91,14 @@ public class PWM {
    *  @webref
    */
   public void clear() {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
     String fn = String.format("/sys/class/pwm/%s/pwm%d/enable", chip, channel);
-    int ret = NativeInterface.writeFile(fn, "0");
+    int ret = JHardNativeInterface.writeFile(fn, "0");
     if (ret < 0) {
-      throw new RuntimeException(NativeInterface.getError(ret));
+      throw new RuntimeException(JHardNativeInterface.getError(ret));
     }
   }
 
@@ -107,7 +107,7 @@ public class PWM {
    *  @webref
    */
   public void close() {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
@@ -115,14 +115,14 @@ public class PWM {
     // XXX: also check GPIO
 
     String fn = "/sys/class/pwm/" + chip + "/unexport";
-    int ret = NativeInterface.writeFile(fn, Integer.toString(channel));
+    int ret = JHardNativeInterface.writeFile(fn, Integer.toString(channel));
     if (ret < 0) {
       if (ret == -2) {    // ENOENT
         System.err.println("Make sure your kernel is compiled with PWM_SYSFS enabled and you have the necessary PWM driver for your platform");
       }
       // XXX: check
       // EINVAL is also returned when trying to unexport pins that weren't exported to begin with
-      throw new RuntimeException(NativeInterface.getError(ret));
+      throw new RuntimeException(JHardNativeInterface.getError(ret));
     }
   }
 
@@ -133,7 +133,7 @@ public class PWM {
    *  @webref
    */
   public static String[] list() {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return new String[]{ "pwmchip0/pwm0", "pwmchip0/pwm1" };
     }
 
@@ -169,15 +169,15 @@ public class PWM {
    *  @webref
    */
   public void set(int period, float duty) {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
     // set period
     String fn = String.format("/sys/class/pwm/%s/pwm%d/period", chip, channel);
     // convert to nanoseconds
-    int ret = NativeInterface.writeFile(fn, String.format("%d", (int)(1_000_000_000 / period)));
+    int ret = JHardNativeInterface.writeFile(fn, String.format("%d", (int)(1_000_000_000 / period)));
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + NativeInterface.getError(ret));
+      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
     }
 
     // set duty cycle
@@ -187,16 +187,16 @@ public class PWM {
       throw new IllegalArgumentException("Illegal argument");
     }
     // convert to nanoseconds
-    ret = NativeInterface.writeFile(fn, String.format("%d", (int)((1_000_000_000 * duty) / period)));
+    ret = JHardNativeInterface.writeFile(fn, String.format("%d", (int)((1_000_000_000 * duty) / period)));
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + NativeInterface.getError(ret));
+      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
     }
 
     // enable output
     fn = String.format("/sys/class/pwm/%s/pwm%d/enable", chip, channel);
-    ret = NativeInterface.writeFile(fn, "1");
+    ret = JHardNativeInterface.writeFile(fn, "1");
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + NativeInterface.getError(ret));
+      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
     }
   }
 

@@ -47,7 +47,7 @@ public class SoftwareServo {
    *  @webref
    */
   public SoftwareServo(Object parent) {
-    NativeInterface.loadLibrary();
+    JHardNativeInterface.loadLibrary();
   }
 
 
@@ -115,18 +115,18 @@ public class SoftwareServo {
     if (handle < 0) {
       // start a new thread
       GPIO.pinMode(pin, GPIO.OUTPUT);
-      if (NativeInterface.isSimulated()) {
+      if (JHardNativeInterface.isSimulated()) {
         return;
       }
-      handle = NativeInterface.servoStartThread(pin, pulse, period);
+      handle = JHardNativeInterface.servoStartThread(pin, pulse, period);
       if (handle < 0) {
-        throw new RuntimeException(NativeInterface.getError((int)handle));
+        throw new RuntimeException(JHardNativeInterface.getError((int)handle));
       }
     } else {
       // thread already running
-      int ret = NativeInterface.servoUpdateThread(handle, pulse, period);
+      int ret = JHardNativeInterface.servoUpdateThread(handle, pulse, period);
       if (ret < 0) {
-        throw new RuntimeException(NativeInterface.getError(ret));
+        throw new RuntimeException(JHardNativeInterface.getError(ret));
       }
     }
   }
@@ -149,12 +149,12 @@ public class SoftwareServo {
   public void detach() {
     if (0 <= handle) {
       // stop thread
-      int ret = NativeInterface.servoStopThread(handle);
+      int ret = JHardNativeInterface.servoStopThread(handle);
       GPIO.pinMode(pin, GPIO.INPUT);
       handle = -1;
       pin = -1;
       if (ret < 0) {
-        throw new RuntimeException(NativeInterface.getError(ret));
+        throw new RuntimeException(JHardNativeInterface.getError(ret));
       }
     }
   }

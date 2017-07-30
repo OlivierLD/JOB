@@ -22,7 +22,7 @@
 
 package jhard.io;
 
-import jhard.io.NativeInterface;
+import jhard.io.JHardNativeInterface;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -50,10 +50,10 @@ public class LED {
    *  @webref
    */
   public LED(String dev) {
-    NativeInterface.loadLibrary();
+    JHardNativeInterface.loadLibrary();
     this.dev = dev;
 
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
@@ -93,12 +93,12 @@ public class LED {
 
     // disable trigger
     String fn = "/sys/class/leds/" + dev + "/trigger";
-    int ret = NativeInterface.writeFile(fn, "none");
+    int ret = JHardNativeInterface.writeFile(fn, "none");
     if (ret < 0) {
       if (ret == -13) {     // EACCES
         System.err.println("You might need to install a custom udev rule to allow regular users to modify /sys/class/leds/*.");
       }
-      throw new RuntimeException(NativeInterface.getError(ret));
+      throw new RuntimeException(JHardNativeInterface.getError(ret));
     }
   }
 
@@ -113,14 +113,14 @@ public class LED {
       System.err.println("Brightness must be between 0.0 and 1.0.");
       throw new IllegalArgumentException("Illegal argument");
     }
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
     String fn = "/sys/class/leds/" + dev + "/brightness";
-    int ret = NativeInterface.writeFile(fn, Integer.toString((int)(bright * maxBrightness)));
+    int ret = JHardNativeInterface.writeFile(fn, Integer.toString((int)(bright * maxBrightness)));
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + NativeInterface.getError(ret));
+      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
     }
   }
 
@@ -129,21 +129,21 @@ public class LED {
    *  @webref
    */
   public void close() {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
     // restore previous settings
     String fn = "/sys/class/leds/" + dev + "/brightness";
-    int ret = NativeInterface.writeFile(fn, Integer.toString(prevBrightness));
+    int ret = JHardNativeInterface.writeFile(fn, Integer.toString(prevBrightness));
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + NativeInterface.getError(ret));
+      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
     }
 
     fn = "/sys/class/leds/" + dev + "/trigger";
-    ret = NativeInterface.writeFile(fn, prevTrigger);
+    ret = JHardNativeInterface.writeFile(fn, prevTrigger);
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + NativeInterface.getError(ret));
+      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
     }
   }
 
@@ -153,7 +153,7 @@ public class LED {
    *  @webref
    */
   public static String[] list() {
-    if (NativeInterface.isSimulated()) {
+    if (JHardNativeInterface.isSimulated()) {
       // as on the Raspberry Pi
       return new String[]{ "led0", "led1" };
     }
