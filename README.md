@@ -29,7 +29,10 @@ Finally, do the `gradle` build from the project root:
 This generates a `JavaHard-0.1.jar` in the `build/libs` directory.
 
 ## To run it
-This is a work in progress... See the sample scripts `sample.0*`, see ho the `java.libray.path` variable is set.
+This is a work in progress... See the sample scripts `sample.0*`, see ho the `java.library.path` variable is set.
 This is the one used to refer to the location of `libjavahard-io.so`.
+
+## TODO
+A lot!
 
 ---

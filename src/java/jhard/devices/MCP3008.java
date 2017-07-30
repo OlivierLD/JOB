@@ -1,11 +1,9 @@
-package examples.io; 
+package jhard.devices;
 
 import jhard.io.SPI;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
-// MCP3008 is a Analog-to-Digital converter using SPI
-// that has 8 input channels
+// MCP3008 is an Analog-to-Digital Converter using SPI.
+// It has 8 input channels.
 // datasheet: http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf
 
 /*
@@ -30,8 +28,8 @@ public class MCP3008 extends SPI {
   }
 
   public float getAnalog(int channel) {
-    if (channel < 0 ||  7 < channel) {
-      System.err.println("The channel needs to be from 0 to 7");
+    if (channel < 0 || 7 < channel) {
+      System.err.println("Channel must be in [0..7]");
       throw new IllegalArgumentException("Unexpected channel");
     }
     byte[] out = { 0, 0, 0 };
@@ -41,24 +39,5 @@ public class MCP3008 extends SPI {
     int val = ((in[1] & 0x03) << 8) | (in[2] & 0xff);
     // val is between 0 and 1023
     return val/1023.0f;
-  }
-
-  private static boolean go = true;
-  // Main for tests
-  public static void main(String... args) {
-    String available[] = SPI.list();
-    System.out.println(String.format("Available: %s",
-      Arrays.asList(available)
-        .stream()
-        .collect(Collectors.joining(", "))));
-    MCP3008 adc = new MCP3008(SPI.list()[0]);
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      go = false;
-    }));
-    while (go) {
-      System.out.println(String.format("Analog value: %.04f", adc.getAnalog(0)));
-    }
-    adc.close();
-    System.out.println("Bye");
   }
 }
