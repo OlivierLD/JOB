@@ -134,14 +134,22 @@ public class SSD1306 extends I2C {
     writeCommand(0x40 | 0x0); // set start line
 
     // send the frame buffer as 16 byte long packets
-    for (int i=0; i < buf.length/16; i++) {
-      super.beginTransmission(address);
-      super.write(0x40);  // indicates data write
-      for (int j=0; j < 16; j++) {
-        super.write(buf[i*16+j]);
-      }
-      super.endTransmission();
+    // for (int i=0; i < buf.length/16; i++) {
+    //   super.beginTransmission(address);
+    //   super.write(0x40);  // indicates data write
+    //   for (int j=0; j < 16; j++) {
+    //     super.write(buf[i*16+j]);
+    //   }
+    //   super.endTransmission();
+    // }
+
+    super.beginTransmission(address);
+    super.write(0x40);  // indicates data write
+    for (int i=0; i < buf.length; i++) {
+      super.write(buf[i]);
     }
+    super.endTransmission();
+
   }
 
   public void display() {
