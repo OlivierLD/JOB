@@ -36,8 +36,7 @@ public class MCP3008 extends SPI {
     // encode the channel number in the first byte
     out[0] = (byte)(0x18 | channel);
     byte[] in = transfer(out);
-    int val = ((in[1] & 0x03) << 8) | (in[2] & 0xff);
-    // val is between 0 and 1023
-    return val/1023.0f;
+    int val = ((in[1] & 0x03) << 8) | (in[2] & 0xff); // val is between 0 and 1023
+    return val/1023.0f; // translated to [0..1]
   }
 }
