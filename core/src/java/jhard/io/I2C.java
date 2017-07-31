@@ -34,7 +34,7 @@ import java.util.Arrays;
  */
 public class I2C {
 
-  protected String dev;
+  protected String bus;
   protected int handle;
   protected int slave;
   protected byte[] out;
@@ -43,19 +43,19 @@ public class I2C {
 
   /**
    *  Opens an I2C interface as master
-   *  @param dev interface name
+   *  @param bus interface name
    *  @see list
    *  @webref
    */
-  public I2C(String dev) {
+  public I2C(String bus) {
     JHardNativeInterface.loadLibrary();
-    this.dev = dev;
+    this.bus = bus;
 
     if (JHardNativeInterface.isSimulated()) {
       return;
     }
 
-    handle = JHardNativeInterface.openDevice("/dev/" + dev);
+    handle = JHardNativeInterface.openDevice("/dev/" + bus);
     if (handle < 0) {
       throw new RuntimeException(JHardNativeInterface.getError(handle));
     }

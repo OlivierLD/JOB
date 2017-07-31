@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group = 'jhard-io'
+version = '0.1'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/java']
+        }
+    }
+    test {
+        java {
+            srcDir 'tests/java'
+        }
+    }
+}
+
+dependencies {
+}

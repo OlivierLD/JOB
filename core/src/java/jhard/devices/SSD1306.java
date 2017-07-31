@@ -10,20 +10,23 @@ import jhard.io.I2C;
 public class SSD1306 extends I2C {
 
   public final static int DEFAULT_ADDR = 0x3c;
-  public final static String DEFAULT_DEV = "i2c-1";
+  public final static String DEFAULT_BUS = "i2c-1";
 
   private int address;
 
   // there can be more than one device connected to the bus
   // as long as they have different addresses
   public SSD1306() {
-    this(DEFAULT_DEV, DEFAULT_ADDR);
+    this(DEFAULT_BUS, DEFAULT_ADDR);
   }
-  public SSD1306(String dev) {
-    this(dev, DEFAULT_ADDR);
+  public SSD1306(int addr) {
+    this(DEFAULT_BUS, addr);
   }
-  public SSD1306(String dev, int address) {
-    super(dev);
+  public SSD1306(String bus) {
+    this(bus, DEFAULT_ADDR);
+  }
+  public SSD1306(String bus, int address) {
+    super(bus);
     this.address = address;
     init();
   }
@@ -63,6 +66,31 @@ public class SSD1306 extends I2C {
       writeCommand(0xa6);
     }
   }
+
+  /**
+	 * Use if the screen is to be seen in a mirror.
+	 * Left and right are inverted.
+	 *
+	 * @param buff the screen buffer to invert
+	 * @param w    width (in pixels) of the above
+	 * @param h    height (in pixels) of the above. One row has 8 pixels.
+	 * @return the mirrored buffer.
+	 */
+	public static int[] mirror(int[] buff, int w, int h) {
+		int len = buff.length;
+		if (len != w * (h / 8)) {
+			throw new RuntimeException(String.format("Invalid buffer length %d, should be %d (%d * %d)", len, (w * (h / 8)), w, h));
+		}
+		int[] mirror = new int[len];
+		for (int row = 0; row < (h / 8); row++) {
+			for (int col = 0; col < w; col++) {
+				int buffIdx = (row * w) + col;
+				int mirrorBuffIdx = (row * w) + (w - col - 1);
+				mirror[mirrorBuffIdx] = buff[buffIdx];
+			}
+		}
+		return mirror;
+	}
 
   // TODO Object: PImage
   public void sendImage(Object img) {
