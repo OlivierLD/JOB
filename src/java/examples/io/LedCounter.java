@@ -29,17 +29,15 @@ public class LedCounter {
 
   private int frameCount = 0;
   public void flip() {
-    // make the LEDs count in binary
+    frameCount++;
     for (int i=0; i < leds.length; i++) {
-      if ((frameCount & (1 << i)) != 0) {
-
+      if ((frameCount % (i + 1)) == 0) {
         leds[i].brightness(1.0f);
       } else {
         leds[i].brightness(0.0f);
       }
     }
     System.out.println(frameCount);
-    frameCount++;
   }
 
   public void shutdown() {
