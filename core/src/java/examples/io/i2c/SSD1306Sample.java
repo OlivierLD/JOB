@@ -1,3 +1,5 @@
+package examples.io.i2c;
+
 import jhard.devices.SSD1306;
 import jhard.devices.lcdutils.ScreenBuffer;
 import jhard.devices.lcdutils.img.ImgInterface;
