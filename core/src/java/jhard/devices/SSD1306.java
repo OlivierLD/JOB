@@ -123,7 +123,8 @@ public class SSD1306 extends I2C {
   }
 
   public void sendFramebuffer(byte[] buf) {
-    if (buf.length != 1024) {
+//  if (buf.length != 1024) {
+    if (buf.length % 512 != 0) {
       System.err.println(String.format("The framebuffer should be 1024 bytes long (found %d), with one bit per pixel", buf.length));
       throw new IllegalArgumentException("Unexpected buffer size");
     }
