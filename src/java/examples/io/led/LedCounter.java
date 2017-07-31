@@ -1,4 +1,4 @@
-package examples.io; 
+package examples.io.led; 
 
 import jhard.io.LED;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package examples.io;
+package examples.io.spi;
 
 import jhard.io.SPI;
 import jhard.devices.MCP3008;

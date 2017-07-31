@@ -1,4 +1,4 @@
-package examples.io;
+package examples.io.gpio;
 
 import jhard.io.GPIO;
 

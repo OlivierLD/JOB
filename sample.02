@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo java -cp build/libs/JavaHard-0.1.jar -Djava.library.path=src/C examples.io.SimpleInput
+sudo java -cp build/libs/JavaHard-0.1.jar -Djava.library.path=src/C examples.io.gpio.SimpleInput
