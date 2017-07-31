@@ -45,7 +45,7 @@ public class ScreenBuffer {
 	}
 
 	public void clear(Mode mode) {
-		for (int i = 0; i < 2 * this.h; i++) {
+		for (int i = 0; i < this.h; i++) {
 			for (int j = 0; j < this.w; j++) {
 				screenMatrix[i][j] = (mode == Mode.WHITE_ON_BLACK ? ' ' : 'X');
 			}
