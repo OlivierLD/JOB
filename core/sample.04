@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo java -cp build/libs/core-0.1-all.jar -Djava.library.path=src/C examples.io.i2c.SSD1306Sample

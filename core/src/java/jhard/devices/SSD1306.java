@@ -13,6 +13,7 @@ public class SSD1306 extends I2C {
   public final static String DEFAULT_BUS = "i2c-1";
 
   private int address;
+  private byte[] buffer = null;
 
   // there can be more than one device connected to the bus
   // as long as they have different addresses
@@ -30,6 +31,14 @@ public class SSD1306 extends I2C {
     this.address = address;
     init();
   }
+
+  public void setBuffer(byte[] buffer) {
+		this.buffer = buffer;
+	}
+
+	public byte[] getBuffer() {
+		return buffer;
+	}
 
   protected void init() {
     writeCommand(0xae);         // turn display off
@@ -76,12 +85,12 @@ public class SSD1306 extends I2C {
 	 * @param h    height (in pixels) of the above. One row has 8 pixels.
 	 * @return the mirrored buffer.
 	 */
-	public static int[] mirror(int[] buff, int w, int h) {
+	public static byte[] mirror(byte[] buff, int w, int h) {
 		int len = buff.length;
 		if (len != w * (h / 8)) {
 			throw new RuntimeException(String.format("Invalid buffer length %d, should be %d (%d * %d)", len, (w * (h / 8)), w, h));
 		}
-		int[] mirror = new int[len];
+		byte[] mirror = new byte[len];
 		for (int row = 0; row < (h / 8); row++) {
 			for (int col = 0; col < w; col++) {
 				int buffIdx = (row * w) + col;
@@ -132,6 +141,10 @@ public class SSD1306 extends I2C {
       }
       super.endTransmission();
     }
+  }
+
+  public void display() {
+    this.sendFramebuffer(this.buffer);
   }
 
   protected void writeCommand(int arg1) {

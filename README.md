@@ -5,11 +5,24 @@ Deeply inspired by the work [Gottfried Haider](https://github.com/gohai/processi
 ---
 
 ## To build it
-If your `JAVA_HOME` variable is not set, set it, and update your `PATH`, you will need this for `javah` to be found:
+You will need `javac` and `javah`.
+To know if they are available, type
+```bash
+ $> which javac
+ $> which javah
+```
+If at least one of the commands above returns nothing, then you need to update your `PATH`.
+If your `JAVA_HOME` variable is not set, set it, and update your `PATH`, as follow:
 ```bash
  $> JAVA_HOME=/opt/jdk/jdk1.8.0_112
  $> PATH=$JAVA_HOME/bin:$PATH
 ```
+After that, the commands above should return the expected values. You can check if thei is correct by typing
+```bash
+ $> javac -version
+ $> javah -version
+```
+
 Compile the Java interface to the native code, from the project root:
 ```bash
  $> cd core

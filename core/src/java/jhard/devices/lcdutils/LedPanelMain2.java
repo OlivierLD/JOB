@@ -35,7 +35,7 @@ public class LedPanelMain2
 
   private final static int BUFFER_SIZE = (NB_COLS * NB_LINES) / 8;
 
-  private static int[] buffer = new int[BUFFER_SIZE];
+  private static byte[] buffer = new byte[BUFFER_SIZE];
 
   public LedPanelMain2()
   {
@@ -105,7 +105,7 @@ public class LedPanelMain2
    *
    * @param screenbuffer as expected by the device.
    */
-  private void setBuffer(int[] screenbuffer)
+  private void setBuffer(byte[] screenbuffer)
   {
     // This displays the buffer top to bottom, instead of left to right
     char[][] screenMatrix = new char[NB_LINES][NB_COLS];

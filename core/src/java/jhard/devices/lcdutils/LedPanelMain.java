@@ -104,7 +104,7 @@ public class LedPanelMain
 	 *
 	 * @param screenbuffer as expected by the device.
 	 */
-	private void setBuffer(int[] screenbuffer) {
+	private void setBuffer(byte[] screenbuffer) {
 		// This displays the buffer top to bottom, instead of left to right
 		char[][] screenMatrix = new char[NB_LINES][NB_COLS];
 		for (int i = 0; i < NB_COLS; i++) {
@@ -144,7 +144,6 @@ public class LedPanelMain
 		ledPanel.repaint();
 	}
 
-	@SuppressWarnings("oracle.jdeveloper.java.insufficient-catch-block")
 	public void doYourJob() {
 		LedPanelMain lcd = instance;
 		againButton.setEnabled(false);
@@ -169,7 +168,7 @@ public class LedPanelMain
 				} catch (Exception ex) {
 				}
 
-				int[] mirror = SSD1306.mirror(sb.getScreenBuffer(), NB_COLS, NB_LINES);
+				byte[] mirror = SSD1306.mirror(sb.getScreenBuffer(), NB_COLS, NB_LINES);
 
 				lcd.setBuffer(mirror);
 
