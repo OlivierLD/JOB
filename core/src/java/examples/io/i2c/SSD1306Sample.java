@@ -29,8 +29,9 @@ public class SSD1306Sample {
 			sb.line(0, 32, 125, 19);
 		}
 
-		if ("true".equals(System.getProperty("verbose", "false")))
+		if ("true".equals(System.getProperty("verbose", "false"))) {
 			System.out.println("Let's go...");
+    }
 		ImgInterface img = new Java32x32();
 		sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
 		sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);

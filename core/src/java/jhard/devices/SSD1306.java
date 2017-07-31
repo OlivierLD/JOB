@@ -42,7 +42,7 @@ public class SSD1306 extends I2C {
 
   protected void init() {
     writeCommand(0xae);         // turn display off
-    writeCommand(0xa8, 0x3f);   // set multiplex ratio to the highest setting
+    writeCommand(0xa8, 0x3f);   // set multi                                              plex ratio to the highest setting
     writeCommand(0x8d, 0x14);   // enable charge pump
     writeCommand(0x20, 0x00);   // set memory addressing mode to horizontal
     writeCommand(0xd5, 0x80);   // set display clock divide ratio & oscillator frequency to default
@@ -61,8 +61,8 @@ public class SSD1306 extends I2C {
 
     // set this since we don't have access to the OLED's reset pins (?)
     writeCommand(0x21, 0, 127); // set column address
-//  writeCommand(0x22, 0, 7);   // set page address. 8 lines
-    writeCommand(0x22, 0, 3);   // set page address. 4 lines
+    writeCommand(0x22, 0, 7);   // set page address. 8 lines
+//  writeCommand(0x22, 0, 3);   // set page address. 4 lines
 
     writeCommand(0x81, 0xcf);   // set contrast
     writeCommand(0x2e);         // deactivate scroll
@@ -88,11 +88,11 @@ public class SSD1306 extends I2C {
 	 */
 	public static byte[] mirror(byte[] buff, int w, int h) {
 		int len = buff.length;
-		if (len != w * (h / 8)) {
-			throw new RuntimeException(String.format("Invalid buffer length %d, should be %d (%d * %d)", len, (w * (h / 8)), w, h));
+		if (len != w * 2 * (h / 8)) {
+			throw new RuntimeException(String.format("Invalid buffer length %d, should be %d (%d * %d)", len, (w * 2 * (h / 8)), w, h));
 		}
 		byte[] mirror = new byte[len];
-		for (int row = 0; row < (h / 8); row++) {
+		for (int row = 0; row < 2 * (h / 8); row++) {
 			for (int col = 0; col < w; col++) {
 				int buffIdx = (row * w) + col;
 				int mirrorBuffIdx = (row * w) + (w - col - 1);
