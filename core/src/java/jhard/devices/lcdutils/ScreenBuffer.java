@@ -73,7 +73,6 @@ public class ScreenBuffer {
 				}
 	//    System.out.println(lpad(Integer.toHexString(bmVal), "0", 2) + ", " + lpad(Integer.toBinaryString(bmVal), "0", 8));
 				this.screenBuffer[(this.w * (line)) + col] = bmVal;
-				this.screenBuffer[(this.w * (line + 1)) + col] = bmVal;
 			}
 		}
 		return this.screenBuffer;
