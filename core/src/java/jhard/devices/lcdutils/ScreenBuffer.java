@@ -7,6 +7,10 @@ import java.awt.Point;
 import java.awt.Polygon;
 import utils.StringUtils;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+
 public class ScreenBuffer {
 	private final static int WIDTH = 128, HEIGHT = 32; // Default values, for SSD1306
 
@@ -75,6 +79,11 @@ public class ScreenBuffer {
 				this.screenBuffer[(this.w * (line)) + col] = bmVal;
 			}
 		}
+		FrameDump.dump(Arrays.asList(this.screenBuffer)
+				.stream()
+				.boxed()
+				.map(b -> String.format(" %02X", Integer.toHexString(b & 0xFF)))
+				.collect(Collectors.joining(" ")));
 		return this.screenBuffer;
 	}
 
