@@ -69,21 +69,18 @@ public class ScreenBuffer {
 			for (int col = 0; col < this.w; col++) {
 				byte bmVal = 0;
 				for (int b = 0; b < 8; b++) {
-			//	if (line % 2 == 0) {
+					if (line % 2 == 0) {
 						if (screenMatrix[((line / 2) * 8) + b][col] == 'X') {
 							bmVal |= (1 << b);
 						}
-			//	}
+					}
+					//    System.out.println(lpad(Integer.toHexString(bmVal), "0", 2) + ", " + lpad(Integer.toBinaryString(bmVal), "0", 8));
+					this.screenBuffer[(this.w * (line)) + col] = bmVal;
 				}
-	//    System.out.println(lpad(Integer.toHexString(bmVal), "0", 2) + ", " + lpad(Integer.toBinaryString(bmVal), "0", 8));
-				this.screenBuffer[(this.w * (line)) + col] = bmVal;
 			}
 		}
-		FrameDump.dump(Arrays.asList(this.screenBuffer)
-				.stream()
-				.boxed()
-				.map(b -> String.format(" %02X", Integer.toHexString(b & 0xFF)))
-				.collect(Collectors.joining(" ")));
+		FrameDump.dump(this.screenBuffer);
+
 		return this.screenBuffer;
 	}
 
