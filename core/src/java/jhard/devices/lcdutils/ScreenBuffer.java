@@ -73,6 +73,10 @@ public class ScreenBuffer {
 						if (screenMatrix[((line / 2) * 8) + b][col] == 'X') {
 							bmVal |= (1 << b);
 						}
+					} else {
+						if (screenMatrix[(((line - 1) / 2) * 8) + b][col] == 'X') {
+							bmVal |= (1 << b);
+						}
 					}
 					//    System.out.println(lpad(Integer.toHexString(bmVal), "0", 2) + ", " + lpad(Integer.toBinaryString(bmVal), "0", 8));
 					this.screenBuffer[(this.w * (line)) + col] = bmVal;
