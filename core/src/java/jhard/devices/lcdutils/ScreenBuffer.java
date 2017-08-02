@@ -73,18 +73,21 @@ public class ScreenBuffer {
 						if (screenMatrix[((line / 2) * 8) + b][col] == 'X') {
 							bmVal |= (1 << b);
 						}
-					} else {
+					} else { // TASK Fix that, not good.
 						if (screenMatrix[(((line - 1) / 2) * 8) + b][col] == 'X') {
 							bmVal |= (1 << b);
 						}
 					}
-					//    System.out.println(lpad(Integer.toHexString(bmVal), "0", 2) + ", " + lpad(Integer.toBinaryString(bmVal), "0", 8));
+					if ("true".equals(System.getProperty("dump.screen", "false"))) {
+						System.out.println(StringUtils.lpad(Integer.toHexString(bmVal), 2, "0") + ", " + StringUtils.lpad(Integer.toBinaryString(bmVal), 8, "0"));
+					}
 					this.screenBuffer[(this.w * (line)) + col] = bmVal;
 				}
 			}
 		}
-		FrameDump.dump(this.screenBuffer);
-
+		if ("true".equals(System.getProperty("dump.screen", "false"))) {
+			FrameDump.dump(this.screenBuffer);
+		}
 		return this.screenBuffer;
 	}
 
@@ -126,7 +129,7 @@ public class ScreenBuffer {
 	 * @param fontFact Font Factor (1 and above), default 1
 	 * @param mode     Default Mode.WHITE_ON_BLACK
 	 * @param rotate   if true, rotate 90 degrees counter-clockwise. Default false
-	 * @see Mode
+	 * See {@link ScreenBuffer.Mode}
 	 */
 	public void text(String txt, int xPx, int yPx, int fontFact, Mode mode, boolean rotate) {
 		int xProgress = xPx;
