@@ -1,6 +1,5 @@
 package jhard.devices.lcdutils;
 
-import jhard.devices.lcdutils.ScreenBuffer;
 import jhard.devices.SSD1306;
 import jhard.devices.lcdutils.img.ImgInterface;
 import jhard.devices.lcdutils.img.Java32x32;
@@ -9,14 +8,13 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Polygon;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -24,7 +22,7 @@ import javax.swing.JPanel;
 import utils.StringUtils;
 
 public class LedPanelMain
-				extends java.awt.Frame {
+		extends java.awt.Frame {
 	private LedPanelMain instance = this;
 	private LEDPanel ledPanel;
 	private JPanel bottomPanel;
@@ -33,18 +31,12 @@ public class LedPanelMain
 
 	private transient ScreenBuffer sb;
 
-	private static int nbCols = -1;
-
 	// SSD1306
 	private final static int NB_LINES = 32;
 	private final static int NB_COLS = 128;
 	// Nokia
 //  private final static int NB_LINES = 48;
 //  private final static int NB_COLS  = 84;
-
-	private final static int BUFFER_SIZE = (NB_COLS * NB_LINES) / 8;
-
-	private static int[] buffer = new int[BUFFER_SIZE];
 
 	public LedPanelMain() {
 		initComponents();
@@ -73,26 +65,18 @@ public class LedPanelMain
 		gridCheckBox = new JCheckBox("With Grid");
 		gridCheckBox.setSelected(false);
 		bottomPanel.add(gridCheckBox, null);
-		gridCheckBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
+		gridCheckBox.addActionListener(actionEvent -> {
 				ledPanel.setWithGrid(gridCheckBox.isSelected());
 				ledPanel.repaint();
-			}
-		});
+			});
 		againButton = new JButton("Play again");
 		bottomPanel.add(againButton, null);
-		againButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				Thread go = new Thread() {
-					public void run() {
+		againButton.addActionListener(actionEvent -> {
+				Thread go = new Thread(() -> {
 						instance.doYourJob();
-					}
-				};
+					});
 				go.start();
-			}
-		});
+			});
 
 		add(bottomPanel, java.awt.BorderLayout.SOUTH);
 		pack();
@@ -105,39 +89,49 @@ public class LedPanelMain
 	 * @param screenbuffer as expected by the device.
 	 */
 	private void setBuffer(byte[] screenbuffer) {
+		FrameDump.dump(screenbuffer);
+
 		// This displays the buffer top to bottom, instead of left to right
 		char[][] screenMatrix = new char[NB_LINES][NB_COLS];
-		for (int i = 0; i < NB_COLS; i++) {
-			// Line is a vertical line, its length is NB_LINES / 8
-			String line = ""; /*lpad(Integer.toBinaryString(screenbuffer[i + (3 * NB_COLS)]), "0", 8).replace('0', ' ').replace('1', 'X') + // " " +
-	                  lpad(Integer.toBinaryString(screenbuffer[i + (2 * NB_COLS)]), "0", 8).replace('0', ' ').replace('1', 'X') + // " " +
-                    lpad(Integer.toBinaryString(screenbuffer[i + (1 * NB_COLS)]), "0", 8).replace('0', ' ').replace('1', 'X') + // " " +
-                    lpad(Integer.toBinaryString(screenbuffer[i + (0 * NB_COLS)]), "0", 8).replace('0', ' ').replace('1', 'X'); */
-			for (int l = (NB_LINES / 8) - 1; l >= 0; l--)
-				line += StringUtils.lpad(Integer.toBinaryString(screenbuffer[i + (l * NB_COLS)]), 8, "0").replace('0', ' ').replace('1', 'X');
-
-//    System.out.println(line);
-//    for (int c=0; c<Math.min(line.length(), NB_COLS); c++)
-			for (int c = 0; c < line.length(); c++) {
+		for (int col = 0; col < NB_COLS; col++) {
+			// Line is a VERTICAL line of the screen, its length is NB_LINES (32)
+			String line = "";
+			for (int l = (NB_LINES / 8) - 1; l >= 0; l--) {
+				line += StringUtils.lpad(Integer.toBinaryString(screenbuffer[col + (l * NB_COLS)] & 0xFF), 8, "0").replace('0', ' ').replace('1', 'X');
+			}
+	    System.out.println(line);
+			for (int row = 0; row < line.length(); row++) {
 				try {
-					char mc = line.charAt(c);
-					screenMatrix[c][i] = mc;
+					char mc = line.charAt(row);
+					//           Line
+					//           |    Column
+					//           |    |
+					screenMatrix[row][col] = mc;
 				} catch (Exception ex) {
-					System.out.println("Line:" + line + " (" + line.length() + " character(s))");
-					System.out.println("c:" + c + ", i=" + i + ", buffer length:" + buffer.length);
+					System.err.println("Line:" + line + " (" + line.length() + " character(s))");
+					System.err.println("r:" + row + ", c=" + col + ", buffer length:" + screenbuffer.length);
 					ex.printStackTrace();
 				}
 			}
 		}
 		// Display the screen matrix, as it should be seen
-		boolean[][] matrix = ledPanel.getLedOnOff();
-		for (int i = 0; i < NB_LINES; i++)
-		// for (int i=31; i>=0; i--)
-		{
-			for (int j = 0; j < NB_COLS; j++)
-				matrix[j][NB_LINES - 1 - i] = (screenMatrix[i][j] == 'X' ? true : false);
+		boolean[][] ledMatrix = ledPanel.getLedOnOff();
+		for (int line = 0; line < NB_LINES; line++) {
+			for (int col = 0; col < NB_COLS; col++) {
+				ledMatrix[NB_LINES - 1 - line][col] = screenMatrix[line][col] == 'X';
+			}
 		}
-		ledPanel.setLedOnOff(matrix);
+		System.out.println("--- LED Matrix ---");
+		// Dump LED Matrix
+		for (int line=0; line<NB_LINES; line++) {
+			final int fLine = line;
+		  String displayLine = IntStream.range(0, NB_COLS)
+				  .boxed()
+				  .map(idx -> { return (ledMatrix[fLine][idx] ? "X" : " "); })
+				  .collect(Collectors.joining(""));
+			System.out.println(displayLine);
+		}
+		ledPanel.setLedOnOff(ledMatrix);
 	}
 
 	private void display() {
@@ -162,7 +156,7 @@ public class LedPanelMain
 				lcd.setBuffer(sb.getScreenBuffer());
 
 				lcd.display();
-				//     sb.dumpScreen();
+//      sb.dumpScreen();
 				try {
 					Thread.sleep(5_000);
 				} catch (Exception ex) {
@@ -252,13 +246,13 @@ public class LedPanelMain
 
 			if (false) {
 				String[] txt1 = new String[]{
-								"!\":#$%&'()*+,-./01234",
-								"56789;<=>?@ABCDEFGHI",
-								"JKLMNOPQRSTUVWXYZ[\\]"
+						"!\":#$%&'()*+,-./01234",
+						"56789;<=>?@ABCDEFGHI",
+						"JKLMNOPQRSTUVWXYZ[\\]"
 				};
 				String[] txt2 = new String[]{
-								"^_abcdefghijklmnopqr",
-								"stuvwxyz{|}"
+						"^_abcdefghijklmnopqr",
+						"stuvwxyz{|}"
 				};
 
 				boolean one = false;
@@ -472,12 +466,12 @@ public class LedPanelMain
 			// Vertical marquee
 			if (true) {
 				String[] txt = new String[]{
-								"Centered",
-								"This is line one",
-								"More text goes here",
-								"Some crap follows: ...",
-								"We're reaching the end",
-								"* The End *"
+						"Centered",
+						"This is line one",
+						"More text goes here",
+						"Some crap follows: ...",
+						"We're reaching the end",
+						"* The End *"
 				};
 				int len = 0;
 				for (int t = 0; t < 80; t++) {
@@ -518,7 +512,7 @@ public class LedPanelMain
 						}
 						double virtualAngle = Math.PI * (((c - i) % 32) / 32d);
 						int x = strOffset - i,
-										y = 26 + (int) (16 * Math.sin(virtualAngle));
+								y = 26 + (int) (16 * Math.sin(virtualAngle));
 //          System.out.println("Displaying " + ca[c] + " at " + x + ", " + y + ", i=" + i + ", strOffset=" + strOffset);
 						sb.text(new String(new char[]{ca[c]}), x, y);
 					}
@@ -608,8 +602,6 @@ public class LedPanelMain
 					} catch (Exception ex) {
 					}
 				}
-				//  oled.setBuffer(sb.getScreenBuffer());
-				//  oled.display();
 				try {
 					Thread.sleep(1_000);
 				} catch (Exception ex) {
@@ -624,7 +616,7 @@ public class LedPanelMain
 	/**
 	 * Exit the Application
 	 */
-	private void exitForm(@SuppressWarnings("oracle.jdeveloper.java.unused-parameter") java.awt.event.WindowEvent evt) {
+	private void exitForm(java.awt.event.WindowEvent evt) {
 		System.out.println("Bye");
 		System.exit(0);
 	}
@@ -632,8 +624,8 @@ public class LedPanelMain
 	/**
 	 * @param args the command line arguments
 	 */
-	public static void main(String args[]) {
-		// Available characters:
+	public static void main(String... args) {
+		// Display available characters:
 		Map<String, String[]> characters = CharacterMatrixes.characters;
 		Set<String> keys = characters.keySet();
 		List<String> kList = new ArrayList<String>(keys.size());
@@ -645,14 +637,7 @@ public class LedPanelMain
 			System.out.print(k + " ");
 		System.out.println();
 
-		// Params
-		if (args.length > 0) {
-			for (int i = 0; i < args.length; i++) {
-				if ("-col".equals(args[i]))
-					nbCols = Integer.parseInt(args[i + 1]);
-			}
-		}
-
+		// Display led panel.
 		LedPanelMain lp = new LedPanelMain();
 		lp.setVisible(true);
 		lp.doYourJob();

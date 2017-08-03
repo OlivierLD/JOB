@@ -1,15 +1,10 @@
 package jhard.devices.lcdutils;
 
 import jhard.devices.lcdutils.img.ImgInterface;
-import jhard.devices.lcdutils.CharacterMatrixes;
 
 import java.awt.Point;
 import java.awt.Polygon;
 import utils.StringUtils;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 
 public class ScreenBuffer {
 	private final static int WIDTH = 128, HEIGHT = 32; // Default values, for SSD1306
@@ -38,6 +33,9 @@ public class ScreenBuffer {
 
 	public ScreenBuffer(int w, int h) {
 		super();
+		if (h % 8 != 0) {
+			throw new IllegalArgumentException("h must be multiple of 8");
+		}
 		this.w = w;
 		this.h = h;
 		this.screenBuffer = new byte[w * (h / 8)]; // h / 8: 8 vertical pixels per line
