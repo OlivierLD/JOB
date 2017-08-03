@@ -6,7 +6,7 @@ import jhard.devices.lcdutils.img.ImgInterface;
 import jhard.devices.lcdutils.img.Java32x32;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.io.IOException;
+import static utils.MiscUtils.delay;
 
 public class SSD1306Sample {
 
@@ -39,52 +39,38 @@ public class SSD1306Sample {
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
 
-		try {
-			Thread.sleep(2_000);
-		} catch (Exception ex) {
-		}
+		delay(2_000);
 		// Blinking
-		if ("true".equals(System.getProperty("verbose", "false")))
+		if ("true".equals(System.getProperty("verbose", "false"))) {
 			System.out.println("Blinking...");
+		}
 		sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
 		sb.image(img, 0, 0, ScreenBuffer.Mode.WHITE_ON_BLACK);
 		sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.WHITE_ON_BLACK);
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
-		try {
-			Thread.sleep(500);
-		} catch (Exception ex) {
-		}
+		delay(500);
 
 		sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
 		sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
 		sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
-		try {
-			Thread.sleep(500);
-		} catch (Exception ex) {
-		}
+		delay(500);
 
 		sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
 		sb.image(img, 0, 0, ScreenBuffer.Mode.WHITE_ON_BLACK);
 		sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.WHITE_ON_BLACK);
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
-		try {
-			Thread.sleep(500);
-		} catch (Exception ex) {
-		}
+		delay(500);
 
 		sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
 		sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
 		sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
-		try {
-			Thread.sleep(500);
-		} catch (Exception ex) {
-		}
+		delay(500);
 
 		// End blinking
 		sb.clear();
@@ -93,105 +79,77 @@ public class SSD1306Sample {
 
 		if (false) { // TODO Fix that ... Marquee does not work with i2c
 			// Marquee
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("Marquee...");
+			}
 			for (int i = 0; i < 128; i++) {
 				sb.image(img, 0 - i, 0);
 				sb.text("I speak Java!.......", 36 - i, 20);
 
 				oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 				oled.display();
-//    try { Thread.sleep(250); } catch (Exception ex) {}
+//      delay(250);
 			}
 
 			// Circles
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("Geometric shapes...");
+			}
 			sb.clear();
 
 			sb.circle(64, 16, 15);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(500);
-			} catch (Exception ex) {
-			}
+			delay(500);
 
 			sb.circle(74, 16, 10);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(500);
-			} catch (Exception ex) {
-			}
+			delay(500);
 
 			sb.circle(80, 16, 5);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(500);
-			} catch (Exception ex) {
-			}
+			delay(500);
 
 			// Lines
 			sb.clear();
 			sb.line(1, 1, 126, 30);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			sb.line(126, 1, 1, 30);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			sb.line(1, 25, 120, 10);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			sb.line(10, 5, 10, 30);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			sb.line(1, 5, 120, 5);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			// Rectangles
 			sb.clear();
 			sb.rectangle(5, 10, 100, 25);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			sb.rectangle(15, 3, 50, 30);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			sb.clear();
 			for (int i = 0; i < 8; i++) {
@@ -200,10 +158,7 @@ public class SSD1306Sample {
 				oled.display();
 				//  try { Thread.sleep(100); } catch (Exception ex) {}
 			}
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			// Arc & plot
 			sb.clear();
@@ -211,14 +166,12 @@ public class SSD1306Sample {
 			sb.plot(64, 16);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			// Shape
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("More shapes...");
+			}
 			sb.clear();
 			// Star
 			int[] x = new int[]{64, 73, 50, 78, 55};
@@ -227,38 +180,31 @@ public class SSD1306Sample {
 			sb.shape(p, true);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			// Centered text
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("More text...");
+			}
 			sb.clear();
 			String txt = "Centered";
 			int len = sb.strlen(txt);
 			sb.text(txt, 64 - (len / 2), 16);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 			// sb.clear();
 			txt = "A much longer string.";
 			len = sb.strlen(txt);
 			sb.text(txt, 64 - (len / 2), 26);
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			// Vertical marquee
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("Vertical marquee...");
+			}
 			String[] txtA = new String[]{
 							"Centered",
 							"This is line one",
@@ -277,12 +223,13 @@ public class SSD1306Sample {
 					oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 					oled.display();
 				}
-//    try { Thread.sleep(100); } catch (Exception ex) {}
+	//    delay(100);
 			}
 
 			// Text Snake...
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("Text snake...");
+			}
 			String snake = "This text is displayed like a snake, waving across the screen...";
 			char[] ca = snake.toCharArray();
 			int strlen = sb.strlen(snake);
@@ -304,12 +251,13 @@ public class SSD1306Sample {
 				}
 				oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 				oled.display();
-//    try { Thread.sleep(75); } catch (Exception ex) {}
+//      delay(75);
 			}
 
 			// A curve
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("Curve...");
+			}
 			sb.clear();
 			// Axis
 			sb.line(0, 16, 128, 16);
@@ -327,10 +275,7 @@ public class SSD1306Sample {
 			}
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			// A curve (progressing)
 			sb.clear();
@@ -349,18 +294,16 @@ public class SSD1306Sample {
 				prev = new Point(_x + 2, _y);
 				oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 				oled.display();
-//    try { Thread.sleep(75); } catch (Exception ex) {}
+//      delaty(75);
 			}
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
 			// Bouncing
-			if ("true".equals(System.getProperty("verbose", "false")))
+			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("Bouncing...");
+			}
 			for (int _x = 0; _x < 130; _x++) {
 				sb.clear();
 				double amplitude = 6 * Math.exp((double) (130 - _x) / (13d * 7.5d));
@@ -373,41 +316,34 @@ public class SSD1306Sample {
 
 				oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 				oled.display();
-//    try { Thread.sleep(75); } catch (Exception ex) {}
+	//    delay(75);
 			}
 			oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 			oled.display();
-			try {
-				Thread.sleep(1_000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 
-//  sb.dumpScreen();
+//    sb.dumpScreen();
 
-			try {
-				Thread.sleep(1000);
-			} catch (Exception ex) {
-			}
+			delay(1_000);
 		}
 
-		if ("true".equals(System.getProperty("verbose", "false")))
+		if ("true".equals(System.getProperty("verbose", "false"))) {
 			System.out.println("Closing...");
+		}
 		sb.clear();
 		sb.text("Bye-bye!", 36, 20);
 
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
 
-		try {
-			Thread.sleep(1000);
-		} catch (Exception ex) {
-		}
+		delay(1_000);
 		sb.clear();
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
 
 		oled.close();
-		if ("true".equals(System.getProperty("verbose", "false")))
+		if ("true".equals(System.getProperty("verbose", "false"))) {
 			System.out.println("Done.");
+		}
   }
 }

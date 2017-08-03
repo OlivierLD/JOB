@@ -20,7 +20,12 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import utils.StringUtils;
+import static utils.MiscUtils.delay;
 
+
+/**
+ * A Standalone program, simulating an LCD, with Swing.
+ */
 public class LedPanelMain
 		extends java.awt.Frame {
 	private LedPanelMain instance = this;
@@ -143,13 +148,6 @@ public class LedPanelMain
 
 	private void display() {
 		ledPanel.repaint();
-	}
-
-	private static void delay(long howMuch) {
-		try {
-			Thread.sleep(howMuch);
-		} catch (Exception ex) {
-		}
 	}
 
 	public void doYourJob() {
