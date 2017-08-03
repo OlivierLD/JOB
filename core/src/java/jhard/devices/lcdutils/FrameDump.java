@@ -17,7 +17,7 @@ public class FrameDump {
 
   public static void dump(String frame) {
     String[] data = frame.split(" ");
-    System.out.println(String.format("We have %d entry(ies).", data.length));
+    System.out.println(String.format("There are %d entry(ies).", data.length));
     if (data.length == 1024) {
       for (int row=0; row<8; row++) {
         for (int bit=0; bit<8; bit++) {
