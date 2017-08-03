@@ -40,7 +40,7 @@ public class ScreenBuffer {
 		super();
 		this.w = w;
 		this.h = h;
-		this.screenBuffer = new byte[w * 2 * (h / 8)];
+		this.screenBuffer = new byte[w * (h / 8)]; // h / 8: 8 vertical pixels per line
 		this.screenMatrix = new char[h][w]; // h lines, w columns
 	}
 
@@ -65,18 +65,12 @@ public class ScreenBuffer {
 	 * @return the buffer to display on the OLED
 	 */
 	public byte[] getScreenBuffer() {
-		for (int line = 0; line < 2 * (this.h / 8); line++) {
+		for (int line = 0; line < (this.h / 8); line++) {
 			for (int col = 0; col < this.w; col++) {
 				byte bmVal = 0;
 				for (int b = 0; b < 8; b++) {
-					if (line % 2 == 0) {
-						if (screenMatrix[((line / 2) * 8) + b][col] == 'X') {
-							bmVal |= (1 << b);
-						}
-					} else { // TASK Fix that, not good.
-						if (screenMatrix[(((line - 1) / 2) * 8) + b][col] == 'X') {
-							bmVal |= (1 << b);
-						}
+					if (screenMatrix[(line * 8) + b][col] == 'X') {
+						bmVal |= (1 << b);
 					}
 					if ("true".equals(System.getProperty("dump.screen", "false"))) {
 						System.out.println(StringUtils.lpad(Integer.toHexString(bmVal), 2, "0") + ", " + StringUtils.lpad(Integer.toBinaryString(bmVal), 8, "0"));
@@ -86,7 +80,10 @@ public class ScreenBuffer {
 			}
 		}
 		if ("true".equals(System.getProperty("dump.screen", "false"))) {
+			System.out.println("-----------------------");
 			FrameDump.dump(this.screenBuffer);
+			System.out.println("-----------------------");
+			this.dumpScreen();
 		}
 		return this.screenBuffer;
 	}
