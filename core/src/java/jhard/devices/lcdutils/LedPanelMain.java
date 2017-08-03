@@ -89,8 +89,9 @@ public class LedPanelMain
 	 * @param screenbuffer as expected by the device.
 	 */
 	private void setBuffer(byte[] screenbuffer) {
-		FrameDump.dump(screenbuffer);
-
+		if ("true".equals(System.getProperty("dump.screen","false"))) {
+			FrameDump.dump(screenbuffer);
+		}
 		// This displays the buffer top to bottom, instead of left to right
 		char[][] screenMatrix = new char[NB_LINES][NB_COLS];
 		for (int col = 0; col < NB_COLS; col++) {
@@ -99,7 +100,9 @@ public class LedPanelMain
 			for (int l = (NB_LINES / 8) - 1; l >= 0; l--) {
 				line += StringUtils.lpad(Integer.toBinaryString(screenbuffer[col + (l * NB_COLS)] & 0xFF), 8, "0").replace('0', ' ').replace('1', 'X');
 			}
-	    System.out.println(line);
+			if ("true".equals(System.getProperty("dump.screen","false"))) {
+				System.out.println(line);
+			}
 			for (int row = 0; row < line.length(); row++) {
 				try {
 					char mc = line.charAt(row);
@@ -121,21 +124,32 @@ public class LedPanelMain
 				ledMatrix[NB_LINES - 1 - line][col] = screenMatrix[line][col] == 'X';
 			}
 		}
-		System.out.println("--- LED Matrix ---");
-		// Dump LED Matrix
-		for (int line=0; line<NB_LINES; line++) {
-			final int fLine = line;
-		  String displayLine = IntStream.range(0, NB_COLS)
-				  .boxed()
-				  .map(idx -> { return (ledMatrix[fLine][idx] ? "X" : " "); })
-				  .collect(Collectors.joining(""));
-			System.out.println(displayLine);
+		if ("true".equals(System.getProperty("dump.screen","false"))) {
+			System.out.println("--- LED Matrix ---");
+			// Dump LED Matrix
+			for (int line = 0; line < NB_LINES; line++) {
+				final int fLine = line;
+				String displayLine = IntStream.range(0, NB_COLS)
+						.boxed()
+						.map(idx -> {
+							return (ledMatrix[fLine][idx] ? "X" : " ");
+						})
+						.collect(Collectors.joining(""));
+				System.out.println(displayLine);
+			}
 		}
 		ledPanel.setLedOnOff(ledMatrix);
 	}
 
 	private void display() {
 		ledPanel.repaint();
+	}
+
+	private static void delay(long howMuch) {
+		try {
+			Thread.sleep(howMuch);
+		} catch (Exception ex) {
+		}
 	}
 
 	public void doYourJob() {
@@ -157,21 +171,23 @@ public class LedPanelMain
 
 				lcd.display();
 //      sb.dumpScreen();
-				try {
-					Thread.sleep(5_000);
-				} catch (Exception ex) {
-				}
+				delay(5_000);
+
+				sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
+				ImgInterface img = new Java32x32();
+				sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
+				sb.text("I speak Java!", 36, 20, ScreenBuffer.Mode.BLACK_ON_WHITE);
+
+				lcd.setBuffer(sb.getScreenBuffer());
+				lcd.display();
+				delay(5_000);
 
 				byte[] mirror = SSD1306.mirror(sb.getScreenBuffer(), NB_COLS, NB_LINES);
 
 				lcd.setBuffer(mirror);
 
 				lcd.display();
-				//     sb.dumpScreen();
-				try {
-					Thread.sleep(5_000);
-				} catch (Exception ex) {
-				}
+				delay(5_000);
 
 				// Bigger
 				sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
@@ -179,11 +195,7 @@ public class LedPanelMain
 				sb.text("3.1415926\u00b0", 2, 19, 2, ScreenBuffer.Mode.WHITE_ON_BLACK); // With a useless degree symbol (for tests).
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				//   sb.dumpScreen();
-				try {
-					Thread.sleep(5_000);
-				} catch (Exception ex) {
-				}
+				delay(5_000);
 
 				// Blinking
 				sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
@@ -192,10 +204,7 @@ public class LedPanelMain
 				sb.text("I speak Java!", 2, 29, ScreenBuffer.Mode.WHITE_ON_BLACK);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(50);
-				} catch (Exception ex) {
-				}
+				delay(50);
 
 				sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
 				sb.text("ScreenBuffer", 2, 9, ScreenBuffer.Mode.BLACK_ON_WHITE);
@@ -203,10 +212,7 @@ public class LedPanelMain
 				sb.text("I speak Java!", 2, 29, ScreenBuffer.Mode.BLACK_ON_WHITE);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(50);
-				} catch (Exception ex) {
-				}
+				delay(50);
 
 				sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
 				sb.text("ScreenBuffer", 2, 9, ScreenBuffer.Mode.WHITE_ON_BLACK);
@@ -214,10 +220,7 @@ public class LedPanelMain
 				sb.text("I speak Java!", 2, 29, ScreenBuffer.Mode.WHITE_ON_BLACK);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(50);
-				} catch (Exception ex) {
-				}
+				delay(50);
 
 				sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
 				sb.text("ScreenBuffer", 2, 9, ScreenBuffer.Mode.BLACK_ON_WHITE);
@@ -225,10 +228,7 @@ public class LedPanelMain
 				sb.text("I speak Java!", 2, 29, ScreenBuffer.Mode.BLACK_ON_WHITE);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(50);
-				} catch (Exception ex) {
-				}
+				delay(50);
 
 				sb.clear(ScreenBuffer.Mode.WHITE_ON_BLACK);
 				sb.text("ScreenBuffer", 2, 9, ScreenBuffer.Mode.WHITE_ON_BLACK);
@@ -236,10 +236,7 @@ public class LedPanelMain
 				sb.text("I speak Java!", 2, 29, ScreenBuffer.Mode.WHITE_ON_BLACK);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(2_000);
-				} catch (Exception ex) {
-				}
+				delay(2_000);
 
 				// End blinking
 			}
@@ -265,15 +262,12 @@ public class LedPanelMain
 					lcd.setBuffer(sb.getScreenBuffer());
 					lcd.display();
 					one = !one;
-					try {
-						Thread.sleep(2_000);
-					} catch (Exception ex) {
-					}
+					delay(2_000);
 				}
 			}
 
 			// Image + text, marquee
-			if (false) {
+			if (true) {
 				sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
 				ImgInterface img = new Java32x32();
 				sb.image(img, 0, 0, ScreenBuffer.Mode.BLACK_ON_WHITE);
@@ -281,10 +275,7 @@ public class LedPanelMain
 
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(2_000);
-				} catch (Exception ex) {
-				}
+				delay(2_000);
 
 				sb.clear();
 				for (int x = 0; x < 128; x++) {
@@ -294,103 +285,70 @@ public class LedPanelMain
 					lcd.setBuffer(sb.getScreenBuffer());
 					lcd.display();
 					long s = (long) (150 - (1.5 * x));
-					try {
-						Thread.sleep(s > 0 ? s : 0);
-					} catch (Exception ex) {
-					}
+					delay(s > 0 ? s : 0);
 				}
 			}
 
 			// Circles
-			if (false) {
+			if (true) {
 				sb.clear();
 				sb.circle(64, 16, 15);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 
 				sb.circle(74, 16, 10);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 
 				sb.circle(80, 16, 5);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Lines
-			if (false) {
+			if (true) {
 				sb.clear();
 				sb.line(1, 1, 126, 30);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 
 				sb.line(126, 1, 1, 30);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 
 				sb.line(1, 25, 120, 10);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 
 				sb.line(10, 5, 10, 30);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 
 				sb.line(1, 5, 120, 5);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Rectangle
-			if (false) {
+			if (true) {
 				sb.clear();
 				sb.rectangle(5, 10, 100, 25);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 
 				sb.rectangle(15, 3, 50, 30);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Nested rectangles
@@ -400,28 +358,19 @@ public class LedPanelMain
 					sb.rectangle(1 + (i * 2), 1 + (i * 2), 127 - (i * 2), 31 - (i * 2));
 					lcd.setBuffer(sb.getScreenBuffer());
 					lcd.display();
-					try {
-						Thread.sleep(100);
-					} catch (Exception ex) {
-					}
+					delay(100);
 				}
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Arc
-			if (false) {
+			if (true) {
 				sb.clear();
 				sb.arc(64, 16, 10, 20, 90);
 				sb.plot(64, 16);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Shape
@@ -433,10 +382,7 @@ public class LedPanelMain
 				sb.shape(p, true);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Centered text
@@ -447,20 +393,14 @@ public class LedPanelMain
 				sb.text(txt, 64 - (len / 2), 16);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 				// sb.clear();
 				txt = "A much longer string.";
 				len = sb.strlen(txt);
 				sb.text(txt, 64 - (len / 2), 26);
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Vertical marquee
@@ -482,17 +422,11 @@ public class LedPanelMain
 						lcd.setBuffer(sb.getScreenBuffer());
 						lcd.display();
 					}
-					try {
-						Thread.sleep(100);
-					} catch (Exception ex) {
-					}
+					delay(100);
 				}
 //      sb.dumpScreen();
 
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			if (true) {
@@ -518,10 +452,7 @@ public class LedPanelMain
 					}
 					lcd.setBuffer(sb.getScreenBuffer());
 					lcd.display();
-					try {
-						Thread.sleep(75);
-					} catch (Exception ex) {
-					}
+					delay(75);
 				}
 			}
 
@@ -544,10 +475,7 @@ public class LedPanelMain
 				}
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Progressing Curve
@@ -568,17 +496,11 @@ public class LedPanelMain
 					prev = new Point(x + 2, y);
 					lcd.setBuffer(sb.getScreenBuffer());
 					lcd.display();
-					try {
-						Thread.sleep(75);
-					} catch (Exception ex) {
-					}
+					delay(75);
 				}
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 
 			// Bouncing
@@ -597,15 +519,9 @@ public class LedPanelMain
 
 					lcd.setBuffer(sb.getScreenBuffer());
 					lcd.display();
-					try {
-						Thread.sleep(75);
-					} catch (Exception ex) {
-					}
+					delay(75);
 				}
-				try {
-					Thread.sleep(1_000);
-				} catch (Exception ex) {
-				}
+				delay(1_000);
 			}
 			againButton.setEnabled(true);
 
