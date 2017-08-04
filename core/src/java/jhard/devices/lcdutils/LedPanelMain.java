@@ -154,7 +154,7 @@ public class LedPanelMain
 //  instance.repaint();
 		if (true) {
 			if (sb == null) {
-				sb = new ScreenBuffer(NB_COLS, NB_LINES);
+				sb = new ScreenBuffer(); // NB_COLS, NB_LINES
 				sb.clear(ScreenBuffer.Mode.BLACK_ON_WHITE);
 			}
 

@@ -2,7 +2,6 @@ package jhard.devices.lcdutils;
 
 import jhard.devices.lcdutils.img.ImgInterface;
 
-import java.awt.Point;
 import java.awt.Polygon;
 import utils.StringUtils;
 
@@ -19,10 +18,16 @@ public class ScreenBuffer {
 		BLACK_ON_WHITE
 	}
 
+	public enum Orientation { // TODO Manage that one
+		LANDSCAPE,
+		PORTRAIT
+	}
+
 	private int w = 128, // Actual values, defaulted to SSD1306
 							h = 32;
 	// This is the buffer that will be pushed on the device
 	private byte[] screenBuffer = null;
+
 	// This represents the led array (128x32). 'X' means on, ' ' means off.
 	// The dumpScreen method displays this one.
 	private char[][] screenMatrix = null;
@@ -34,7 +39,7 @@ public class ScreenBuffer {
 	public ScreenBuffer(int w, int h) {
 		super();
 		if (h % 8 != 0) {
-			throw new IllegalArgumentException("h must be multiple of 8");
+			throw new IllegalArgumentException("h must be a multiple of 8");
 		}
 		this.w = w;
 		this.h = h;
@@ -226,14 +231,11 @@ public class ScreenBuffer {
 				deltaY = (toy - fromy);
 			}
 			double coeffDir = (double) deltaY / (double) deltaX;
-//    if (fromx < tox)
-			{
-				for (int x = 0; x <= deltaX; x++) {
-					int y = fromy + (int) (Math.round(x * coeffDir));
-					int _x = x + fromx;
-					if (_x >= 0 && _x < this.w && y >= 0 && y < this.h)
-						screenMatrix[y][_x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
-				}
+			for (int x = 0; x <= deltaX; x++) {
+				int y = fromy + (int) (Math.round(x * coeffDir));
+				int _x = x + fromx;
+				if (_x >= 0 && _x < this.w && y >= 0 && y < this.h)
+					screenMatrix[y][_x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
 			}
 		} else if (Math.abs(deltaX) < Math.abs(deltaY)) { // > 45, < -45
 			if (deltaY < 0) {
@@ -247,14 +249,11 @@ public class ScreenBuffer {
 				deltaY = (toy - fromy);
 			}
 			double coeffDir = (double) deltaX / (double) deltaY;
-			//    if (fromx < tox)
-			{
-				for (int y = 0; y <= deltaY; y++) {
-					int x = fromx + (int) (Math.round(y * coeffDir));
-					int _y = y + fromy;
-					if (_y >= 0 && _y < this.h && x >= 0 && x < this.w)
-						screenMatrix[_y][x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
-				}
+			for (int y = 0; y <= deltaY; y++) {
+				int x = fromx + (int) (Math.round(y * coeffDir));
+				int _y = y + fromy;
+				if (_y >= 0 && _y < this.h && x >= 0 && x < this.w)
+					screenMatrix[_y][x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
 			}
 		}
 	}
@@ -296,17 +295,12 @@ public class ScreenBuffer {
 	}
 
 	public void arc(int centerX, int centerY, int radius, int fromDeg, int toDeg, Mode mode) {
-		Point prevPt = null;
 		for (int i = fromDeg; i <= toDeg; i++) {
 			int x = centerX + (int) Math.round(radius * Math.sin(Math.toRadians(i)));
 			int y = centerY + (int) Math.round(radius * Math.cos(Math.toRadians(i)));
-			Point pt = new Point(x, y);
 			if (x >= 0 && x < this.w && y >= 0 && y < this.h) {
 				screenMatrix[y][x] = (mode == Mode.WHITE_ON_BLACK ? 'X' : ' ');
-				prevPt = pt;
-			} else
-				prevPt = null;
-
+			}
 		}
 	}
 
@@ -321,7 +315,7 @@ public class ScreenBuffer {
 		for (int col = 0; col < w; col++) {
 			for (int row = 0; row < (h / 8); row++) {
 				String bitMapCol = StringUtils.lpad(Integer.toBinaryString(imgBuf[col + (w * row)]), 8, "0").replace('0', (mode == Mode.WHITE_ON_BLACK ? ' ' : 'X')).replace('1', (mode == Mode.WHITE_ON_BLACK ? 'X' : ' '));
-				// Write in the scren matrix
+				// Write in the screen matrix
 				// screenMatrix[line][col]
 				for (int y = 0; y < 8; y++) {
 					int l = (topLeftY + (7 - y) + (row * 8));
@@ -334,8 +328,7 @@ public class ScreenBuffer {
 
 	public int strlen(String s) {
 		int len = 0;
-		for (int i = 0; i < s.length(); i++) // For each character of the string to display
-		{
+		for (int i = 0; i < s.length(); i++) { // For each character of the string to display
 			String c = new String(new char[]{s.charAt(i)});
 			if (CharacterMatrixes.characters.containsKey(c)) {
 				String[] matrix = CharacterMatrixes.characters.get(c);
