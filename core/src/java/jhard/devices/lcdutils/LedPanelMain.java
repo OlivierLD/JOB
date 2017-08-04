@@ -101,22 +101,22 @@ public class LedPanelMain
 		char[][] screenMatrix = new char[NB_LINES][NB_COLS];
 		for (int col = 0; col < NB_COLS; col++) {
 			// Line is a VERTICAL line of the screen, its length is NB_LINES (32)
-			String line = "";
+			String screenVerticalLine = "";
 			for (int l = (NB_LINES / 8) - 1; l >= 0; l--) {
-				line += StringUtils.lpad(Integer.toBinaryString(screenbuffer[col + (l * NB_COLS)] & 0xFF), 8, "0").replace('0', ' ').replace('1', 'X');
+				screenVerticalLine += StringUtils.lpad(Integer.toBinaryString(screenbuffer[col + (l * NB_COLS)] & 0xFF), 8, "0").replace('0', ' ').replace('1', 'X');
 			}
 			if ("true".equals(System.getProperty("dump.screen","false"))) {
-				System.out.println(line);
+				System.out.println(screenVerticalLine);
 			}
-			for (int row = 0; row < line.length(); row++) {
+			for (int row = 0; row < screenVerticalLine.length(); row++) {
 				try {
-					char mc = line.charAt(row);
+					char mc = screenVerticalLine.charAt(row);
 					//           Line
 					//           |    Column
 					//           |    |
 					screenMatrix[row][col] = mc;
 				} catch (Exception ex) {
-					System.err.println("Line:" + line + " (" + line.length() + " character(s))");
+					System.err.println("Line:" + screenVerticalLine + " (" + screenVerticalLine.length() + " character(s))");
 					System.err.println("r:" + row + ", c=" + col + ", buffer length:" + screenbuffer.length);
 					ex.printStackTrace();
 				}
@@ -136,9 +136,7 @@ public class LedPanelMain
 				final int fLine = line;
 				String displayLine = IntStream.range(0, NB_COLS)
 						.boxed()
-						.map(idx -> {
-							return (ledMatrix[fLine][idx] ? "X" : " ");
-						})
+						.map((Integer idx) -> ledMatrix[fLine][idx] ? "X" : " ")
 						.collect(Collectors.joining(""));
 				System.out.println(displayLine);
 			}
@@ -235,7 +233,6 @@ public class LedPanelMain
 				lcd.setBuffer(sb.getScreenBuffer());
 				lcd.display();
 				delay(2_000);
-
 				// End blinking
 			}
 

@@ -128,27 +128,6 @@ public class SSD1306 extends I2C {
 		return mirror;
 	}
 
-  // TODO Object: PImage
-  public void sendImage(Object img) {
-    sendImage(img, 0, 0);
-  }
-
-  // TODO Object: PImage
-  public void sendImage(Object img, int startX, int startY) {
-    byte[] frame = new byte[512];
-    // img.loadPixels();
-    // for (int y=startY; y < height && y-startY < 64; y++) {
-    //   for (int x=startX; x < width && x-startX < 128; x++) {
-    //     if (128 <= brightness(img.pixels[y*img.width+x])) {
-    //       // this isn't the normal (scanline) mapping, but 8 pixels below each other at a time
-    //       // white pixels have their bit turned on
-    //       frame[x + (y/8)*128] |= (1 << (y % 8));
-    //     }
-    //   }
-    // }
-    sendFramebuffer(frame);
-  }
-
   public void sendFramebuffer(byte[] buf) {
 //  if (buf.length != 1024) {
     if (buf.length % 512 != 0) {
