@@ -12,6 +12,7 @@ do
   echo -e "| 2: Push Button input |"
   echo -e "| 3: MCP3008 (ADC)     |"
   echo -e "| 4: OLED SSD1306      |"
+  echo -e "| 5: GPIO Interrupt    |"
   echo -e "+----------------------+"
   echo -e "| Q: Quit              |"
   echo -e "+----------------------+"
@@ -42,6 +43,12 @@ do
       JAVA_OPTS="$JAVA_OPTS -Dverbose=true"
       JAVA_OPTS="$JAVA_OPTS -Ddump.screen=false"
       sudo java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.SSD1306Sample
+      echo -en "Hit [return]"
+      read a
+      ;;
+    5)
+      echo -e "GPIO Interrupt"
+      sudo java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.gpio.PinInterrupt
       echo -en "Hit [return]"
       read a
       ;;
