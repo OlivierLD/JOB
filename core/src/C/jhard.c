@@ -204,6 +204,10 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferI2c
 		packets.nmsgs = 1;
 	}
 
+	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> ioctl...\n");
+	}
+
 	int ret = ioctl(handle, I2C_RDWR, &packets);
 	if (ret < 0) {
 		ret = -errno;
@@ -264,6 +268,11 @@ JNIEXPORT jlong JNICALL Java_jhard_io_JHardNativeInterface_servoStartThread
 
 	// open gpio
 	sprintf(path, "/sys/class/gpio/gpio%d/value", gpio);
+
+	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> gpio, start thread [%s]\n", path);
+	}
+
 	state->fd = open(path, O_WRONLY);
 	if (state->fd < 0) {
 		free(state);
