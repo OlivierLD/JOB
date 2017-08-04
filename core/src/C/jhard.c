@@ -35,12 +35,36 @@
 #include <unistd.h>
 #include "jhard.h"
 
+#ifndef TRUE
+#define TRUE 1
+#define FALSE 0
+#endif
+
 static const int servo_pulse_oversleep = 35;  // amount of uS to account for when sleeping
+
+/**
+ * Extra info when NATIVEDEBUG=true
+ */
+int nativeDebugEnabled() {
+  char * nativeDebug = "NATIVEDEBUG";
+  int debug = FALSE;
+  if (getenv(nativeDebug)) {
+    if (strcmp("true", getenv(nativeDebug)) == 0) {
+      debug = TRUE;
+    }
+  }
+  return debug;
+}
 
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
   (JNIEnv *env, jclass cls, jstring _fn)
 {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
+
+	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> Opening device [%s]\n", *fn);
+	}
+
 	int file = open(fn, O_RDWR);
 	(*env)->ReleaseStringUTFChars(env, _fn, fn);
 	if (file < 0) {
