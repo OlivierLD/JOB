@@ -48,7 +48,36 @@ This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar cont
 This is a work in progress... See the sample scripts `sample.0*`, see ho the `java.library.path` variable is set.
 This is the one used to refer to the location of `libjavahard-io.so`.
 
+## Samples
+Run the script named `samplemenu.sh`:
+```bash
+ $> ./samplemenu.sh
+ +----------------------+
+ | Sample Menu          |
+ +----------------------+
+ | 1: Led Counter       |
+ | 2: Push Button input |
+ | 3: MCP3008 (ADC)     |
+ | 4: OLED SSD1306      |
+ +----------------------+
+ | Q: Quit              |
+ +----------------------+
+  You choose >
+
+```
+Make sure the required devices are correctly wired for the demos.
+
 ## TODO
 A lot!
+
+- Interrupts
+- BMP180
+- BME280
+- LSM303
+- HTU21DF
+- LoRa
+- FONA
+- Servos & PWM
+- ...etc
 
 ---

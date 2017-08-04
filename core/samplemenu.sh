@@ -26,13 +26,13 @@ do
       ;;
     2)
       echo -e "Push Button"
-      sudo java -cp build/libs/core-0.1-all.jar -Djava.library.path=src/C examples.io.gpio.SimpleInput
+      sudo java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.gpio.SimpleInput
       echo -en "Hit [return]"
       read a
       ;;
     3)
       echo -e "ADC and potentiometer"
-      sudo java -cp build/libs/core-0.1-all.jar -Djava.library.path=src/C examples.io.spi.MCP3008Sample
+      sudo java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.spi.MCP3008Sample
       echo -en "Hit [return]"
       read a
       ;;
@@ -41,7 +41,7 @@ do
       JAVA_OPTS=
       JAVA_OPTS="$JAVA_OPTS -Dverbose=true"
       JAVA_OPTS="$JAVA_OPTS -Ddump.screen=false"
-      sudo java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=src/C examples.io.i2c.SSD1306Sample
+      sudo java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.SSD1306Sample
       echo -en "Hit [return]"
       read a
       ;;
