@@ -92,6 +92,7 @@ public class SSD1306 extends I2C {
 	  this.writeCommand(SSD1306_SETVCOMDETECT, 0x40);       // 0xDB, set VCOMH deselect level
 	  this.writeCommand(SSD1306_DISPLAYALLON_RESUME);       // 0xA4, display RAM content (not all-on)
 	  this.writeCommand(SSD1306_NORMALDISPLAY);             // 0xA6, set normal (not-inverted) display
+	  this.writeCommand(SSD1306_DISPLAYON);                 // 0xAF, turn display on
   }
 
   public void invert(boolean inverted) {
