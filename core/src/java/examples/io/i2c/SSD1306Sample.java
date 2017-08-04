@@ -77,7 +77,7 @@ public class SSD1306Sample {
 		oled.setBuffer(mirror ? SSD1306.mirror(sb.getScreenBuffer(), WIDTH, HEIGHT) : sb.getScreenBuffer());
 		oled.display();
 
-		if (false) { // TODO Fix that ... Marquee does not work with i2c
+		if (true) { // TODO Fix that ... Marquee does not work with i2c
 			// Marquee
 			if ("true".equals(System.getProperty("verbose", "false"))) {
 				System.out.println("Marquee...");
