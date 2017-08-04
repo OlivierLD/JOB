@@ -6,21 +6,20 @@ import java.awt.Graphics;
 public class LEDPanel
   extends javax.swing.JPanel {
   private Color ledColor = Color.red;
-  private int origin = 0;
   private boolean withGrid = false;
 
   private static int NB_LINES =  32;
   private static int NB_COLS  = 128;
 
-  private boolean[][] ledOnOff; // = new boolean[NB_COLS][NB_LINES];
+  private int nbLines, nbCols;
 
-  public void setLedOnOff(boolean[][] ledOnOff)
-  {
+  private boolean[][] ledOnOff;
+
+  public void setLedOnOff(boolean[][] ledOnOff) {
     this.ledOnOff = ledOnOff;
   }
 
-  public boolean[][] getLedOnOff()
-  {
+  public boolean[][] getLedOnOff() {
     return ledOnOff;
   }
 
@@ -30,42 +29,35 @@ public class LEDPanel
     this(NB_LINES, NB_COLS);
   }
 
-  public LEDPanel(int nbLines, int nbCols)
-  {
-    NB_LINES = nbLines;
-    NB_COLS = nbCols;
+  public LEDPanel(int nbLines, int nbCols) {
+    this.nbLines = nbLines;
+    this.nbCols = nbCols;
     initLeds();
     initComponents();
   }
 
-  public void setWithGrid(boolean withGrid)
-  {
+  public void setWithGrid(boolean withGrid) {
     this.withGrid = withGrid;
   }
 
-  private void initLeds()
-  {
-    ledOnOff = new boolean[NB_COLS][NB_LINES];
-    for (int r=0; r<NB_LINES; r++)
-    {
-      for (int c=0; c<NB_COLS; c++)
-        ledOnOff[c][r] = false;
+  private void initLeds() {
+    this.ledOnOff = new boolean[this.nbLines][this.nbCols];
+    for (int r=0; r<this.nbLines; r++) {
+      for (int c=0; c<this.nbCols; c++) {
+        this.ledOnOff[r][c] = false;
+      }
     }
   }
 
-  public void clear()
-  {
+  public void clear() {
     initLeds();
-    origin = 0;
     this.repaint();
   }
 
   /** This method is called from within the constructor to
    * initialize the form.
    */
-  @SuppressWarnings("unchecked")
-  private void initComponents()
-  {
+  private void initComponents() {
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -78,57 +70,46 @@ public class LEDPanel
     );
   }
 
-  public void setImage(boolean[][] leds)
-  {
-    if (leds.length != NB_COLS)
-    {
-      System.out.println("Height mismatch " + leds.length + " instead of " + NB_COLS);
+  public void setImage(boolean[][] leds) {
+    if (leds.length != this.nbLines) {
+      System.out.println("Width mismatch " + leds.length + " instead of " + this.nbLines);
       return;
     }
-    if (leds[0].length != NB_LINES)
-    {
-      System.out.println("Width mismatch " + leds[0].length + " instead of " + NB_LINES);
+    if (leds[0].length != this.nbCols) {
+      System.out.println("Height mismatch " + leds[0].length + " instead of " + this.nbCols);
       return;
     }
-    for (int r=0; r<NB_LINES; r++)
-    {
-//    String s = "";
-      for (int c=0; c<NB_COLS; c++)
-      {
-        ledOnOff[c][r] = leds[c][r];
-//      s += (leds[c][r]?"X":" ");
+    for (int r=0; r<this.nbLines; r++) {
+      for (int c=0; c<this.nbCols; c++) {
+        ledOnOff[r][c] = leds[r][c];
       }
-//    System.out.println(s);
     }
     this.repaint();
   }
 
   @Override
-  public void paintComponent(Graphics gr)
-  {
+  public void paintComponent(Graphics gr) {
     gr.setColor(Color.black);
     gr.fillRect(0, 0, this.getWidth(), this.getHeight());
     // Grid
-    if (withGrid)
-    {
+    if (withGrid) {
       gr.setColor(Color.gray);
-      for (int c=0; c<NB_COLS; c++)
-        gr.drawLine(c * this.getWidth() / NB_COLS, 0, c * this.getWidth() / NB_COLS, this.getHeight());
-      for (int r=0; r<NB_LINES; r++)
-        gr.drawLine(0, r * this.getHeight() / NB_LINES, this.getWidth(), r * this.getHeight() / NB_LINES);
+      for (int c=0; c<this.nbCols; c++) {
+	      gr.drawLine(c * this.getWidth() / this.nbCols, 0, c * this.getWidth() / this.nbCols, this.getHeight());
+      }
+      for (int r=0; r<this.nbLines; r++) {
+	      gr.drawLine(0, r * this.getHeight() / this.nbLines, this.getWidth(), r * this.getHeight() / this.nbLines);
+      }
     }
     gr.setColor(ledColor);
-    for (int r=0; r<NB_LINES; r++)
-    {
-      for (int c=0; c<NB_COLS; c++)
-      {
-        if (ledOnOff[c][r])
-        {
+    for (int r=0; r<this.nbLines; r++) {
+      for (int c=0; c<this.nbCols; c++) {
+        if (ledOnOff[r][c]) {
           // Change that, with gradient and this sort of stuff, if necessary
-          gr.fillRoundRect(c * this.getWidth() / NB_COLS,
-                           r * this.getHeight() / NB_LINES,
-                           this.getWidth() / NB_COLS,
-                           this.getHeight() / NB_LINES,
+          gr.fillRoundRect(c * this.getWidth() / this.nbCols,
+                           r * this.getHeight() / this.nbLines,
+                           this.getWidth() / this.nbCols,
+                           this.getHeight() / this.nbLines,
                            20,
                            20);
         }
