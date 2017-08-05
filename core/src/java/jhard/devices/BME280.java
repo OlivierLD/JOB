@@ -314,6 +314,8 @@ public class BME280 extends I2C {
 	public int readU16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
+		super.endTransmission();
+		super.beginTransmission(this.address);
 		byte[] ba = super.read(2);
 		super.endTransmission();
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian

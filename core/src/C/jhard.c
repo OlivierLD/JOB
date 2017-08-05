@@ -71,7 +71,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
 
 	if (nativeDebugEnabled()) {
-	  fprintf(stdout, "C >> openDevice\n");
+//    fprintf(stdout, "C >> openDevice\n");
 	  fprintf(stdout, "C >> Opening device [%s]\n", fn);
 	}
 

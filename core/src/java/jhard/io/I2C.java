@@ -203,13 +203,13 @@ public class I2C {
    *  @see #endTransmission
    */
   public void write(int out) {
-    if (out < -128 || 255 < out) {
+    if (out < -128 || out > 255) {
       System.err.println("The write function can only operate on a single byte at a time. Call it with a value from 0 to 255, or -128 to 127.");
       throw new RuntimeException("Argument does not fit into a single byte");
     }
-    byte[] tmp = new byte[1];
-    tmp[0] = (byte)out;
-    write(tmp);
+//    byte[] tmp = new byte[1];
+//    tmp[0] = (byte)out;
+    write((byte)out);
   }
 
   /**
