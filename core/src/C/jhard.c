@@ -222,7 +222,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferI2c
 		packets.nmsgs = 1;
 	}
 
-	if (false && nativeDebugEnabled()) {
+	if (FALSE && nativeDebugEnabled()) {
 	  fprintf(stdout, "C >> ioctl...\n");
 	}
 
