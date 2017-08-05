@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 
 
 /**
- *  @webref
+ *  GPIO interface
  */
 public class GPIO {
 
@@ -94,9 +94,9 @@ public class GPIO {
    *  @param parent typically use "this"
    *  @param method name of sketch method to call
    *  @param mode when to call: GPIO.CHANGE, GPIO.FALLING or GPIO.RISING
-   *  @see noInterrupts
-   *  @see interrupts
-   *  @see releaseInterrupt
+   *  @see #noInterrupts
+   *  @see #interrupts
+   *  @see #releaseInterrupt
    *  @deprecated
    */
   public static void attachInterrupt(int pin, Object parent, String method, int mode) {
@@ -213,8 +213,8 @@ public class GPIO {
    *  Returns the value of an input pin
    *  @param pin GPIO pin
    *  @return GPIO.HIGH (1) or GPIO.LOW (0)
-   *  @see pinMode
-   *  @see digitalWrite
+   *  @see #pinMode
+   *  @see #digitalWrite
    *  @webref
    */
   public static int digitalRead(int pin) {
@@ -248,8 +248,8 @@ public class GPIO {
    *  Sets an output pin to be either high or low
    *  @param pin GPIO pin
    *  @param value GPIO.HIGH (1) or GPIO.LOW (0)
-   *  @see pinMode
-   *  @see digitalRead
+   *  @see #pinMode
+   *  @see #digitalRead
    *  @webref
    */
   public static void digitalWrite(int pin, int value) {
@@ -298,8 +298,8 @@ public class GPIO {
   /**
    *  Disables an interrupt for an input pin
    *  @param pin GPIO pin
-   *  @see enableInterrupt
-   *  @see waitForInterrupt
+   *  @see #enableInterrupt
+   *  @see #waitForInterrupt
    */
   protected static void disableInterrupt(int pin) {
     enableInterrupt(pin, NONE);
@@ -310,8 +310,8 @@ public class GPIO {
    *  Enables an interrupt for an input pin
    *  @param pin GPIO pin
    *  @param mode what to wait for: GPIO.CHANGE, GPIO.FALLING or GPIO.RISING
-   *  @see waitForInterrupt
-   *  @see disableInterrupt
+   *  @see #waitForInterrupt
+   *  @see #disableInterrupt
    */
   protected static void enableInterrupt(int pin, int mode) {
     checkValidPin(pin);
@@ -346,9 +346,9 @@ public class GPIO {
 
   /**
    *  Allows interrupts to happen
-   *  @see attachInterrupt
-   *  @see noInterrupts
-   *  @see releaseInterrupt
+   *  @see #attachInterrupt
+   *  @see #noInterrupts
+   *  @see #releaseInterrupt
    *  @webref
    */
   public static void interrupts() {
@@ -358,9 +358,9 @@ public class GPIO {
 
   /**
    *  Prevents interrupts from happpening
-   *  @see attachInterrupt
-   *  @see interrupts
-   *  @see releaseInterrupt
+   *  @see #attachInterrupt
+   *  @see #interrupts
+   *  @see #releaseInterrupt
    *  @webref
    */
   public static void noInterrupts() {
@@ -372,9 +372,9 @@ public class GPIO {
    *  Configures a pin to act either as input or output
    *  @param pin GPIO pin
    *  @param mode GPIO.INPUT or GPIO.OUTPUT
-   *  @see digitalRead
-   *  @see digitalWrite
-   *  @see releasePin
+   *  @see #digitalRead
+   *  @see #digitalWrite
+   *  @see #releasePin
    *  @webref
    */
   public static void pinMode(int pin, int mode) {
@@ -435,9 +435,9 @@ public class GPIO {
   /**
    *  Stops listening for interrupts on an input pin
    *  @param pin GPIO pin
-   *  @see attachInterrupt
-   *  @see noInterrupts
-   *  @see interrupts
+   *  @see #attachInterrupt
+   *  @see #noInterrupts
+   *  @see #interrupts
    *  @webref
    */
   public static void releaseInterrupt(int pin) {
@@ -462,7 +462,7 @@ public class GPIO {
   /**
    *  Gives ownership of a pin back to the operating system
    *  @param pin GPIO pin
-   *  @see pinMode
+   *  @see #pinMode
    *  @webref
    */
   public static void releasePin(int pin) {
@@ -525,8 +525,8 @@ public class GPIO {
    *  @param pin GPIO pin
    *  @param timeout don't wait more than timeout milliseconds
    *  @return true if the interrupt occured, false if the timeout occured
-   *  @see enableInterrupt
-   *  @see disableInterrupt
+   *  @see #enableInterrupt
+   *  @see #disableInterrupt
    */
   protected static boolean waitForInterrupt(int pin, int timeout) {
     checkValidPin(pin);

@@ -21,7 +21,6 @@ public class PinInterrupt {
 
 	  // In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
 	  GPIO.attachInterrupt(pin, this::buttonPressed, GPIO.RISING);
-	  GPIO.attachInterrupt(pin, this::buttonReleased, GPIO.FALLING);
   }
 
 //  public void buttonListener(int i) {
@@ -31,9 +30,6 @@ public class PinInterrupt {
 	private void buttonPressed(int i) {
     System.out.println(String.format("Button pressed pin: %d", i));
   }
-	private void buttonReleased(int i) {
-		System.out.println(String.format("Button released pin: %d", i));
-	}
 
   public static void main(String... args) {
 
@@ -47,7 +43,8 @@ public class PinInterrupt {
 	    }
     }));
 
-    synchronized (me) {
+	  System.out.println("Ready.");
+	  synchronized (me) {
 	    try {
 		    me.wait();
 	    } catch (InterruptedException e) {
