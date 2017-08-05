@@ -43,19 +43,23 @@
 static const int servo_pulse_oversleep = 35;  // amount of uS to account for when sleeping
 
 #define VERBOSE TRUE
+#define NATIVEDEBUG "NATIVEDEBUG"
 /**
  * Extra info when NATIVEDEBUG=true
  */
 int nativeDebugEnabled() {
-  char * nativeDebug = "NATIVEDEBUG";
+  char * nativeDebug = NATIVEDEBUG;
   int debug = FALSE;
   if (getenv(nativeDebug)) {
     if (strcmp("true", getenv(nativeDebug)) == 0) {
+      if (VERBOSE) {
+        fprintf(stdout, "%s=%s\n", nativeDebug, getenv(nativeDebug));
+      }
       debug = TRUE;
     }
   }
   if (VERBOSE) {
-    fprintf(stdout, "C >> NATIVEDEBUG:%s", (debug ? "true" : "false"));
+    fprintf(stdout, "C >> %s:%s\n", nativeDebug, (debug ? "true" : "false"));
   }
   return debug;
 }
