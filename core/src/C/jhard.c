@@ -68,11 +68,11 @@ int nativeDebugEnabled() {
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
   (JNIEnv *env, jclass cls, jstring _fn)
 {
-	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
+	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
 
 	if (nativeDebugEnabled()) {
 	  fprintf(stdout, "C >> openDevice\n");
-	  fprintf(stdout, "C >> Opening device [%s]\n", *fn);
+	  fprintf(stdout, "C >> Opening device [%s]\n", fn);
 	}
 
 	int file = open(fn, O_RDWR);
@@ -111,10 +111,10 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_closeDevice
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
   (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _in)
 {
-	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
+	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
 	  fprintf(stdout, "C >> readFile\n");
-      fprintf(stdout, "C >> readFile [%s]\n", *fn);
+      fprintf(stdout, "C >> readFile [%s]\n", fn);
     }
 	int file = open(fn, O_RDONLY);
 	(*env)->ReleaseStringUTFChars(env, _fn, fn);
@@ -137,10 +137,10 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile
   (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _out)
 {
-	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
+	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
 	  fprintf(stdout, "C >> writeFile\n");
-      fprintf(stdout, "C >> writeFile [%s]\n", *fn);
+      fprintf(stdout, "C >> writeFile [%s]\n", fn);
     }
 	int file = open(fn, O_WRONLY);
 	(*env)->ReleaseStringUTFChars(env, _fn, fn);
@@ -222,7 +222,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferI2c
 		packets.nmsgs = 1;
 	}
 
-	if (nativeDebugEnabled()) {
+	if (false && nativeDebugEnabled()) {
 	  fprintf(stdout, "C >> ioctl...\n");
 	}
 
