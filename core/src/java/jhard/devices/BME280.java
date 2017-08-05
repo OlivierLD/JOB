@@ -314,7 +314,7 @@ public class BME280 extends I2C {
 	public int readU16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
-		byte[] ba = this.read(2);
+		byte[] ba = super.read(2);
 		super.endTransmission();
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian
 	}
@@ -322,7 +322,7 @@ public class BME280 extends I2C {
 	public int readS16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
-		byte[] ba = this.read(2);
+		byte[] ba = super.read(2);
 		super.endTransmission();
 		int lo = ba[0] & 0xFF;
 		int hi = ba[1] & 0xFF;
@@ -334,7 +334,7 @@ public class BME280 extends I2C {
 	public int readU8(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
-		byte[] ba = this.read(1);
+		byte[] ba = super.read(1);
 		super.endTransmission();
 		return (int)(ba[0] & 0xFF);
 	}
