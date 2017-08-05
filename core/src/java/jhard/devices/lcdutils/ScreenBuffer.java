@@ -18,7 +18,7 @@ public class ScreenBuffer {
 		BLACK_ON_WHITE
 	}
 
-	public enum Orientation { // TODO Manage that one
+	public enum Orientation { // TODO Implement that one
 		LANDSCAPE,
 		PORTRAIT
 	}
