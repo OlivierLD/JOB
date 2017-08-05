@@ -103,6 +103,7 @@ public class BME280 extends I2C {
 				Arrays.asList(deviceList)
 						.stream()
 						.collect(Collectors.joining(", "))));
+			System.out.println(String.format("Bus %s, address %02X", bus, address));
 		}
 
 		try {
@@ -177,7 +178,7 @@ public class BME280 extends I2C {
 		System.out.println("======================");
 	}
 
-	private void send(int reg, byte val) {
+	private void command(int reg, byte val) {
 		super.beginTransmission(this.address);
 		super.write(reg);
 		super.write(val);
@@ -190,12 +191,12 @@ public class BME280 extends I2C {
 		if (verbose) {
 			System.out.println(String.format("readRawTemp: 1 - meas=%d", meas));
 		}
-		this.send(BME280_REGISTER_CONTROL_HUM, (byte) meas); // HUM ?
+		this.command(BME280_REGISTER_CONTROL_HUM, (byte) meas); // HUM ?
 		meas = mode << 5 | mode << 2 | 1;
 		if (verbose) {
 			System.out.println(String.format("readRawTemp: 2 - meas=%d", meas));
 		}
-		this.send(BME280_REGISTER_CONTROL, (byte) meas);
+		this.command(BME280_REGISTER_CONTROL, (byte) meas);
 
 		double sleepTime = 0.00125 + 0.0023 * (1 << mode);
 		sleepTime = sleepTime + 0.0023 * (1 << mode) + 0.000575;

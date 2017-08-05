@@ -77,29 +77,29 @@ public class SSD1306 extends I2C {
 	}
 
   protected void init() {
-    this.writeCommand(SSD1306_DISPLAYOFF);                // 0xAE, turn display off
-	  this.writeCommand(SSD1306_SETDISPLAYCLOCKDIV, 0x80);  // 0xD5, set display clock divide ratio & oscillator frequency to default
-	  this.writeCommand(SSD1306_SETMULTIPLEX, 0x1f);        // 0xA8, set multiplex ratio to the highest setting, was 0x3F
-	  this.writeCommand(SSD1306_SETDISPLAYOFFSET, 0x00);    // 0xD3, no display offset
-	  this.writeCommand(SSD1306_SETSTARTLINE | 0x00);       // 0x40, set default display start line
-    this.writeCommand(SSD1306_CHARGEPUMP, 0x14);          // 0x8D, enable charge pump
-    this.writeCommand(SSD1306_MEMORYMODE, 0x00);          // 0x20, set memory addressing mode to horizontal
-	  this.writeCommand(SSD1306_SEGREMAP | 0x01);           // 0xA0, set segment re-map
-	  this.writeCommand(SSD1306_COMSCANDEC);                // 0xC8, set COM output scan direction
-	  this.writeCommand(SSD1306_SETCOMPINS, 0x02);          // 0xDA, set COM pins hardware configuration, was 0x12
-	  this.writeCommand(SSD1306_SETCONTRAST, 0x8f);         // 0x81, set contrast, was 0xCF
-	  this.writeCommand(SSD1306_SETPRECHARGE, 0xf1);        // 0xD9, set pre-charge period to 241x DCLK
-	  this.writeCommand(SSD1306_SETVCOMDETECT, 0x40);       // 0xDB, set VCOMH deselect level
-	  this.writeCommand(SSD1306_DISPLAYALLON_RESUME);       // 0xA4, display RAM content (not all-on)
-	  this.writeCommand(SSD1306_NORMALDISPLAY);             // 0xA6, set normal (not-inverted) display
-	  this.writeCommand(SSD1306_DISPLAYON);                 // 0xAF, turn display on
+    this.command(SSD1306_DISPLAYOFF);                // 0xAE, turn display off
+	  this.command(SSD1306_SETDISPLAYCLOCKDIV, 0x80);  // 0xD5, set display clock divide ratio & oscillator frequency to default
+	  this.command(SSD1306_SETMULTIPLEX, 0x1f);        // 0xA8, set multiplex ratio to the highest setting, was 0x3F
+	  this.command(SSD1306_SETDISPLAYOFFSET, 0x00);    // 0xD3, no display offset
+	  this.command(SSD1306_SETSTARTLINE | 0x00);       // 0x40, set default display start line
+    this.command(SSD1306_CHARGEPUMP, 0x14);          // 0x8D, enable charge pump
+    this.command(SSD1306_MEMORYMODE, 0x00);          // 0x20, set memory addressing mode to horizontal
+	  this.command(SSD1306_SEGREMAP | 0x01);           // 0xA0, set segment re-map
+	  this.command(SSD1306_COMSCANDEC);                // 0xC8, set COM output scan direction
+	  this.command(SSD1306_SETCOMPINS, 0x02);          // 0xDA, set COM pins hardware configuration, was 0x12
+	  this.command(SSD1306_SETCONTRAST, 0x8f);         // 0x81, set contrast, was 0xCF
+	  this.command(SSD1306_SETPRECHARGE, 0xf1);        // 0xD9, set pre-charge period to 241x DCLK
+	  this.command(SSD1306_SETVCOMDETECT, 0x40);       // 0xDB, set VCOMH deselect level
+	  this.command(SSD1306_DISPLAYALLON_RESUME);       // 0xA4, display RAM content (not all-on)
+	  this.command(SSD1306_NORMALDISPLAY);             // 0xA6, set normal (not-inverted) display
+	  this.command(SSD1306_DISPLAYON);                 // 0xAF, turn display on
   }
 
   public void invert(boolean inverted) {
     if (inverted) {
-      writeCommand(SSD1306_INVERTDISPLAY); // 0xA7
+      command(SSD1306_INVERTDISPLAY); // 0xA7
     } else {
-      writeCommand(SSD1306_NORMALDISPLAY); // 0xA6
+      command(SSD1306_NORMALDISPLAY); // 0xA6
     }
   }
 
@@ -129,23 +129,22 @@ public class SSD1306 extends I2C {
 	}
 
   public void sendFramebuffer(byte[] buf) {
-//  if (buf.length != 1024) {
-    if (buf.length % 512 != 0) {
-      System.err.println(String.format("The framebuffer should be 1024 bytes long (found %d), with one bit per pixel", buf.length));
+	  if (buf.length != 512) {
+      System.err.println(String.format("The framebuffer should be 512 bytes long (found %d), with one bit per pixel", buf.length));
       throw new IllegalArgumentException("Unexpected buffer size");
     }
 
-	  this.writeCommand(SSD1306_COLUMNADDR, new int[] {0, 127});        // 0x21, set column address
+	  this.command(SSD1306_COLUMNADDR, new int[] {0, 127});        // 0x21, set column address
 	  // Page size: (h / 8) - 1;
-//  this.writeCommand(SSD1306_PAGEADDR, new int[] {0, 7});            // 0x22, set page address. 8 lines
-	  this.writeCommand(SSD1306_PAGEADDR, new int[] {0, 3});            // 0x22, set page address. 4 lines
+//  this.command(SSD1306_PAGEADDR, new int[] {0, 7});            // 0x22, set page address. 8 lines
+	  this.command(SSD1306_PAGEADDR, new int[] {0, 3});            // 0x22, set page address. 4 lines
 
-//  this.writeCommand(SSD1306_DEACTIVATE_SCROLL);         // 0x2E, deactivate scroll
-//  this.writeCommand(SSD1306_DISPLAYON);                 // 0xAF, turn display on
+//  this.command(SSD1306_DEACTIVATE_SCROLL);         // 0x2E, deactivate scroll
+//  this.command(SSD1306_DISPLAYON);                 // 0xAF, turn display on
 
-//  this.writeCommand(SSD1306_SETLOWCOLUMN | 0x0);  // set start address
-//  this.writeCommand(SSD1306_SETHIGHCOLUMN | 0x0); // set higher column start address
-//  this.writeCommand(SSD1306_SETSTARTLINE | 0x0);  // set start line
+//  this.command(SSD1306_SETLOWCOLUMN | 0x0);  // set start address
+//  this.command(SSD1306_SETHIGHCOLUMN | 0x0); // set higher column start address
+//  this.command(SSD1306_SETSTARTLINE | 0x0);  // set start line
 
     // send the frame buffer as 16 byte long packets
     for (int i=0; i < buf.length/16; i++) {
@@ -162,14 +161,14 @@ public class SSD1306 extends I2C {
     this.sendFramebuffer(this.buffer);
   }
 
-  protected void writeCommand(int arg1) {
+  protected void command(int arg1) {
     super.beginTransmission(this.address);
     super.write(SSD1306_SETLOWCOLUMN);    // 0x00, indicates command write
     super.write(arg1);
     super.endTransmission();
   }
 
-  protected void writeCommand(int arg1, int arg2) {
+  protected void command(int arg1, int arg2) {
     super.beginTransmission(this.address);
     super.write(SSD1306_SETLOWCOLUMN);
     super.write(arg1);
@@ -177,7 +176,7 @@ public class SSD1306 extends I2C {
     super.endTransmission();
   }
 
-	protected void writeCommand(int reg, int[] args) {
+	protected void command(int reg, int[] args) {
 		super.beginTransmission(this.address);
 		super.write(SSD1306_SETLOWCOLUMN);
 		super.write(reg);
