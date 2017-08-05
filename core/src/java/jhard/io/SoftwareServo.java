@@ -1,32 +1,7 @@
-/* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-
-/*
-  Copyright (c) The Processing Foundation 2015
-  Hardware I/O library developed by Gottfried Haider
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
-*/
-
 package jhard.io;
 
-// import processing.core.*;
-
-
 /**
- *  @webref
+ *
  */
 public class SoftwareServo {
 
@@ -40,11 +15,9 @@ public class SoftwareServo {
   protected int maxPulse = 0;       // maximum pulse width in microseconds
   protected int pulse = 0;          // current pulse in microseconds
 
-
   /**
    *  Opens a servo motor
    *  @param parent typically use "this"
-   *  @webref
    */
   public SoftwareServo(Object parent) {
     JHardNativeInterface.loadLibrary();
@@ -53,7 +26,6 @@ public class SoftwareServo {
 
   /**
    *  Closes a servo motor
-   *  @webref
    */
   public void close() {
     detach();
@@ -68,11 +40,9 @@ public class SoftwareServo {
     }
   }
 
-
   /**
    *  Attaches a servo motor to a GPIO pin
    *  @param pin GPIO pin
-   *  @webref
    */
   public void attach(int pin) {
     detach();
@@ -81,12 +51,10 @@ public class SoftwareServo {
     this.maxPulse = DEFAULT_MAX_PULSE;
   }
 
-
   /**
    *  Attaches a servo motor to a GPIO pin using custom pulse widths
    *  @param minPulse minimum pulse width in microseconds (default: 544, same as on Arduino)
    *  @param maxPulse maximum pulse width in microseconds (default: 2400, same as on Arduino)
-   *  @webref
    */
   public void attach(int pin, int minPulse, int maxPulse) {
     detach();
@@ -98,7 +66,6 @@ public class SoftwareServo {
   /**
    *  Moves a servo motor to a given orientation
    *  @param angle angle in degrees (controls speed and direction on continuous-rotation servos)
-   *  @webref
    */
   public void write(float angle) {
     if (attached() == false) {
@@ -131,20 +98,16 @@ public class SoftwareServo {
     }
   }
 
-
   /**
    *  Returns whether a servo motor is attached to a pin
    *  @return true if attached, false is not
-   *  @webref
    */
   public boolean attached() {
     return (pin != -1);
   }
 
-
   /**
-   *  Detatches a servo motor from a GPIO pin
-   *  @webref
+   *  Detach a servo motor from a GPIO pin
    */
   public void detach() {
     if (0 <= handle) {

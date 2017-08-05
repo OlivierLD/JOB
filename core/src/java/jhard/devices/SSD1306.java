@@ -135,10 +135,10 @@ public class SSD1306 extends I2C {
       throw new IllegalArgumentException("Unexpected buffer size");
     }
 
-	  this.writeCommand(SSD1306_COLUMNADDR, 0, 127);        // 0x21, set column address
+	  this.writeCommand(SSD1306_COLUMNADDR, new int[] {0, 127});        // 0x21, set column address
 	  // Page size: (h / 8) - 1;
-//  this.writeCommand(SSD1306_PAGEADDR, 0, 7);            // 0x22, set page address. 8 lines
-	  this.writeCommand(SSD1306_PAGEADDR, 0, 3);            // 0x22, set page address. 4 lines
+//  this.writeCommand(SSD1306_PAGEADDR, new int[] {0, 7});            // 0x22, set page address. 8 lines
+	  this.writeCommand(SSD1306_PAGEADDR, new int[] {0, 3});            // 0x22, set page address. 4 lines
 
 //  this.writeCommand(SSD1306_DEACTIVATE_SCROLL);         // 0x2E, deactivate scroll
 //  this.writeCommand(SSD1306_DISPLAYON);                 // 0xAF, turn display on
@@ -149,7 +149,7 @@ public class SSD1306 extends I2C {
 
     // send the frame buffer as 16 byte long packets
     for (int i=0; i < buf.length/16; i++) {
-      super.beginTransmission(address);
+      super.beginTransmission(this.address);
       super.write(SSD1306_SETSTARTLINE);  // 0x40, indicates data write
       for (int j=0; j < 16; j++) {
         super.write(buf[i*16+j]);
@@ -163,26 +163,36 @@ public class SSD1306 extends I2C {
   }
 
   protected void writeCommand(int arg1) {
-    super.beginTransmission(address);
+    super.beginTransmission(this.address);
     super.write(SSD1306_SETLOWCOLUMN);    // 0x00, indicates command write
     super.write(arg1);
     super.endTransmission();
   }
 
   protected void writeCommand(int arg1, int arg2) {
-    super.beginTransmission(address);
+    super.beginTransmission(this.address);
     super.write(SSD1306_SETLOWCOLUMN);
     super.write(arg1);
     super.write(arg2);
     super.endTransmission();
   }
 
-  protected void writeCommand(int arg1, int arg2, int arg3) {
-    super.beginTransmission(address);
-    super.write(SSD1306_SETLOWCOLUMN);
-    super.write(arg1);
-    super.write(arg2);
-    super.write(arg3);
-    super.endTransmission();
-  }
+//  protected void writeCommand(int arg1, int arg2, int arg3) {
+//    super.beginTransmission(this.address);
+//    super.write(SSD1306_SETLOWCOLUMN);
+//    super.write(arg1);
+//    super.write(arg2);
+//    super.write(arg3);
+//    super.endTransmission();
+//  }
+
+	protected void writeCommand(int reg, int[] args) {
+		super.beginTransmission(this.address);
+		super.write(SSD1306_SETLOWCOLUMN);
+		super.write(reg);
+		for (int arg : args) {
+			super.write(arg);
+		}
+		super.endTransmission();
+	}
 }

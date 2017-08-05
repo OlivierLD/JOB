@@ -1,35 +1,10 @@
-/* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-
-/*
-  Copyright (c) The Processing Foundation 2015
-  Hardware I/O library developed by Gottfried Haider as part of GSoC 2015
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
-*/
-
 package jhard.io;
-
-import jhard.io.JHardNativeInterface;
 
 import java.lang.reflect.Method;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
 
 /**
  *  GPIO interface
@@ -58,6 +33,10 @@ public class GPIO {
    *  trigger when level changes from low to high
    */
   public static final int RISING = 3;
+
+  private final static int ENOENT =  -2;
+	private final static int EINVAL = -22;
+	private final static int EBUSY  = -16;
 
   protected static Map<Integer, Thread> irqThreads = new HashMap<>();
   protected static boolean serveInterrupts = true;
@@ -155,7 +134,7 @@ public class GPIO {
 	 *
 	 * @param pin GPIO pin
 	 * @param callback the event Consumer. Takes the pin # as prm.
-	 * @param mode {@link #CHANGE}, {@link #FALLING}, {@link #RISING}.
+	 * @param mode one of {@link #CHANGE}, {@link #FALLING}, {@link #RISING}.
 	 *
 	 */
   public static void attachInterrupt(int pin, Consumer<Integer> callback, int mode) {
@@ -395,13 +374,13 @@ public class GPIO {
     String fn = "/sys/class/gpio/export";
     int ret = JHardNativeInterface.writeFile(fn, Integer.toString(pin));
     if (ret < 0) {
-      if (ret == -2) {    // ENOENT
+      if (ret == ENOENT) {    // ENOENT
         System.err.println("Make sure your kernel is compiled with GPIO_SYSFS enabled");
       }
-      if (ret == -22) {   // EINVAL
+      if (ret == EINVAL) {   // EINVAL
         System.err.println("GPIO pin " + pin + " does not seem to be available on your platform");
       }
-      if (ret != -16) {   // EBUSY, returned when the pin is already exported
+      if (ret != EBUSY) {   // EBUSY, returned when the pin is already exported
         throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
       }
     }

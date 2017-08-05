@@ -1,28 +1,4 @@
-/* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-
-/*
-  Copyright (c) The Processing Foundation 2015
-  Hardware I/O library developed by Gottfried Haider as part of GSoC 2015
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
-*/
-
 package jhard.io;
-
-import jhard.io.JHardNativeInterface;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -33,18 +9,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- *  @webref
+ *  Generic Pulse Width Modulation (PWM)
  */
 public class PWM {
 
   int channel;
   String chip;
 
+  private final static int ENOENT =  -2;
+  private final static int EINVAL = -22;
+  private final static int EBUSY  = -16;
+
   /**
    *  Opens a PWM channel
    *  @param channel PWM channel
-   *  @see list
-   *  @webref
+   *  @see #list
    */
   public PWM(String channel) {
     JHardNativeInterface.loadLibrary();
@@ -64,15 +43,13 @@ public class PWM {
     String fn = "/sys/class/pwm/" + chip + "/export";
     int ret = JHardNativeInterface.writeFile(fn, Integer.toString(this.channel));
     if (ret < 0) {
-      if (ret == -2) {    // ENOENT
+      if (ret == ENOENT) {
         System.err.println("Make sure your kernel is compiled with PWM_SYSFS enabled and you have the necessary PWM driver for your platform");
       }
-      // XXX: check
-      if (ret == -22) {   // EINVAL
+      if (ret == EINVAL) {
         System.err.println("PWM channel " + channel + " does not seem to be available on your platform");
       }
-      // XXX: check
-      if (ret != -16) {   // EBUSY, returned when the pin is already exported
+      if (ret != EBUSY) {   // Returned when the pin is already exported
         throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
       }
     }
@@ -88,7 +65,6 @@ public class PWM {
 
   /**
    *  Disables the PWM output
-   *  @webref
    */
   public void clear() {
     if (JHardNativeInterface.isSimulated()) {
@@ -104,7 +80,6 @@ public class PWM {
 
   /**
    *  Gives ownership of a channel back to the operating system
-   *  @webref
    */
   public void close() {
     if (JHardNativeInterface.isSimulated()) {
@@ -117,7 +92,7 @@ public class PWM {
     String fn = "/sys/class/pwm/" + chip + "/unexport";
     int ret = JHardNativeInterface.writeFile(fn, Integer.toString(channel));
     if (ret < 0) {
-      if (ret == -2) {    // ENOENT
+      if (ret == ENOENT) {
         System.err.println("Make sure your kernel is compiled with PWM_SYSFS enabled and you have the necessary PWM driver for your platform");
       }
       // XXX: check
@@ -129,8 +104,7 @@ public class PWM {
 
   /**
    *  Lists all available PWM channels
-   *  @return String array
-   *  @webref
+   *  @return Device list
    */
   public static String[] list() {
     if (JHardNativeInterface.isSimulated()) {
@@ -151,7 +125,7 @@ public class PWM {
             devs.add(chip.getName() + "/pwm" + i);
           }
         } catch (Exception e) {
-          // Absorb?
+          // Absorbed
         }
       }
     }
@@ -161,12 +135,10 @@ public class PWM {
     return tmp;
   }
 
-
   /**
    *  Enables the PWM output
    *  @param period cycle period in Hz
    *  @param duty duty cycle, 0.0 (always off) to 1.0 (always on)
-   *  @webref
    */
   public void set(int period, float duty) {
     if (JHardNativeInterface.isSimulated()) {
@@ -204,7 +176,6 @@ public class PWM {
   /**
    *  Enables the PWM output with a preset period of 1 kHz
    *  @param duty duty cycle, 0.0 (always off) to 1.0 (always on)
-   *  @webref
    */
   public void set(float duty) {
     set(1_000, duty);

@@ -113,7 +113,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
 {
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
-	  fprintf(stdout, "C >> readFile\n");
+//    fprintf(stdout, "C >> readFile\n");
       fprintf(stdout, "C >> readFile [%s]\n", fn);
     }
 	int file = open(fn, O_RDONLY);
@@ -139,7 +139,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile
 {
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
-	  fprintf(stdout, "C >> writeFile\n");
+//    fprintf(stdout, "C >> writeFile\n");
       fprintf(stdout, "C >> writeFile [%s]\n", fn);
     }
 	int file = open(fn, O_WRONLY);
@@ -164,6 +164,10 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_pollDevice
   (JNIEnv *env, jclass cls, jstring _fn, jint timeout)
 {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
+    if (nativeDebugEnabled()) {
+//    fprintf(stdout, "C >> writeFile\n");
+      fprintf(stdout, "C >> pollDevice [%s]\n", fn);
+    }
 	int file = open(fn, O_RDONLY|O_NONBLOCK);
 	(*env)->ReleaseStringUTFChars(env, _fn, fn);
 	if (file < 0) {
@@ -223,7 +227,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferI2c
 	}
 
 	if (FALSE && nativeDebugEnabled()) {
-	  fprintf(stdout, "C >> ioctl...\n");
+	  fprintf(stdout, "C >> ioctl in transferI2c...\n");
 	}
 
 	int ret = ioctl(handle, I2C_RDWR, &packets);
@@ -262,7 +266,7 @@ static void* servoThread(void *ptr) {
 
 		off.tv_nsec = (state->period - state->pulse) * 1000;
 		nanosleep(&off, NULL);
-	} while (1);
+	} while (TRUE);
 }
 
 
@@ -288,7 +292,7 @@ JNIEXPORT jlong JNICALL Java_jhard_io_JHardNativeInterface_servoStartThread
 	sprintf(path, "/sys/class/gpio/gpio%d/value", gpio);
 
 	if (nativeDebugEnabled()) {
-	  fprintf(stdout, "C >> startThread\n");
+//    fprintf(stdout, "C >> startThread\n");
 	  fprintf(stdout, "C >> gpio, start thread [%s]\n", path);
 	}
 

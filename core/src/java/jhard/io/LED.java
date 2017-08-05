@@ -1,28 +1,4 @@
-/* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-
-/*
-  Copyright (c) The Processing Foundation 2015
-  Hardware I/O library developed by Gottfried Haider as part of GSoC 2015
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
-*/
-
 package jhard.io;
-
-import jhard.io.JHardNativeInterface;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -34,7 +10,7 @@ import java.util.Arrays;
 
 
 /**
- *  @webref
+ *  Generic LED interface (internal LED)
  */
 public class LED {
 
@@ -43,11 +19,11 @@ public class LED {
   protected int prevBrightness;
   protected String prevTrigger;
 
+  private final static int EACCES = -13;
   /**
    *  Opens a LED device
    *  @param dev device name
-   *  @see list
-   *  @webref
+   *  @see #list
    */
   public LED(String dev) {
     JHardNativeInterface.loadLibrary();
@@ -90,23 +66,20 @@ public class LED {
       System.err.println(e.getMessage());
       throw new RuntimeException("Unable to read current brightness");
     }
-
     // disable trigger
     String fn = "/sys/class/leds/" + dev + "/trigger";
     int ret = JHardNativeInterface.writeFile(fn, "none");
     if (ret < 0) {
-      if (ret == -13) {     // EACCES
+      if (ret == EACCES) {
         System.err.println("You might need to install a custom udev rule to allow regular users to modify /sys/class/leds/*.");
       }
       throw new RuntimeException(JHardNativeInterface.getError(ret));
     }
   }
 
-
   /**
    *  Sets the brightness
    *  @param bright 0.0 (off) to 1.0 (maximum)
-   *  @webref
    */
   public void brightness(float bright) {
     if (bright < 0.0 || 1.0 < bright) {
@@ -126,7 +99,6 @@ public class LED {
 
   /**
    *  Restores the previous state
-   *  @webref
    */
   public void close() {
     if (JHardNativeInterface.isSimulated()) {
@@ -150,7 +122,6 @@ public class LED {
   /**
    *  Lists all available LED devices
    *  @return String array
-   *  @webref
    */
   public static String[] list() {
     if (JHardNativeInterface.isSimulated()) {

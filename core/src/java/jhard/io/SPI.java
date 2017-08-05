@@ -1,28 +1,4 @@
-/* -*- mode: java; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-
-/*
-  Copyright (c) The Processing Foundation 2015
-  Hardware I/O library developed by Gottfried Haider as part of GSoC 2015
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
-*/
-
 package jhard.io;
-
-import jhard.io.JHardNativeInterface;
 
 import java.io.File;
 import java.util.List;
@@ -32,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  @webref
+ *  Generic SPI Communication
  */
 public class SPI {
 
@@ -71,8 +47,7 @@ public class SPI {
   /**
    *  Opens an SPI interface as master
    *  @param dev device name
-   *  @see list
-   *  @webref
+   *  @see #list
    */
   public SPI(String dev) {
     JHardNativeInterface.loadLibrary();
@@ -91,7 +66,6 @@ public class SPI {
 
   /**
    *  Closes the SPI interface
-   *  @webref
    */
   public void close() {
     if (JHardNativeInterface.isSimulated()) {
@@ -113,8 +87,7 @@ public class SPI {
 
   /**
    *  Lists all available SPI interfaces
-   *  @return String array
-   *  @webref
+   *  @return Device list
    */
   public static String[] list() {
     if (JHardNativeInterface.isSimulated()) {
@@ -138,13 +111,11 @@ public class SPI {
     return tmp;
   }
 
-
   /**
    *  Configures the SPI interface
    *  @param maxSpeed maximum transmission rate in Hz, 500000 (500 kHz) is a resonable default
    *  @param dataOrder whether data is send with the first- or least-significant bit first (SPI.MSBFIRST or SPI.LSBFIRST, the former is more common)
    *  @param mode <a href="https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus#Clock_polarity_and_phase">SPI.MODE0 to SPI.MODE3</a>
-   *  @webref
    */
   public void settings(int maxSpeed, int dataOrder, int mode) {
     this.maxSpeed = maxSpeed;
@@ -152,12 +123,10 @@ public class SPI {
     this.mode = mode;
   }
 
-
   /**
    *  Transfers data over the SPI bus
    *  @param out bytes to send
    *  @return bytes read in (array is the same length as out)
-   *  @webref
    */
   public byte[] transfer(byte[] out) {
     if (JHardNativeInterface.isSimulated()) {
@@ -185,7 +154,6 @@ public class SPI {
     return in;
   }
 
-
   /**
    *  Transfers data over the SPI bus
    *  @param out string to send
@@ -194,7 +162,6 @@ public class SPI {
   public byte[] transfer(String out) {
     return transfer(out.getBytes());
   }
-
 
   /**
    *  Transfers data over the SPI bus
@@ -210,7 +177,6 @@ public class SPI {
     tmp[0] = (byte)out;
     return transfer(tmp);
   }
-
 
   /**
    *  Transfers data over the SPI bus
