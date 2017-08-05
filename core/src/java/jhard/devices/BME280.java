@@ -103,7 +103,7 @@ public class BME280 extends I2C {
 				Arrays.asList(deviceList)
 						.stream()
 						.collect(Collectors.joining(", "))));
-			System.out.println(String.format("Bus %s, address %02X", bus, address));
+			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
 		}
 
 		try {
@@ -114,7 +114,7 @@ public class BME280 extends I2C {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		this.write(new byte[] {(byte)BME280_REGISTER_CONTROL, (byte)0x3F});
+		this.command(BME280_REGISTER_CONTROL, (byte)0x3F);
 		tFine = 0.0f;
 	}
 
@@ -184,7 +184,14 @@ public class BME280 extends I2C {
 		super.write(val);
 		super.endTransmission();
 	}
-	
+
+	private void command(int reg, byte[] val) {
+		super.beginTransmission(this.address);
+		super.write(reg);
+		super.write(val);
+		super.endTransmission();
+	}
+
 	private int readRawTemp() throws Exception {
 		// Reads the raw (uncompensated) temperature from the sensor
 		int meas = mode;
