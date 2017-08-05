@@ -42,7 +42,7 @@
 
 static const int servo_pulse_oversleep = 35;  // amount of uS to account for when sleeping
 
-#define VERBOSE TRUE
+#define VERBOSE FALSE
 #define NATIVEDEBUG "NATIVEDEBUG"
 /**
  * Extra info when NATIVEDEBUG=true
