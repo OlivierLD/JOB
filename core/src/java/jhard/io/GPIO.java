@@ -152,7 +152,47 @@ public class GPIO {
   }
 
   public static void attachInterrupt(int pin, Consumer<Integer> callback, int mode) {
+	  if (irqThreads.containsKey(pin)) {
+		  throw new RuntimeException("You must call releaseInterrupt before attaching another interrupt on the same pin");
+	  }
 
+	  enableInterrupt(pin, mode);
+
+	  final int irqPin = pin;
+	  // it might be worth checking how Java threads compare to pthreads in terms
+	  // of latency
+	  Thread t = new Thread(new Runnable() {
+		  public void run() {
+			  boolean gotInterrupt = false;
+			  try {
+				  do {
+					  try {
+						  if (waitForInterrupt(irqPin, 100)) {
+							  gotInterrupt = true;
+						  }
+						  if (gotInterrupt && serveInterrupts) {
+						  	callback.accept(irqPin);
+							  gotInterrupt = false;
+						  }
+						  // if we received an interrupt while interrupts were disabled
+						  // we still deliver it the next time interrupts get enabled
+						  // not sure if everyone agrees with this logic though
+					  } catch (RuntimeException e) {
+						  // make sure we're not busy spinning on error
+						  Thread.sleep(100);
+					  }
+				  } while (!Thread.currentThread().isInterrupted());
+			  } catch (Exception e) {
+				  // terminate the thread on any unexpected exception that might occur
+				  System.err.println("Terminating interrupt handling for pin " + irqPin + " after catching: " + e.getMessage());
+			  }
+		  }
+	  }, "GPIO" + pin + " IRQ");
+
+	  t.setPriority(Thread.MAX_PRIORITY);
+	  t.start();
+
+	  irqThreads.put(pin, t);
   }
 
     /**

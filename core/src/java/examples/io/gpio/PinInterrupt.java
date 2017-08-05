@@ -17,24 +17,23 @@ public class PinInterrupt {
 
   private void setup() {
     GPIO.pinMode(pin, GPIO.INPUT);
-    GPIO.attachInterrupt(pin, this, "buttonListener", GPIO.CHANGE);
+//  GPIO.attachInterrupt(pin, this, "buttonListener", GPIO.CHANGE);
 
-	  // TODO In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
-//  GPIO.attachInterrupt(pin, this::buttonListener, GPIO.CHANGE);
+	  // In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
+	  GPIO.attachInterrupt(pin, this::buttonPressed, GPIO.RISING);
+	  GPIO.attachInterrupt(pin, this::buttonReleased, GPIO.FALLING);
   }
 
-  public void buttonListener(int i) {
-    System.out.println(String.format("Interrupt! Prm: %d", i));
-  }
+//  public void buttonListener(int i) {
+//    System.out.println(String.format("Interrupt! pin: %d", i));
+//  }
 
-  public void check() {
-    // sense the input pin
-    if (GPIO.digitalRead(pin) == GPIO.HIGH) {
-      System.out.println("High");
-    } else {
-      System.out.println("Low");
-    }
+	private void buttonPressed(int i) {
+    System.out.println(String.format("Button pressed pin: %d", i));
   }
+	private void buttonReleased(int i) {
+		System.out.println(String.format("Button released pin: %d", i));
+	}
 
   public static void main(String... args) {
 
