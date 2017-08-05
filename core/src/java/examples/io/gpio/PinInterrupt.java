@@ -19,11 +19,11 @@ public class PinInterrupt {
     GPIO.pinMode(pin, GPIO.INPUT);
     GPIO.attachInterrupt(pin, this, "buttonListener", GPIO.CHANGE);
 
-	  // TODO In the line above, replace the parent and methodName with a Consumer<Integer>
+	  // TODO In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
 //  GPIO.attachInterrupt(pin, this::buttonListener, GPIO.CHANGE);
   }
 
-  private void buttonListener(int i) {
+  public void buttonListener(int i) {
     System.out.println(String.format("Interrupt! Prm: %d", i));
   }
 

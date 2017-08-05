@@ -97,7 +97,7 @@ public class GPIO {
    *  @see noInterrupts
    *  @see interrupts
    *  @see releaseInterrupt
-   *  @webref
+   *  @deprecated
    */
   public static void attachInterrupt(int pin, Object parent, String method, int mode) {
     if (irqThreads.containsKey(pin)) {
