@@ -178,8 +178,10 @@ public class BME280 extends I2C {
 	}
 
 	private void send(int reg, byte val) {
-		this.write((byte)reg);
-		this.write(val);
+		super.beginTransmission(this.address);
+		super.write(reg);
+		super.write(val);
+		super.endTransmission();
 	}
 	
 	private int readRawTemp() throws Exception {
@@ -302,18 +304,18 @@ public class BME280 extends I2C {
 	}
 
 	public int readU16LE(int register) {
-		this.beginTransmission(this.address);
-		this.write(register);
+		super.beginTransmission(this.address);
+		super.write(register);
 		byte[] ba = this.read(2);
-		this.endTransmission();
+		super.endTransmission();
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian
 	}
 
 	public int readS16LE(int register) {
-		this.beginTransmission(this.address);
-		this.write(register);
+		super.beginTransmission(this.address);
+		super.write(register);
 		byte[] ba = this.read(2);
-		this.endTransmission();
+		super.endTransmission();
 		int lo = ba[0] & 0xFF;
 		int hi = ba[1] & 0xFF;
 		if (hi > 127)
@@ -322,10 +324,10 @@ public class BME280 extends I2C {
 	}
 
 	public int readU8(int register) {
-		this.beginTransmission(this.address);
-		this.write(register);
+		super.beginTransmission(this.address);
+		super.write(register);
 		byte[] ba = this.read(1);
-		this.endTransmission();
+		super.endTransmission();
 		return (int)(ba[0] & 0xFF);
 	}
 
