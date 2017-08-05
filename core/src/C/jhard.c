@@ -48,20 +48,21 @@ static const int servo_pulse_oversleep = 35;  // amount of uS to account for whe
  * Extra info when NATIVEDEBUG=true
  */
 int nativeDebugEnabled() {
-  char * nativeDebug = NATIVEDEBUG;
-  int debug = FALSE;
-  if (getenv(nativeDebug)) {
-    if (strcmp("true", getenv(nativeDebug)) == 0) {
-      if (VERBOSE) {
-        fprintf(stdout, "%s=%s\n", nativeDebug, getenv(nativeDebug));
-      }
-      debug = TRUE;
-    }
-  }
-  if (VERBOSE) {
-    fprintf(stdout, "C >> %s:%s\n", nativeDebug, (debug ? "true" : "false"));
-  }
-  return debug;
+//  char * nativeDebug = NATIVEDEBUG;
+//  int debug = FALSE;
+//  if (getenv(nativeDebug)) {
+//    if (strcmp("true", getenv(nativeDebug)) == 0) {
+//      if (VERBOSE) {
+//        fprintf(stdout, "%s=%s\n", nativeDebug, getenv(nativeDebug));
+//      }
+//      debug = TRUE;
+//    }
+//  }
+//  if (VERBOSE) {
+//    fprintf(stdout, "C >> %s:%s\n", nativeDebug, (debug ? "true" : "false"));
+//  }
+//  return debug;
+    return TRUE;
 }
 
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
