@@ -102,6 +102,9 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
   (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _in)
 {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
+    if (nativeDebugEnabled()) {
+      fprintf(stdout, "C >> readFile [%s]\n", *fn);
+    }
 	int file = open(fn, O_RDONLY);
 	(*env)->ReleaseStringUTFChars(env, _fn, fn);
 	if (file < 0) {
@@ -124,6 +127,9 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile
   (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _out)
 {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
+    if (nativeDebugEnabled()) {
+      fprintf(stdout, "C >> writeFile [%s]\n", *fn);
+    }
 	int file = open(fn, O_WRONLY);
 	(*env)->ReleaseStringUTFChars(env, _fn, fn);
 	if (file < 0) {

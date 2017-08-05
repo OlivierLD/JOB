@@ -19,7 +19,7 @@ public class SimpleInput {
     GPIO.pinMode(pin, GPIO.INPUT);
   }
 
-  public void check() {
+  private void check() {
     // sense the input pin
     if (GPIO.digitalRead(pin) == GPIO.HIGH) {
       System.out.println("High");
@@ -35,7 +35,7 @@ public class SimpleInput {
       go = false;
     }));
     while (go) {
-      simpleInput.check();
+      simpleInput.check(); // Constant polling...
     }
     System.out.println("Bye");
   }

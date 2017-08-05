@@ -40,6 +40,7 @@ public class PinInterrupt {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       synchronized (me) {
       	me.notify();
+	      System.out.println(" <- Ooops!");
 	    }
     }));
 

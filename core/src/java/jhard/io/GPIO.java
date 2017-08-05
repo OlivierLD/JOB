@@ -151,6 +151,13 @@ public class GPIO {
     irqThreads.put(pin, t);
   }
 
+	/**
+	 *
+	 * @param pin GPIO pin
+	 * @param callback the event Consumer. Takes the pin # as prm.
+	 * @param mode {@link #CHANGE}, {@link #FALLING}, {@link #RISING}.
+	 *
+	 */
   public static void attachInterrupt(int pin, Consumer<Integer> callback, int mode) {
 	  if (irqThreads.containsKey(pin)) {
 		  throw new RuntimeException("You must call releaseInterrupt before attaching another interrupt on the same pin");
