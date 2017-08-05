@@ -13,6 +13,7 @@ do
   echo -e "| 3: MCP3008 (ADC)     |"
   echo -e "| 4: OLED SSD1306      |"
   echo -e "| 5: GPIO Interrupt    |"
+  echo -e "| 6: BME280            |"
   echo -e "+----------------------+"
   echo -e "| Q: Quit              |"
   echo -e "+----------------------+"
@@ -49,6 +50,14 @@ do
     5)
       echo -e "GPIO Interrupt"
       sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.gpio.PinInterrupt
+      echo -en "Hit [return]"
+      read a
+      ;;
+    6)
+      echo -e "BME280"
+      JAVA_OPTS=
+      JAVA_OPTS="$JAVA_OPTS -Dbme280.verbose=true"
+      sudo NATIVEDEBUG=true java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.BME280Sample
       echo -en "Hit [return]"
       read a
       ;;

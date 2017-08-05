@@ -177,15 +177,6 @@ public class SSD1306 extends I2C {
     super.endTransmission();
   }
 
-//  protected void writeCommand(int arg1, int arg2, int arg3) {
-//    super.beginTransmission(this.address);
-//    super.write(SSD1306_SETLOWCOLUMN);
-//    super.write(arg1);
-//    super.write(arg2);
-//    super.write(arg3);
-//    super.endTransmission();
-//  }
-
 	protected void writeCommand(int reg, int[] args) {
 		super.beginTransmission(this.address);
 		super.write(SSD1306_SETLOWCOLUMN);
