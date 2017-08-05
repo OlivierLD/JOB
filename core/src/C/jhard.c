@@ -48,21 +48,21 @@ static const int servo_pulse_oversleep = 35;  // amount of uS to account for whe
  * Extra info when NATIVEDEBUG=true
  */
 int nativeDebugEnabled() {
-//  char * nativeDebug = NATIVEDEBUG;
-//  int debug = FALSE;
-//  if (getenv(nativeDebug)) {
-//    if (strcmp("true", getenv(nativeDebug)) == 0) {
-//      if (VERBOSE) {
-//        fprintf(stdout, "%s=%s\n", nativeDebug, getenv(nativeDebug));
-//      }
-//      debug = TRUE;
-//    }
-//  }
-//  if (VERBOSE) {
-//    fprintf(stdout, "C >> %s:%s\n", nativeDebug, (debug ? "true" : "false"));
-//  }
-//  return debug;
-    return TRUE;
+  char * nativeDebug = NATIVEDEBUG;
+  int debug = FALSE;
+  if (getenv(nativeDebug)) {
+    if (strcmp("true", getenv(nativeDebug)) == 0) {
+      if (VERBOSE) {
+        fprintf(stdout, "%s=%s\n", nativeDebug, getenv(nativeDebug));
+      }
+      debug = TRUE;
+    }
+  }
+  if (VERBOSE) {
+    fprintf(stdout, "C >> %s:%s\n", nativeDebug, (debug ? "true" : "false"));
+  }
+  return debug;
+//return TRUE;
 }
 
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
@@ -71,6 +71,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
 
 	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> openDevice\n");
 	  fprintf(stdout, "C >> Opening device [%s]\n", *fn);
 	}
 
@@ -112,6 +113,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
 {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> readFile\n");
       fprintf(stdout, "C >> readFile [%s]\n", *fn);
     }
 	int file = open(fn, O_RDONLY);
@@ -137,6 +139,7 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile
 {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> writeFile\n");
       fprintf(stdout, "C >> writeFile [%s]\n", *fn);
     }
 	int file = open(fn, O_WRONLY);
@@ -285,6 +288,7 @@ JNIEXPORT jlong JNICALL Java_jhard_io_JHardNativeInterface_servoStartThread
 	sprintf(path, "/sys/class/gpio/gpio%d/value", gpio);
 
 	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> startThread\n");
 	  fprintf(stdout, "C >> gpio, start thread [%s]\n", path);
 	}
 
