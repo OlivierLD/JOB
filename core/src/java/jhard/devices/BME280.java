@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 
 import static utils.MiscUtils.delay;
 
+/**
+ * Work in progress...
+ */
 public class BME280 extends I2C {
 
 	public final static int BME280_I2CADDR = 0x77;
@@ -318,33 +321,15 @@ public class BME280 extends I2C {
 		return altitude;
 	}
 
-	public int readU16LE(int register) {
-		System.out.println(String.format("Java >> readU16LE, - 1, beginTx at 0x%02X", this.address));
+	private int readU16LE(int register) {
 		super.beginTransmission(this.address);
-		System.out.println(String.format("Java >> readU16LE, - 2, write at reg 0x%02X", register));
 		super.write((byte)register);
-//		try {
-//			System.out.println("Java >> endTx");
-//			super.endTransmission();
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-		System.out.println(String.format("Java >> readU16LE, - 3, now reading %d byte(s)", 2));
 		byte[] ba = super.read(2);
-
-		System.out.println(String.format("Java >> Read %s byte(s)", (ba == null ? "NULL" : String.format("%d", ba.length))));
-
-		try {
-			System.out.println("Java >> endTx");
-			super.endTransmission();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
+		super.endTransmission();
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian
 	}
 
-	public int readS16LE(int register) {
+	private int readS16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write((byte)register);
 		byte[] ba = super.read(2);
@@ -357,7 +342,7 @@ public class BME280 extends I2C {
 		return (hi << 8) + lo; // Little Endian
 	}
 
-	public int readU8(int register) {
+	private int readU8(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
 		byte[] ba = super.read(1);
@@ -365,7 +350,7 @@ public class BME280 extends I2C {
 		return (int)(ba[0] & 0xFF);
 	}
 
-	public int readS8(int register) {
+	private int readS8(int register) {
 		int val = this.readU8(register);
 		if (val > 127)
 			val -= 256;

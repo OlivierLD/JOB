@@ -13,7 +13,8 @@ do
   echo -e "| 3: MCP3008 (ADC)     |"
   echo -e "| 4: OLED SSD1306      |"
   echo -e "| 5: GPIO Interrupt    |"
-  echo -e "| 6: BME280 (I2C)      |"
+  echo -e "| 6: BMP180 (I2C)      |"
+  echo -e "| 7: BME280 (I2C)      |"
   echo -e "+----------------------+"
   echo -e "| Q: Quit              |"
   echo -e "+----------------------+"
@@ -54,6 +55,14 @@ do
       read a
       ;;
     6)
+      echo -e "BMP180"
+      JAVA_OPTS=
+      JAVA_OPTS="$JAVA_OPTS -Dbmp180.verbose=true"
+      sudo NATIVEDEBUG=true java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.BMP180Sample
+      echo -en "Hit [return]"
+      read a
+      ;;
+    7)
       echo -e "BME280"
       JAVA_OPTS=
       JAVA_OPTS="$JAVA_OPTS -Dbme280.verbose=true"
