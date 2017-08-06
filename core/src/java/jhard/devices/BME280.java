@@ -317,18 +317,24 @@ public class BME280 extends I2C {
 		super.beginTransmission(this.address);
 		System.out.println(String.format("Java >> readU16LE, - 2, write at reg 0x%02X", register));
 		super.write((byte)register);
+//		try {
+//			System.out.println("Java >> endTx");
+//			super.endTransmission();
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
+		System.out.println(String.format("Java >> readU16LE, - 3, now reading %d byte(s)", 2));
+		byte[] ba = super.read(2);
+
+		System.out.println(String.format("Java >> Read %s byte(s)", (ba == null ? "NULL" : String.format("%d", ba.length))));
+
 		try {
-			System.out.println("Java >> 2bis, endTx");
+			System.out.println("Java >> endTx");
 			super.endTransmission();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		System.out.println(String.format("Java >> readU16LE, - 3, now reading %d byte(s)", 2));
-		byte[] ba = super.read(2);
 
-		System.out.println(String.format("Read %s byte(s)", (ba == null ? "NULL" : String.format("%d", ba.length))));
-
-//	super.endTransmission();
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian
 	}
 
