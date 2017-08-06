@@ -1,6 +1,7 @@
 package jhard.devices;
 
 import jhard.io.I2C;
+import utils.MiscUtils;
 import utils.StringUtils;
 
 import java.util.Arrays;
@@ -312,16 +313,19 @@ public class BME280 extends I2C {
 	}
 
 	public int readU16LE(int register) {
-		System.out.println(String.format("Java >> readU16LE, - 1, beginTx at %02X", this.address));
+		System.out.println(String.format("Java >> readU16LE, - 1, beginTx at 0x%02X", this.address));
 		super.beginTransmission(this.address);
-		System.out.println(String.format("Java >> readU16LE, - 2, write at reg %02X", register));
+		System.out.println(String.format("Java >> readU16LE, - 2, write at reg 0x%02X", register));
 		super.write((byte)register);
+		MiscUtils.delay(100L);
+		System.out.println("Java >> 2bis, endTx");
+		super.endTransmission();
 		System.out.println(String.format("Java >> readU16LE, - 3, now reading %d byte(s)", 2));
 		byte[] ba = super.read(2);
 
 		System.out.println(String.format("Read %s byte(s)", (ba == null ? "NULL" : String.format("%d", ba.length))));
 
-		super.endTransmission();
+//	super.endTransmission();
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian
 	}
 
