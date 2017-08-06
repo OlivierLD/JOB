@@ -107,6 +107,11 @@ public class BME280 extends I2C {
 			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
 		}
 
+		// Soft reset
+		this.command(BME280_REGISTER_SOFTRESET, (byte)0xB6);
+		// Wait for the chip to wake up
+		MiscUtils.delay(300L);
+
 		try {
 			this.readCalibrationData();
 			if (verbose) {
@@ -115,6 +120,7 @@ public class BME280 extends I2C {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+
 		this.command(BME280_REGISTER_CONTROL, (byte)0x3F);
 		tFine = 0.0f;
 	}

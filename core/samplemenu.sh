@@ -13,7 +13,7 @@ do
   echo -e "| 3: MCP3008 (ADC)     |"
   echo -e "| 4: OLED SSD1306      |"
   echo -e "| 5: GPIO Interrupt    |"
-  echo -e "| 6: BME280            |"
+  echo -e "| 6: BME280 (I2C)      |"
   echo -e "+----------------------+"
   echo -e "| Q: Quit              |"
   echo -e "+----------------------+"
