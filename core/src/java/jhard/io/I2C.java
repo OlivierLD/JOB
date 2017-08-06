@@ -35,8 +35,7 @@ public class I2C {
       throw new RuntimeException(JHardNativeInterface.getError(handle));
     }
   }
-
-
+	
   /**
    *  Begins a transmission to an attached device
    *  @see #write
@@ -64,7 +63,6 @@ public class I2C {
     JHardNativeInterface.closeDevice(handle);
     handle = 0;
   }
-
 
   protected void finalize() throws Throwable {
     try {
@@ -100,7 +98,6 @@ public class I2C {
     }
   }
 
-
   /**
    *  Lists all available I2C interfaces
    *  @return String array
@@ -127,7 +124,6 @@ public class I2C {
     Arrays.sort(tmp);
     return tmp;
   }
-
 
   /**
    *  Reads bytes from the attached device
@@ -159,7 +155,6 @@ public class I2C {
     return in;
   }
 
-
   /**
    *  Adds bytes to be written to the device
    *  @param out bytes to be written
@@ -182,7 +177,6 @@ public class I2C {
     }
   }
 
-
   /**
    *  Adds bytes to be written to the attached device
    *  @param out string to be written
@@ -193,7 +187,6 @@ public class I2C {
   public void write(String out) {
     write(out.getBytes());
   }
-
 
   /**
    *  Adds a byte to be written to the attached device
@@ -209,7 +202,7 @@ public class I2C {
     }
 //    byte[] tmp = new byte[1];
 //    tmp[0] = (byte)out;
-    write((byte)out);
+    write(new byte[] {(byte)out});
   }
 
   /**
