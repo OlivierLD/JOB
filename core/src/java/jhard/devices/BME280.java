@@ -312,8 +312,11 @@ public class BME280 extends I2C {
 	}
 
 	public int readU16LE(int register) {
+		System.out.println(String.format("Java >> readU16LE, - 1, beginTx at %02X", this.address));
 		super.beginTransmission(this.address);
-		super.write(register);
+		System.out.println(String.format("Java >> readU16LE, - 2, write at reg %02X", register));
+		super.write((byte)register);
+		System.out.println(String.format("Java >> readU16LE, - 3, now reading %d byte(s)", 2));
 		byte[] ba = super.read(2);
 
 		System.out.println(String.format("Read %s byte(s)", (ba == null ? "NULL" : String.format("%d", ba.length))));
@@ -324,11 +327,8 @@ public class BME280 extends I2C {
 
 	public int readS16LE(int register) {
 		super.beginTransmission(this.address);
-		super.write(register);
+		super.write((byte)register);
 		byte[] ba = super.read(2);
-
-		System.out.println(String.format("Read %s byte(s)", (ba == null ? "NULL" : String.format("%d", ba.length))));
-
 		super.endTransmission();
 
 		int lo = ba[0] & 0xFF;
