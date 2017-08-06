@@ -294,7 +294,7 @@ public class BME280 extends I2C {
 		return h;
 	}
 
-	private int standardSeaLevelPressure = 101_325;
+	private int standardSeaLevelPressure = 101_325; // in Pascals. 1013.25 hPa
 
 	public void setStandardSeaLevelPressure(int standardSeaLevelPressure) {
 		this.standardSeaLevelPressure = standardSeaLevelPressure;
@@ -314,8 +314,7 @@ public class BME280 extends I2C {
 	public int readU16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
-		super.endTransmission();
-		super.beginTransmission(this.address);
+
 		byte[] ba = super.read(2);
 		super.endTransmission();
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian
@@ -324,8 +323,8 @@ public class BME280 extends I2C {
 	public int readS16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
-		byte[] ba = super.read(2);
 		super.endTransmission();
+		byte[] ba = super.read(2);
 		int lo = ba[0] & 0xFF;
 		int hi = ba[1] & 0xFF;
 		if (hi > 127)

@@ -35,7 +35,7 @@ public class I2C {
       throw new RuntimeException(JHardNativeInterface.getError(handle));
     }
   }
-	
+
   /**
    *  Begins a transmission to an attached device
    *  @see #write
