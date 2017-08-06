@@ -76,7 +76,6 @@ public class I2C {
    *  Ends the current transmissions
    *  @see #beginTransmission
    *  @see #write
-   *  @webref
    */
   public void endTransmission() {
     if (!transmitting) {
@@ -101,7 +100,6 @@ public class I2C {
   /**
    *  Lists all available I2C interfaces
    *  @return String array
-   *  @webref
    */
   public static String[] list() {
     if (JHardNativeInterface.isSimulated()) {

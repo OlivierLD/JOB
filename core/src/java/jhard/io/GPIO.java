@@ -201,7 +201,6 @@ public class GPIO {
    *  @return GPIO.HIGH (1) or GPIO.LOW (0)
    *  @see #pinMode
    *  @see #digitalWrite
-   *  @webref
    */
   public static int digitalRead(int pin) {
     checkValidPin(pin);
@@ -236,7 +235,6 @@ public class GPIO {
    *  @param value GPIO.HIGH (1) or GPIO.LOW (0)
    *  @see #pinMode
    *  @see #digitalRead
-   *  @webref
    */
   public static void digitalWrite(int pin, int value) {
     checkValidPin(pin);
@@ -262,12 +260,11 @@ public class GPIO {
     String fn = String.format("/sys/class/gpio/gpio%d/value", pin);
     int ret = JHardNativeInterface.writeFile(fn, out);
     if (ret < 0) {
-      if (ret != -2) {    // ENOENT, pin might not yet be exported
+      if (ret != ENOENT) {    // Pin might not yet be exported
         throw new RuntimeException(JHardNativeInterface.getError(ret));
       }
     }
   }
-
 
   /**
    *  @param value true or false
@@ -280,7 +277,6 @@ public class GPIO {
     }
   }
 
-
   /**
    *  Disables an interrupt for an input pin
    *  @param pin GPIO pin
@@ -290,7 +286,6 @@ public class GPIO {
   protected static void disableInterrupt(int pin) {
     enableInterrupt(pin, NONE);
   }
-
 
   /**
    *  Enables an interrupt for an input pin
@@ -329,30 +324,25 @@ public class GPIO {
     }
   }
 
-
   /**
    *  Allows interrupts to happen
    *  @see #attachInterrupt
    *  @see #noInterrupts
    *  @see #releaseInterrupt
-   *  @webref
    */
   public static void interrupts() {
     serveInterrupts = true;
   }
-
 
   /**
    *  Prevents interrupts from happpening
    *  @see #attachInterrupt
    *  @see #interrupts
    *  @see #releaseInterrupt
-   *  @webref
    */
   public static void noInterrupts() {
     serveInterrupts = false;
   }
-
 
   /**
    *  Configures a pin to act either as input or output
@@ -361,7 +351,6 @@ public class GPIO {
    *  @see #digitalRead
    *  @see #digitalWrite
    *  @see #releasePin
-   *  @webref
    */
   public static void pinMode(int pin, int mode) {
     checkValidPin(pin);
@@ -417,14 +406,12 @@ public class GPIO {
     }
   }
 
-
   /**
    *  Stops listening for interrupts on an input pin
    *  @param pin GPIO pin
    *  @see #attachInterrupt
    *  @see #noInterrupts
    *  @see #interrupts
-   *  @webref
    */
   public static void releaseInterrupt(int pin) {
     Thread t = irqThreads.get(pin);
@@ -444,12 +431,10 @@ public class GPIO {
     disableInterrupt(pin);
   }
 
-
   /**
    *  Gives ownership of a pin back to the operating system
    *  @param pin GPIO pin
    *  @see #pinMode
-   *  @webref
    */
   public static void releasePin(int pin) {
     checkValidPin(pin);
@@ -471,12 +456,10 @@ public class GPIO {
     }
   }
 
-
   /**
    *  Waits for the value of an input pin to change
    *  @param pin GPIO pin
    *  @param mode what to wait for: GPIO.CHANGE, GPIO.FALLING or GPIO.RISING
-   *  @webref
    */
   public static void waitFor(int pin, int mode) {
     waitFor(pin, mode, -1);
@@ -488,7 +471,6 @@ public class GPIO {
    *
    *  This function will throw a RuntimeException in case of a timeout.
    *  @param timeout don't wait more than timeout milliseconds
-   *  @webref
    */
   public static void waitFor(int pin, int mode, int timeout) {
     enableInterrupt(pin, mode);
@@ -497,11 +479,9 @@ public class GPIO {
     }
   }
 
-
   public static boolean waitForInterrupt(int pin, int mode, int timeout) {
     throw new RuntimeException("The waitForInterrupt function has been renamed to waitFor. Please update your sketch accordingly.");
   }
-
 
   /**
    *  Waits for the value of an input pin to change
