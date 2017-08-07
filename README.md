@@ -5,7 +5,7 @@ Deeply inspired by the work [Gottfried Haider](https://github.com/gohai/processi
 
 It is supposed to be as light as possible, and as close the the registers as possible.
 
-This should make the translation from `Python` or `C` code into `Java` easier.
+This should make the translations from `Python` or `C` code into `Java` a bit easier.
 
 Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
