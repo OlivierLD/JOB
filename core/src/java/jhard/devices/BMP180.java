@@ -288,7 +288,7 @@ public class BMP180 extends I2C {
 		return p;
 	}
 
-	private int standardSeaLevelPressure = 101325;
+	private int standardSeaLevelPressure = 101_325; // 1013.25 hPa
 
 	public void setStandardSeaLevelPressure(int standardSeaLevelPressure) {
 		this.standardSeaLevelPressure = standardSeaLevelPressure;

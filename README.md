@@ -1,6 +1,13 @@
 # JavaHard
+### An Hardware I/O library for the Raspberry PI.
 
-Deeply inspired by the work [Gottfried Haider](https://github.com/gohai/processing) has done for the Raspberry PI to communicate with [Processing](http://processing.org).
+Deeply inspired by the work [Gottfried Haider](https://github.com/gohai/processing) (with his authorization) has done for the Raspberry PI to communicate with [Processing](http://processing.org).
+
+It is supposed to be as light as possible, and as close the the registers as possible.
+
+This should make the translation from `Python` or `C` code into `Java` easier.
+
+Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
 ---
 
@@ -59,6 +66,7 @@ Run the script named `samplemenu.sh`:
  | 2: Push Button input |
  | 3: MCP3008 (ADC)     |
  | 4: OLED SSD1306      |
+ |   ...                |
  +----------------------+
  | Q: Quit              |
  +----------------------+
@@ -67,12 +75,18 @@ Run the script named `samplemenu.sh`:
 ```
 Make sure the required devices are correctly wired for the demos.
 
+## Compatibility
+Should be comaptible with any JVM-aware languages. Samples to be provided.
+
+## Available devices implementations
+- SSD1306
+- GPIO push-button (with interrupt, or not)
+- BMP180
+- BME280
+
 ## TODO
 A lot!
 
-- Interrupts
-- BMP180
-- BME280
 - LSM303
 - HTU21DF
 - LoRa
