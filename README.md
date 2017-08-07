@@ -78,7 +78,7 @@ Make sure the required devices are correctly wired for the demos.
 ## Compatibility
 Should be comaptible with any JVM-aware languages. Samples to be provided.
 
-## Available devices implementations
+## Available device implementations
 - SSD1306
 - GPIO push-button (with interrupt, or not)
 - BMP180
