@@ -15,6 +15,8 @@ public class BME280Sample {
 			System.out.println("BME280 ready...");
 
 		float press = 0f, alt = 0f, temp = 0f, hum = 0f;
+		// WARNING!! The read order is important!
+		// temperature, pressure (analog to altitude), humidity.
 		try {
 			temp = bme280.readTemperature();
 		} catch (Exception ex) {
