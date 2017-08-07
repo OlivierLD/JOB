@@ -15,6 +15,12 @@ public class BME280Sample {
 			System.out.println("BME280 ready...");
 
 		float press = 0f, alt = 0f, temp = 0f, hum = 0f;
+		try {
+			temp = bme280.readTemperature();
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+			ex.printStackTrace();
+		}
 	  try {
 		  press = bme280.readPressure();
 	  } catch (Exception ex) {
@@ -24,12 +30,6 @@ public class BME280Sample {
 		bme280.setStandardSeaLevelPressure((int) press); // As we ARE at the sea level (in San Francisco).
 	  try {
 		  alt = (float)bme280.readAltitude();
-	  } catch (Exception ex) {
-		  System.err.println(ex.getMessage());
-		  ex.printStackTrace();
-	  }
-	  try {
-		  temp = bme280.readTemperature();
 	  } catch (Exception ex) {
 		  System.err.println(ex.getMessage());
 		  ex.printStackTrace();
