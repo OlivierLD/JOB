@@ -7,7 +7,7 @@ import jhard.devices.BMP180
  * If you see errors about that, check your sensors...
  *
  * run with:
- * $ scala -cp build/classes/main:build/libs/core-0.1-all.jar i2c.Scala_BMP180
+ * $ scala -cp build/classes/main:build/libs/core-0.1-all.jar i2c.BMP180ScalaSample
  */
 object BMP180ScalaSample {
   def main(args: Array[String]) {
