@@ -1,4 +1,4 @@
-package i2c
+package gpio
 
 import java.util.function.Consumer
 
@@ -8,7 +8,7 @@ import jhard.io.GPIO
   * Push button (pin 27) interrupt demo.
   *
   * to run with:
-  * $ scala -cp build/classes/main:build/libs/core-0.1-all.jar i2c.PinInterruptScalaSample
+  * $ scala -cp build/classes/main:build/libs/core-0.1-all.jar gpio.PinInterruptScalaSample
   */
 object PinInterruptScalaSample {
 
