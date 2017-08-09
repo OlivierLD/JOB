@@ -11,16 +11,17 @@ import static utils.MiscUtils.delay;
 
 /**
  * Work in progress...
+ * TODO write a getData implementing the right read order.
  */
 public class BME280 extends I2C {
 
 	public final static int BME280_I2CADDR = 0x77;
 
 	// Operating Modes
-	public final static int BME280_OSAMPLE_1 = 1;
-	public final static int BME280_OSAMPLE_2 = 2;
-	public final static int BME280_OSAMPLE_4 = 3;
-	public final static int BME280_OSAMPLE_8 = 4;
+	public final static int BME280_OSAMPLE_1  = 1;
+	public final static int BME280_OSAMPLE_2  = 2;
+	public final static int BME280_OSAMPLE_4  = 3;
+	public final static int BME280_OSAMPLE_8  = 4;
 	public final static int BME280_OSAMPLE_16 = 5;
 
 	// BME280 Registers
@@ -248,7 +249,7 @@ public class BME280 extends I2C {
 		return raw;
 	}
 
-	public float readTemperature() throws Exception {
+	protected float readTemperature() throws Exception {
 		// Gets the compensated temperature in degrees celcius
 		float UT = readRawTemp();
 		float var1 = 0;
@@ -266,7 +267,7 @@ public class BME280 extends I2C {
 		return temp;
 	}
 
-	public float readPressure() throws Exception {
+	protected float readPressure() throws Exception {
 		// Gets the compensated pressure in pascal
 		int adc = readRawPressure();
 		if (verbose) {
@@ -291,7 +292,7 @@ public class BME280 extends I2C {
 		return p;
 	}
 
-	public float readHumidity() throws Exception {
+	protected float readHumidity() throws Exception {
 		int adc = readRawHumidity();
 		float h = tFine - 76800.0f;
 		h = (adc - (dig_H4 * 64.0f + dig_H5 / 16384.8f * h)) *
@@ -307,13 +308,13 @@ public class BME280 extends I2C {
 		return h;
 	}
 
-	private int standardSeaLevelPressure = 101_325; // in Pascals. 1013.25 hPa
+	private int standardSeaLevelPressure = 1013_25; // in Pascals. 1013.25 hPa
 
 	public void setStandardSeaLevelPressure(int standardSeaLevelPressure) {
 		this.standardSeaLevelPressure = standardSeaLevelPressure;
 	}
 
-	public double readAltitude() throws Exception {
+	protected double readAltitude() throws Exception {
 		// "Calculates the altitude in meters"
 		double altitude = 0.0;
 		float pressure = readPressure();
@@ -322,6 +323,77 @@ public class BME280 extends I2C {
 			System.out.println("DBG: Altitude = " + altitude);
 		}
 		return altitude;
+	}
+
+	public static class BME280Data {
+		private float temp = 0f, press = 0f, alt = 0f, hum = 0f;
+		public BME280Data(float temp, float press, float alt, float hum) {
+			this.temp = temp;
+			this.press = press;
+			this.alt = alt;
+			this.hum = hum;
+		}
+
+		public float getTemp() {
+			return this.temp;
+		}
+
+		public float getPress() {
+			return this.press;
+		}
+
+		public float getAlt() {
+			return this.alt;
+		}
+
+		public float getHum() {
+			return this.hum;
+		}
+	}
+
+	/**
+	 * Use this one if you are at the sea level.
+	 * @return temperature, pressure, altitude and humidity
+	 */
+	public BME280Data getAllData() {
+		return getAllData(null);
+	}
+
+	/**
+	 * The order used to read the data is important!
+	 *
+	 * @param prmsl Pressure at Mean Sea Level, in Pa
+	 * @return temperature, pressure, altitude and humidity
+	 */
+	public BME280Data getAllData(Float prmsl) {
+		// 1.temperature, 2.pressure (analog to altitude), 3.humidity.
+		float temp = 0f, press = 0f, alt = 0f, hum = 0f;
+		try {
+			temp = this.readTemperature();
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+		try {
+			press = this.readPressure();
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+		this.setStandardSeaLevelPressure((prmsl == null) ? (int) press : prmsl.intValue());
+		try {
+			alt = (float)this.readAltitude();
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+		try {
+			hum = this.readHumidity();
+		} catch (Exception ex) {
+			System.err.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+		return new BME280Data(temp, press, alt, hum);
 	}
 
 	private int readU16LE(int register) {

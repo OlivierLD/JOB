@@ -18,7 +18,6 @@ public class PinInterrupt {
   private void setup() {
     GPIO.pinMode(pin, GPIO.INPUT);
 //  GPIO.attachInterrupt(pin, this, "buttonListener", GPIO.CHANGE);
-
 	  // In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
 	  GPIO.attachInterrupt(pin, this::buttonPressed, GPIO.RISING);
   }

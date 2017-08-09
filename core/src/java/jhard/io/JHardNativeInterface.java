@@ -8,7 +8,9 @@ public class JHardNativeInterface {
   public static void loadLibrary() {
     if (!loaded) {
       if (isSimulated()) {
-        System.err.println("The JavaHard I/O library is not supported on this platform. Instead of values from actual hardware ports, your sketch will only receive stand-in values that allow you to test the remainder of its functionality.");
+        System.err.println(String.format(
+            "The JavaHard I/O library is not supported on this platform [%s].\nInstead of values from actual hardware ports, your code will only receive stand-in values that allow you to test the remainder of its functionality.",
+            System.getProperty("os.name")));
       } else {
         System.loadLibrary("javahard-io");
       }
@@ -25,7 +27,7 @@ public class JHardNativeInterface {
            !"Linux".equals(System.getProperty("os.name"));
   }
 
-  public static native int openDevice(String fn);
+  public static native int openDevice(String fn); // fn: File Name
   public static native String getError(int errno);
   public static native int closeDevice(int handle);
 

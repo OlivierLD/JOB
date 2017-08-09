@@ -12,6 +12,7 @@ import jhard.io.GPIO
   */
 object PinInterruptScalaSample {
 
+  // TASK: Maybe there is a better way to do this...
   val buttonPressed = new Consumer[Integer] {
     override def accept(pin:Integer): Unit = {
       println(s"Button pressed, pin ${pin}")
@@ -25,7 +26,7 @@ object PinInterruptScalaSample {
     val me = Thread currentThread
 
     sys addShutdownHook {
-      println("\nShutdown hook caught.")
+      println(" <- Oops! Shutdown hook caught.")
       me synchronized {
         me notify
       }
