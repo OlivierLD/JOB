@@ -26,7 +26,7 @@ This `C` file will be compiled into a system library (with an `.so` extension), 
 Below are the detailed steps of the process.
 
 The Java class to start from is `JavaHardNativeInterface.java`.
-See the header file `jhard.h`, and its corresponding implementation `jard.c`.
+See the header file `jhard.h`, and its corresponding implementation `jhard.c`.
 
 ---
 ## To build it
