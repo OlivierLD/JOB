@@ -11,9 +11,9 @@ Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
 ## How it works
 The low level interactions with the pins of the GPIO Header have to be done at the system level, they have to be performed in `C`.
-Devices - and their pins - are considered as `Files`, and bits are sent to received from through `ioctl` or similar `C` functions.
+Devices - and their pins - are considered as `Files`, and bits are sent to received from the devices through `ioctl` or similar `C` functions.
 
-To communicate with `C`, Java uses the `javah` utility.
+To write a Java class that communicates with `C`, you need to use the `javah` utility.
 
 To use `javah`:
 - Write a Java class, mentioning the the methods that will need to interact with `C` as `native`.
@@ -25,6 +25,7 @@ This `C` file will be compiled into a system library (with an `.so` extension), 
 
 Below are the detailed steps of the process.
 
+The Java class to start from is `JavaHardNativeInterface.java`.
 See the header file `jhard.h`, and its corresponding implementation `jard.c`.
 
 ---
@@ -41,7 +42,7 @@ If your `JAVA_HOME` variable is not set, set it, and update your `PATH`, as foll
  $> JAVA_HOME=/opt/jdk/jdk1.8.0_112
  $> PATH=$JAVA_HOME/bin:$PATH
 ```
-After that, the commands above should return the expected values. You can check if thei is correct by typing
+After that, the commands above should return the expected values. You can check if this is correct by typing
 ```bash
  $> javac -version
  $> javah -version
@@ -59,6 +60,7 @@ Then generate the native library:
  $> cd src/C
  $> make
 ```
+The make command invokes the `javah` utility. See the content of `Makefile`.
 By then, you should see a `libjavahard-io.so` library in the `C` directory.
 
 Finally, do the `gradle` build from the project root:
