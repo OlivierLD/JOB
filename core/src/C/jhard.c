@@ -62,7 +62,6 @@ int nativeDebugEnabled() {
     fprintf(stdout, "C >> %s:%s\n", nativeDebug, (debug ? "true" : "false"));
   }
   return debug;
-//return TRUE;
 }
 
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
@@ -98,6 +97,10 @@ JNIEXPORT jstring JNICALL Java_jhard_io_JHardNativeInterface_getError
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_closeDevice
   (JNIEnv *env, jclass cls, jint handle)
 {
+	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "C >> Closing device [%d]\n", (int)handle);
+	}
+
 	if (close(handle) < 0) {
 		return -errno;
 	} else {
@@ -222,8 +225,8 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferI2c
 		packets.nmsgs = 1;
 	}
 
-	if (FALSE && nativeDebugEnabled()) {
-	  fprintf(stdout, "C >> ioctl in transferI2c...\n");
+	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "\tC >> ioctl in transferI2c...\n"); // TODO Display payload
 	}
 
 	int ret = ioctl(handle, I2C_RDWR, &packets);
@@ -366,6 +369,10 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_setSpiSettings
 		return ret;
 	}
 
+	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "\tC >> spiSettings: mode %d, maxSpeed %d\n", (int)mode, maxSpeed);
+	}
+
 	return 0;
 }
 
@@ -381,6 +388,10 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferSpi
 		.rx_buf = (unsigned long)in,
 		.len = MIN((*env)->GetArrayLength(env, _out), (*env)->GetArrayLength(env, _in)),
 	};
+
+	if (nativeDebugEnabled()) {
+	  fprintf(stdout, "\tC >> ioctl in transferSpi...\n"); // TODO Display payload
+	}
 
 	int ret = ioctl(handle, SPI_IOC_MESSAGE(1), &xfer);
 
