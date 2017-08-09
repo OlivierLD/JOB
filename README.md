@@ -9,8 +9,25 @@ This should make the translations from `Python` or `C` code into `Java` a bit ea
 
 Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
----
+## How it works
+The low level interactions with the pins of the GPIO Header have to be done at the system level, they have to be performed in `C`.
+Devices - and their pins - are considered as `Files`, and bits are sent to received from through `ioctl` or similar `C` functions.
 
+To communicate with `C`, Java uses the `javah` utility.
+
+To use `javah`:
+- Write a Java class, mentioning the the methods that will need to interact with `C` as `native`.
+- Compile this class with `javac`.
+- Run `javah` on this compiled class
+
+`javah` will generate the `C` header file with the signatures of the `C` functions to implement. All you need to do is to implement them in a `C` file.
+This `C` file will be compiled into a system library (with an `.so` extension), that will be dynamically loaded by Java at run time.
+
+Below are the detailed steps of the process.
+
+See the header file `jhard.h`, and its corresponding implementation `jard.c`.
+
+---
 ## To build it
 You will need `javac` and `javah`.
 To know if they are available, type
@@ -52,10 +69,9 @@ Finally, do the `gradle` build from the project root:
 This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar contains all the required dependencies.
 
 ## To run it
-This is a work in progress... See the sample scripts `sample.0*`, see ho the `java.library.path` variable is set.
+This is a work in progress... The samples can be run from a single script named `samplemenu.h`, see ho the `java.library.path` variable is set.
 This is the one used to refer to the location of `libjavahard-io.so`.
 
-## Samples
 Run the script named `samplemenu.sh`:
 ```bash
  $> ./samplemenu.sh

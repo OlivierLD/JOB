@@ -84,7 +84,6 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
 	}
 }
 
-
 JNIEXPORT jstring JNICALL Java_jhard_io_JHardNativeInterface_getError
   (JNIEnv *env, jclass cls, jint _errno)
 {
@@ -96,7 +95,6 @@ JNIEXPORT jstring JNICALL Java_jhard_io_JHardNativeInterface_getError
 	}
 }
 
-
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_closeDevice
   (JNIEnv *env, jclass cls, jint handle)
 {
@@ -106,7 +104,6 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_closeDevice
 		return 0;
 	}
 }
-
 
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
   (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _in)
@@ -132,7 +129,6 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
 	close(file);
 	return len;
 }
-
 
 JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile
   (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _out)
