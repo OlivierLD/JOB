@@ -32,7 +32,7 @@ public class JHardNativeInterface {
   public static native int closeDevice(int handle);
 
   // the following two functions were done in native code to get access to the
-  // specifc error number (errno) that might occur
+  // specific error number (errno) that might occur
   public static native int readFile(String fn, byte[] in);
   public static native int writeFile(String fn, byte[] out);
   public static int writeFile(String fn, String out) {

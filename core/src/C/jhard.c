@@ -64,9 +64,10 @@ int nativeDebugEnabled() {
   return debug;
 }
 
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
-  (JNIEnv *env, jclass cls, jstring _fn)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice(
+  JNIEnv *env,
+  jclass cls,
+  jstring _fn) {
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
 
 	if (nativeDebugEnabled()) {
@@ -83,9 +84,10 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_openDevice
 	}
 }
 
-JNIEXPORT jstring JNICALL Java_jhard_io_JHardNativeInterface_getError
-  (JNIEnv *env, jclass cls, jint _errno)
-{
+JNIEXPORT jstring JNICALL Java_jhard_io_JHardNativeInterface_getError(
+    JNIEnv *env,
+    jclass cls,
+    jint _errno) {
 	char *msg = strerror(abs(_errno));
 	if (msg) {
 		return (*env)->NewStringUTF(env, msg);
@@ -94,9 +96,10 @@ JNIEXPORT jstring JNICALL Java_jhard_io_JHardNativeInterface_getError
 	}
 }
 
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_closeDevice
-  (JNIEnv *env, jclass cls, jint handle)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_closeDevice(
+    JNIEnv *env,
+    jclass cls,
+    jint handle) {
 	if (nativeDebugEnabled()) {
 	  fprintf(stdout, "C >> Closing device [%d]\n", (int)handle);
 	}
@@ -108,9 +111,11 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_closeDevice
 	}
 }
 
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
-  (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _in)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile(
+    JNIEnv *env,
+    jclass cls,
+    jstring _fn,
+    jbyteArray _in) {
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
 //    fprintf(stdout, "C >> readFile\n");
@@ -133,9 +138,11 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile
 	return len;
 }
 
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile
-  (JNIEnv *env, jclass cls, jstring _fn, jbyteArray _out)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile(
+    JNIEnv *env,
+    jclass cls,
+    jstring _fn,
+    jbyteArray _out) {
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
 //    fprintf(stdout, "C >> writeFile\n");
@@ -158,10 +165,11 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile
 	return len;
 }
 
-
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_pollDevice
-  (JNIEnv *env, jclass cls, jstring _fn, jint timeout)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_pollDevice(
+    JNIEnv *env,
+    jclass cls,
+    jstring _fn,
+    jint timeout) {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
 //    fprintf(stdout, "C >> writeFile\n");
@@ -200,9 +208,13 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_pollDevice
 	}
 }
 
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferI2c
-  (JNIEnv *env, jclass cls, jint handle, jint slave, jbyteArray _out, jbyteArray _in)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferI2c(
+    JNIEnv *env,
+    jclass cls,
+    jint handle,
+    jint slave,
+    jbyteArray _out,
+    jbyteArray _in) {
 	struct i2c_rdwr_ioctl_data packets;
 	struct i2c_msg msgs[2];
 	jbyte *out, *in;
@@ -248,8 +260,8 @@ typedef struct {
 	int period;
 } SERVO_STATE_T;
 
-
-static void* servoThread(void *ptr) {
+static void * servoThread(
+    void * ptr) {
 	SERVO_STATE_T *state = (SERVO_STATE_T*)ptr;
 	struct timespec on, off;
 	on.tv_sec = 0;
@@ -268,10 +280,12 @@ static void* servoThread(void *ptr) {
 	} while (TRUE);
 }
 
-
-JNIEXPORT jlong JNICALL Java_jhard_io_JHardNativeInterface_servoStartThread
-  (JNIEnv *env, jclass cls, jint gpio, jint pulse, jint period)
-{
+JNIEXPORT jlong JNICALL Java_jhard_io_JHardNativeInterface_servoStartThread(
+    JNIEnv *env,
+    jclass cls,
+    jint gpio,
+    jint pulse,
+    jint period) {
 	char path[26 + 19 + 1];
 	int fd;
 	pthread_t thread;
@@ -319,20 +333,22 @@ JNIEXPORT jlong JNICALL Java_jhard_io_JHardNativeInterface_servoStartThread
 	return (intptr_t)state;
 }
 
-
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_servoUpdateThread
-  (JNIEnv *env, jclass cls, jlong handle, jint pulse, jint period)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_servoUpdateThread(
+    JNIEnv *env,
+    jclass cls,
+    jlong handle,
+    jint pulse,
+    jint period) {
 	SERVO_STATE_T *state = (SERVO_STATE_T*)(intptr_t)handle;
 	state->pulse = (pulse - servo_pulse_oversleep > 0) ? pulse - servo_pulse_oversleep : 0;
 	state->period = period;
 	return 0;
 }
 
-
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_servoStopThread
-  (JNIEnv *env, jclass cls, jlong handle)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_servoStopThread(
+    JNIEnv *env,
+    jclass cls,
+    jlong handle) {
 	SERVO_STATE_T *state = (SERVO_STATE_T*)(intptr_t)handle;
 
 	// signal thread to stop
@@ -344,10 +360,13 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_servoStopThread
 	return 0;
 }
 
-
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_setSpiSettings
-  (JNIEnv *env, jclass cls, jint handle, jint _maxSpeed, jint dataOrder, jint mode)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_setSpiSettings(
+    JNIEnv *env,
+    jclass cls,
+    jint handle,
+    jint _maxSpeed,
+    jint dataOrder,
+    jint mode) {
 	uint8_t tmp;
 	uint32_t maxSpeed;
 
@@ -376,17 +395,20 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_setSpiSettings
 	return 0;
 }
 
-
-JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferSpi
-  (JNIEnv *env, jclass cls, jint handle, jbyteArray _out, jbyteArray _in)
-{
+JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_transferSpi(
+    JNIEnv *env,
+    jclass cls,
+    jint handle,
+    jbyteArray _out,
+    jbyteArray _in) {
 	jbyte* out = (*env)->GetByteArrayElements(env, _out, NULL);
 	jbyte* in = (*env)->GetByteArrayElements(env, _in, NULL);
 
 	struct spi_ioc_transfer xfer = {
 		.tx_buf = (unsigned long)out,
 		.rx_buf = (unsigned long)in,
-		.len = MIN((*env)->GetArrayLength(env, _out), (*env)->GetArrayLength(env, _in)),
+		.len = MIN((*env)->GetArrayLength(env, _out),
+		           (*env)->GetArrayLength(env, _in)),
 	};
 
 	if (nativeDebugEnabled()) {

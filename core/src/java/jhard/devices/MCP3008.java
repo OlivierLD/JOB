@@ -7,7 +7,7 @@ import jhard.io.SPI;
 // datasheet: http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf
 
 /*
- * Wiring of the MCP3008-SPI:
+ * Wiring of the MCP3008-SPI (without power supply):
  * +---------++---------------------------------------------+
  * | MCP3008 || Raspberry PI                                |
  * +---------++------+------------+---------+---------------+
@@ -24,7 +24,7 @@ public class MCP3008 extends SPI {
 
   public MCP3008(String dev) {
     super(dev);
-    settings(500_000, SPI.MSBFIRST, SPI.MODE0);
+    settings(SPI.DEFAULT_SPEED, Endianness.LITTLE_ENDIAN, SPIMode.MODE0);
   }
 
   public float getAnalog(int channel) {

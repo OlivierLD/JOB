@@ -6,7 +6,7 @@ while [ "$EXIT" = "false" ]
 do
   clear
   echo -e "+----------------------+"
-  echo -e "| Sample Menu          |"
+  echo -e "| Samples Menu         |"
   echo -e "+----------------------+"
   echo -e "| 1: Led Counter       |"
   echo -e "| 2: Push Button input |"

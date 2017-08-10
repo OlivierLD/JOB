@@ -12,36 +12,47 @@ import java.util.Map;
  */
 public class SPI {
 
-  /**
-   *  CPOL=0, CPHA=0, most common
-   */
-  public static final int MODE0 = 0;
-  /**
-   *  CPOL=0, CPHA=1
-   */
-  public static final int MODE1 = 1;
-  /**
-   *  CPOL=1, CPHA=0
-   */
-  public static final int MODE2 = 2;
-  /**
-   *  CPOL=1, CPHA=1
-   */
-  public static final int MODE3 = 3;
-  /**
-   *  most significant bit first, most common
-   */
-  public static final int MSBFIRST = 0;
-  /**
-   *  least significant bit first
-   */
-  public static final int LSBFIRST = 1;
+	public final static int DEFAULT_SPEED = 500_000;
 
-  protected int dataOrder = 0;
+  public enum SPIMode {
+    MODE0(0), // CPOL=0, CPHA=0, most common
+    MODE1(1), // CPOL=0, CPHA=1
+    MODE2(2), // CPOL=1, CPHA=0
+    MODE3(3); // CPOL=1, CPHA=1
+
+    private int intVal;
+    SPIMode(int intVal) {
+      this.intVal = intVal;
+    }
+    public int intVal() {
+      return this.intVal;
+    }
+  };
+
+	/**
+	 *  most significant bit first, most common
+	 */
+	private static final int MSB_FIRST = 0;
+	/**
+	 *  least significant bit first
+	 */
+	private static final int LSB_FIRST = 1;
+
+  public enum Endianness {
+    LITTLE_ENDIAN(MSB_FIRST),
+    BIG_ENDIAN(LSB_FIRST);
+
+	  private int order;
+    Endianness(int order) { this.order = order; }
+    public int order() { return this.order; }
+  }
+
+
+  protected Endianness endianness = Endianness.LITTLE_ENDIAN; // MSBFIRST;
   protected String dev;
   protected int handle;
-  protected int maxSpeed = 500_000;
-  protected int mode = 0;
+  protected int maxSpeed = DEFAULT_SPEED;
+  protected SPIMode mode = SPIMode.MODE0;
   protected static Map<String, String> settings = new HashMap<>();
 
   /**
@@ -113,13 +124,13 @@ public class SPI {
 
   /**
    *  Configures the SPI interface
-   *  @param maxSpeed maximum transmission rate in Hz, 500000 (500 kHz) is a resonable default
-   *  @param dataOrder whether data is send with the first- or least-significant bit first (SPI.MSBFIRST or SPI.LSBFIRST, the former is more common)
+   *  @param maxSpeed maximum transmission rate in Hz, 500,000 (500 kHz) is a reasonable default
+   *  @param endianness whether data is send with the first- or least-significant bit first (SPI.MSBFIRST or SPI.LSBFIRST, the former is more common)
    *  @param mode <a href="https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus#Clock_polarity_and_phase">SPI.MODE0 to SPI.MODE3</a>
    */
-  public void settings(int maxSpeed, int dataOrder, int mode) {
+  public void settings(int maxSpeed, Endianness endianness, SPIMode mode) {
     this.maxSpeed = maxSpeed;
-    this.dataOrder = dataOrder;
+    this.endianness = endianness;
     this.mode = mode;
   }
 
@@ -134,9 +145,9 @@ public class SPI {
     }
 
     // track the current setting per device across multiple instances
-    String curSettings = maxSpeed + "-" + dataOrder + "-" + mode;
+    String curSettings = maxSpeed + "-" + endianness + "-" + mode;
     if (!curSettings.equals(settings.get(dev))) {
-      int ret = JHardNativeInterface.setSpiSettings(handle, maxSpeed, dataOrder, mode);
+      int ret = JHardNativeInterface.setSpiSettings(handle, maxSpeed, endianness.order(), mode.intVal());
       if (ret < 0) {
         System.err.println(JHardNativeInterface.getError(handle));
         throw new RuntimeException("Error updating device configuration");
