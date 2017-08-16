@@ -22,21 +22,22 @@ import jhard.io.SPI;
 
 public class MCP3008 extends SPI {
 
-  public MCP3008(String dev) {
-    super(dev);
-    settings(SPI.DEFAULT_SPEED, Endianness.LITTLE_ENDIAN, SPIMode.MODE0);
-  }
+	public MCP3008(String dev) {
+		super(dev);
+		settings(SPI.DEFAULT_SPEED, Endianness.LITTLE_ENDIAN, SPIMode.MODE0);
+	}
 
-  public float getAnalog(int channel) {
-    if (channel < 0 || 7 < channel) {
-      System.err.println("Channel must be in [0..7]");
-      throw new IllegalArgumentException("Unexpected channel");
-    }
-    byte[] out = { 0, 0, 0 };
-    // encode the channel number in the first byte
-    out[0] = (byte)(0x18 | channel);
-    byte[] in = transfer(out);
-    int val = ((in[1] & 0x03) << 8) | (in[2] & 0xff); // val is between 0 and 1023
-    return val/1023.0f; // translated to [0..1]
-  }
+	public float getAnalog(int channel) {
+		if (channel < 0 || 7 < channel) {
+			System.err.println("Channel must be in [0..7]");
+			throw new IllegalArgumentException("Unexpected channel");
+		}
+		byte[] out = {0, 0, 0};
+		// encode the channel number in the first byte
+		out[0] = (byte) (0x18 | channel);
+		byte[] in = transfer(out);
+		int val = ((in[1] & 0x03) << 8) | (in[2] & 0xff); // val is between 0 and 1023
+		return val / 1023.0f; // translated to [0..1]
+	}
 }
+
