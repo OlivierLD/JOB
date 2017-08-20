@@ -270,11 +270,7 @@ public class GPIO {
    *  @param value true or false
    */
   public static void digitalWrite(int pin, boolean value) {
-    if (value) {
-      digitalWrite(pin, HIGH);
-    } else {
-      digitalWrite(pin, LOW);
-    }
+    digitalWrite(pin, value ? HIGH : LOW);
   }
 
   /**
@@ -317,7 +313,7 @@ public class GPIO {
     String fn = String.format("/sys/class/gpio/gpio%d/edge", pin);
     int ret = JHardNativeInterface.writeFile(fn, out);
     if (ret < 0) {
-      if (ret == -2) {    // ENOENT
+      if (ret == ENOENT) {
         System.err.println("Make sure your called pinMode on the input pin");
       }
       throw new RuntimeException(JHardNativeInterface.getError(ret));
@@ -363,13 +359,13 @@ public class GPIO {
     String fn = "/sys/class/gpio/export";
     int ret = JHardNativeInterface.writeFile(fn, Integer.toString(pin));
     if (ret < 0) {
-      if (ret == ENOENT) {    // ENOENT
+      if (ret == ENOENT) {
         System.err.println("Make sure your kernel is compiled with GPIO_SYSFS enabled");
       }
-      if (ret == EINVAL) {   // EINVAL
+      if (ret == EINVAL) {
         System.err.println("GPIO pin " + pin + " does not seem to be available on your platform");
       }
-      if (ret != EBUSY) {   // EBUSY, returned when the pin is already exported
+      if (ret != EBUSY) {   // returned when the pin is already exported
         throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
       }
     }
@@ -446,11 +442,11 @@ public class GPIO {
     String fn = "/sys/class/gpio/unexport";
     int ret = JHardNativeInterface.writeFile(fn, Integer.toString(pin));
     if (ret < 0) {
-      if (ret == -2) {    // ENOENT
+      if (ret == ENOENT) {
         System.err.println("Make sure your kernel is compiled with GPIO_SYSFS enabled");
       }
       // EINVAL is returned when trying to unexport pins that weren't exported to begin with, ignore this case
-      if (ret != -22) {
+      if (ret != EINVAL) {
         throw new RuntimeException(JHardNativeInterface.getError(ret));
       }
     }
@@ -508,7 +504,7 @@ public class GPIO {
     String fn = String.format("/sys/class/gpio/gpio%d/value", pin);
     int ret = JHardNativeInterface.pollDevice(fn, timeout);
     if (ret < 0) {
-      if (ret == -2) {    // ENOENT
+      if (ret == ENOENT) {    // ENOENT
         System.err.println("Make sure your called pinMode on the input pin");
       }
       throw new RuntimeException(JHardNativeInterface.getError(ret));

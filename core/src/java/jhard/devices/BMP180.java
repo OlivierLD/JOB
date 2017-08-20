@@ -10,7 +10,12 @@ import java.util.stream.Collectors;
 import static utils.MiscUtils.delay;
 
 /**
- * BMP180. Big Endian.
+ * BMP180. Pressure (-> Altitude), Temperature.
+ * <br/>
+ * Big Endian
+ * <br/>
+ * I<sup><small>2</small></sup>C bus, Address 0x77.
+
  */
 public class BMP180 extends I2C {
 
@@ -121,8 +126,9 @@ public class BMP180 extends I2C {
 		cal_MB = readS16(BMP180_CAL_MB);    // INT16
 		cal_MC = readS16(BMP180_CAL_MC);    // INT16
 		cal_MD = readS16(BMP180_CAL_MD);    // INT16
-		if (verbose)
+		if (verbose) {
 			showCalibrationData();
+		}
 	}
 
 	private void showCalibrationData() {
@@ -145,30 +151,33 @@ public class BMP180 extends I2C {
 		this.command(BMP180_CONTROL, (byte) BMP180_READTEMPCMD);
 		MiscUtils.delay(5);  // Wait 5ms
 		int raw = readU16(BMP180_TEMPDATA);
-		if (verbose)
+		if (verbose) {
 			System.out.println("DBG: Raw Temp: " + (raw & 0xFFFF) + ", " + raw);
+		}
 		return raw;
 	}
 
 	public int readRawPressure() throws Exception {
 		// Reads the raw (uncompensated) pressure level from the sensor
 		this.command(BMP180_CONTROL, (byte) (BMP180_READPRESSURECMD + (this.mode << 6)));
-		if (this.mode == BMP180_ULTRALOWPOWER)
+		if (this.mode == BMP180_ULTRALOWPOWER) {
 			MiscUtils.delay(5);
-		else if (this.mode == BMP180_HIGHRES)
+		} else if (this.mode == BMP180_HIGHRES) {
 			MiscUtils.delay(14);
-		else if (this.mode == BMP180_ULTRAHIGHRES)
+		} else if (this.mode == BMP180_ULTRAHIGHRES) {
 			MiscUtils.delay(26);
-		else
+		} else {
 			MiscUtils.delay(8);
+		}
 		super.beginTransmission(this.address);
 		int msb = this.readU8(BMP180_PRESSUREDATA);
 		int lsb = this.readU8(BMP180_PRESSUREDATA + 1);
 		int xlsb = this.readU8(BMP180_PRESSUREDATA + 2);
 		super.endTransmission();
 		int raw = ((msb << 16) + (lsb << 8) + xlsb) >> (8 - this.mode);
-		if (verbose)
+		if (verbose) {
 			System.out.println("DBG: Raw Pressure: " + (raw & 0xFFFF) + ", " + raw);
+		}
 		return raw;
 	}
 
@@ -186,8 +195,9 @@ public class BMP180 extends I2C {
 		X2 = (this.cal_MC << 11) / (X1 + this.cal_MD);
 		B5 = X1 + X2;
 		temp = ((B5 + 8) >> 4) / 10.0f;
-		if (verbose)
+		if (verbose) {
 			System.out.println("DBG: Calibrated temperature = " + temp + " C");
+		}
 		return temp;
 	}
 
@@ -209,10 +219,10 @@ public class BMP180 extends I2C {
 		UP = this.readRawPressure();
 
 		// You can use the datasheet values to test the conversion results
-		// boolean dsValues = true;
-		boolean dsValues = false;
+		// boolean dataSheetValues = true;
+		boolean dataSheetValues = false;
 
-		if (dsValues) {
+		if (dataSheetValues) {
 			UT = 27898;
 			UP = 23843;
 			this.cal_AC6 = 23153;
@@ -227,8 +237,9 @@ public class BMP180 extends I2C {
 			this.cal_AC1 = 408;
 			this.cal_AC4 = 32741;
 			this.mode = BMP180_ULTRALOWPOWER;
-			if (verbose)
+			if (verbose) {
 				this.showCalibrationData();
+			}
 		}
 		// True Temperature Calculations
 		X1 = (int) ((UT - this.cal_AC6) * this.cal_AC5) >> 15;
@@ -265,14 +276,14 @@ public class BMP180 extends I2C {
 			System.out.println("DBG: B4 = " + B4);
 			System.out.println("DBG: B7 = " + B7);
 		}
-		if (B7 < 0x80000000)
+		if (B7 < 0x80000000) {
 			p = (B7 * 2) / B4;
-		else
+		} else {
 			p = (B7 / B4) * 2;
-
-		if (verbose)
+		}
+		if (verbose) {
 			System.out.println("DBG: X1 = " + X1);
-
+		}
 		X1 = (p >> 8) * (p >> 8);
 		X1 = (X1 * 3038) >> 16;
 		X2 = (-7357 * p) >> 16;
@@ -282,28 +293,34 @@ public class BMP180 extends I2C {
 			System.out.println("DBG: X2 = " + X2);
 		}
 		p = p + ((X1 + X2 + 3791) >> 4);
-		if (verbose)
+		if (verbose) {
 			System.out.println("DBG: Pressure = " + p + " Pa");
-
+		}
 		return p;
 	}
 
-	private int standardSeaLevelPressure = 101_325; // 1013.25 hPa
+	private int standardSeaLevelPressure = 101_325; // in Pa, eq to 1013.25 hPa
 
 	public void setStandardSeaLevelPressure(int standardSeaLevelPressure) {
 		this.standardSeaLevelPressure = standardSeaLevelPressure;
 	}
 
 	public double readAltitude() throws Exception {
-		// "Calculates the altitude in meters"
+		// Calculates the altitude in meters
 		double altitude = 0.0;
 		float pressure = readPressure();
 		altitude = 44330.0 * (1.0 - Math.pow(pressure / standardSeaLevelPressure, 0.1903));
-		if (verbose)
+		if (verbose) {
 			System.out.println("DBG: Altitude = " + altitude);
+		}
 		return altitude;
 	}
 
+	/**
+	 * Read an Unsigned 16 bit word from register.
+	 * @param register
+	 * @return
+	 */
 	private int readU16(int register) {
 		super.beginTransmission(this.address);
 		super.write((byte)register);
@@ -312,6 +329,11 @@ public class BMP180 extends I2C {
 		return ((ba[0] & 0xFF) << 8) + (ba[1] & 0xFF); // Big Endian
 	}
 
+	/**
+	 * Read a Signed 16 bit word from register.
+	 * @param register
+	 * @return
+	 */
 	private int readS16(int register) {
 		super.beginTransmission(this.address);
 		super.write((byte)register);
@@ -325,6 +347,11 @@ public class BMP180 extends I2C {
 		return (hi << 8) + lo; // Little Endian
 	}
 
+	/**
+	 * Read an Unsigned byte from register.
+	 * @param register
+	 * @return
+	 */
 	private int readU8(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
@@ -333,6 +360,11 @@ public class BMP180 extends I2C {
 		return (int)(ba[0] & 0xFF);
 	}
 
+	/**
+	 * Read a Signed byte from register.
+	 * @param register
+	 * @return
+	 */
 	private int readS8(int register) {
 		int val = this.readU8(register);
 		if (val > 127)

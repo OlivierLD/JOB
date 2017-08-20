@@ -10,8 +10,11 @@ import java.util.stream.Collectors;
 import static utils.MiscUtils.delay;
 
 /**
- * Work in progress...
- * TODO write a getData implementing the right read order.
+ * BME280. Pressure (-> Altitude), Temperature, Humidity.
+ * <br/>
+ * Little Endian
+ * <br/>
+ * I<sup><small>2</small></sup>C bus, Address 0x77.
  */
 public class BME280 extends I2C {
 
@@ -360,10 +363,10 @@ public class BME280 extends I2C {
 	}
 
 	/**
-	 * The order used to read the data is important!
+	 * The order used to read the data is <strong>important!</strong>
 	 *
-	 * @param prmsl Pressure at Mean Sea Level, in Pa
-	 * @return temperature, pressure, altitude and humidity
+	 * @param prmsl Pressure at Mean Sea Level, in Pa. Standard value is 101,325 Pa (1013.25 hPa, aka mb).
+	 * @return temperature, pressure, altitude and humidity.
 	 */
 	public BME280Data getAllData(Float prmsl) {
 		// 1.temperature, 2.pressure (analog to altitude), 3.humidity.
@@ -396,6 +399,11 @@ public class BME280 extends I2C {
 		return new BME280Data(temp, press, alt, hum);
 	}
 
+	/**
+	 * Read a 16 bit word, unsigned, Little Endian.
+	 * @param register the one to read
+	 * @return the int value of the read 16 bit word
+	 */
 	private int readU16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write((byte)register);
@@ -404,6 +412,11 @@ public class BME280 extends I2C {
 		return ((ba[1] & 0xFF) << 8) + (ba[0] & 0xFF); // Little Endian
 	}
 
+	/**
+	 * Read a 16 bit word, signed, Little Endian.
+	 * @param register the one to read
+	 * @return the int value of the read 16 bit word
+	 */
 	private int readS16LE(int register) {
 		super.beginTransmission(this.address);
 		super.write((byte)register);
@@ -417,6 +430,11 @@ public class BME280 extends I2C {
 		return (hi << 8) + lo; // Little Endian
 	}
 
+	/**
+	 * read unsigned byte from register
+	 * @param register
+	 * @return
+	 */
 	private int readU8(int register) {
 		super.beginTransmission(this.address);
 		super.write(register);
@@ -425,6 +443,11 @@ public class BME280 extends I2C {
 		return (int)(ba[0] & 0xFF);
 	}
 
+	/**
+	 * read signed byte from register
+	 * @param register
+	 * @return
+	 */
 	private int readS8(int register) {
 		int val = this.readU8(register);
 		if (val > 127)

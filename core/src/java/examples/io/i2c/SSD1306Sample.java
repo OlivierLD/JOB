@@ -245,7 +245,7 @@ public class SSD1306Sample {
 					}
 					double virtualAngle = Math.PI * (((c - i) % 32) / 32d);
 					int xpos = strOffset - i,
-									ypos = 26 + (int) (16 * Math.sin(virtualAngle));
+							ypos = 26 + (int) (16 * Math.sin(virtualAngle));
 //      System.out.println("Displaying " + ca[c] + " at " + x + ", " + y + ", i=" + i + ", strOffset=" + strOffset);
 					sb.text(new String(new char[]{ca[c]}), xpos, ypos);
 				}
