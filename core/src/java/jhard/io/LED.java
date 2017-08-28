@@ -67,8 +67,8 @@ public class LED {
       throw new RuntimeException("Unable to read current brightness");
     }
     // disable trigger
-    String fn = "/sys/class/leds/" + dev + "/trigger";
-    int ret = JHardNativeInterface.writeFile(fn, "none");
+    String fName = "/sys/class/leds/" + dev + "/trigger";
+    int ret = JHardNativeInterface.writeFile(fName, "none");
     if (ret < 0) {
       if (ret == EACCES) {
         System.err.println("You might need to install a custom udev rule to allow regular users to modify /sys/class/leds/*.");
@@ -90,10 +90,10 @@ public class LED {
       return;
     }
 
-    String fn = "/sys/class/leds/" + dev + "/brightness";
-    int ret = JHardNativeInterface.writeFile(fn, Integer.toString((int)(bright * maxBrightness)));
+    String fName = "/sys/class/leds/" + dev + "/brightness";
+    int ret = JHardNativeInterface.writeFile(fName, Integer.toString((int)(bright * maxBrightness)));
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
+      throw new RuntimeException(fName + ": " + JHardNativeInterface.getError(ret));
     }
   }
 
@@ -106,16 +106,16 @@ public class LED {
     }
 
     // restore previous settings
-    String fn = "/sys/class/leds/" + dev + "/brightness";
-    int ret = JHardNativeInterface.writeFile(fn, Integer.toString(prevBrightness));
+    String fName = "/sys/class/leds/" + dev + "/brightness";
+    int ret = JHardNativeInterface.writeFile(fName, Integer.toString(prevBrightness));
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
+      throw new RuntimeException(fName + ": " + JHardNativeInterface.getError(ret));
     }
 
-    fn = "/sys/class/leds/" + dev + "/trigger";
-    ret = JHardNativeInterface.writeFile(fn, prevTrigger);
+    fName = "/sys/class/leds/" + dev + "/trigger";
+    ret = JHardNativeInterface.writeFile(fName, prevTrigger);
     if (ret < 0) {
-      throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));
+      throw new RuntimeException(fName + ": " + JHardNativeInterface.getError(ret));
     }
   }
 

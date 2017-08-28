@@ -7,7 +7,7 @@ import jhard.io.GPIO;
  */
 public class SimpleInput {
 // GPIO numbers refer to different physical pins on various boards
-// On the Raspberry Pi GPIO 4 is physical pin 7 on the header
+// On the Raspberry Pi, GPIO 4 is physical pin 7 on the header
 // see setup.png in the sketch folder for wiring details
   private int pin = 27;
 
@@ -16,12 +16,12 @@ public class SimpleInput {
   }
 
   private void setup() {
-    GPIO.pinMode(pin, GPIO.INPUT);
+    GPIO.pinMode(this.pin, GPIO.INPUT);
   }
 
   private void check() {
     // sense the input pin
-    if (GPIO.digitalRead(pin) == GPIO.HIGH) {
+    if (GPIO.digitalRead(this.pin) == GPIO.HIGH) {
       System.out.println("High");
     } else {
       System.out.println("Low");

@@ -27,20 +27,20 @@ public class JHardNativeInterface {
            !"Linux".equals(System.getProperty("os.name"));
   }
 
-  public static native int openDevice(String fn); // fn: File Name
+  public static native int openDevice(String fName); // fn: File Name
   public static native String getError(int errno);
   public static native int closeDevice(int handle);
 
   // the following two functions were done in native code to get access to the
   // specific error number (errno) that might occur
-  public static native int readFile(String fn, byte[] in);
-  public static native int writeFile(String fn, byte[] out);
-  public static int writeFile(String fn, String out) {
-    return writeFile(fn, out.getBytes());
+  public static native int readFile(String fName, byte[] in);
+  public static native int writeFile(String fName, byte[] out);
+  public static int writeFile(String fName, String out) {
+    return writeFile(fName, out.getBytes());
   }
 
   /* GPIO */
-  public static native int pollDevice(String fn, int timeout);
+  public static native int pollDevice(String fName, int timeout);
   /* I2C */
   public static native int transferI2c(int handle, int slave, byte[] out, byte[] in);
   /* SoftwareServo */
