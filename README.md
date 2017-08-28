@@ -9,6 +9,8 @@ This should make the translations from `Python` or `C` code into `Java` a bit ea
 
 Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
+> Note: GPIO Pin numbers are the ones available [here](https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/).
+
 ## How it works
 The low level interactions with the pins of the GPIO Header have to be done at the system level, they have to be performed in `C`.
 Devices - and their pins - are considered as `Files`, and bits are sent to received from the devices through `ioctl` or similar `C` functions.
@@ -101,6 +103,7 @@ Should be comaptible with any JVM-aware languages. Samples to be provided.
 - GPIO push-button (with interrupt, or not)
 - BMP180
 - BME280
+- Servos (direct, Software Servos)
 
 ## TODO
 A lot!
@@ -109,7 +112,7 @@ A lot!
 - HTU21DF
 - LoRa
 - FONA
-- Servos & PWM
+- PWM
 - ...etc
 
 ---
