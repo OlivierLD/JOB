@@ -73,7 +73,7 @@ do
       ;;
     8)
       echo -e "Sotfware Servo (have servo connected on pin 5 - physical #29)"
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.servo.DirectPWMServo
+      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.servo.DirectPWMServo 5
       echo -en "Hit [return]"
       read a
       ;;
