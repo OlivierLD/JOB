@@ -15,6 +15,7 @@ do
   echo -e "| 5: GPIO Interrupt    |"
   echo -e "| 6: BMP180 (I2C)      |"
   echo -e "| 7: BME280 (I2C)      |"
+  echo -e "| 8: Servo             |"
   echo -e "+----------------------+"
   echo -e "| Q: Quit              |"
   echo -e "+----------------------+"
@@ -49,7 +50,7 @@ do
       read a
       ;;
     5)
-      echo -e "GPIO Interrupt"
+      echo -e "GPIO Interrupt (have a push button connected on pin 27 - physical #13)"
       sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.gpio.PinInterrupt
       echo -en "Hit [return]"
       read a
@@ -67,6 +68,12 @@ do
       JAVA_OPTS=
       JAVA_OPTS="$JAVA_OPTS -Dbme280.verbose=true"
       sudo NATIVEDEBUG=true java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.BME280Sample
+      echo -en "Hit [return]"
+      read a
+      ;;
+    8)
+      echo -e "Sotfware Servo (have servo connected on pin 5 - physical #29)"
+      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.servo.DirectPWMServo
       echo -en "Hit [return]"
       read a
       ;;
