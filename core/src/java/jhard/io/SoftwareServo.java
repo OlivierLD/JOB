@@ -68,7 +68,7 @@ public class SoftwareServo {
    *  @param angle angle in degrees (controls speed and direction on continuous-rotation servos)
    */
   public void write(float angle) {
-    if (attached() == false) {
+    if (!this.attached()) {
       System.err.println("You need to call attach(pin) before write(angle).");
       throw new RuntimeException("Servo is not attached");
     }
