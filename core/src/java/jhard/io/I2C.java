@@ -30,9 +30,9 @@ public class I2C {
       return;
     }
 
-    handle = JHardNativeInterface.openDevice("/dev/" + bus);
-    if (handle < 0) {
-      throw new RuntimeException(JHardNativeInterface.getError(handle));
+    this.handle = JHardNativeInterface.openDevice("/dev/" + bus);
+    if (this.handle < 0) {
+      throw new RuntimeException(JHardNativeInterface.getError(this.handle));
     }
   }
 
@@ -49,8 +49,8 @@ public class I2C {
       throw new IllegalArgumentException("Illegal address");
     }
     this.slave = slave;
-    transmitting = true;
-    out = null;
+    this.transmitting = true;
+    this.out = null;
   }
 
   /**
@@ -60,13 +60,13 @@ public class I2C {
     if (JHardNativeInterface.isSimulated()) {
       return;
     }
-    JHardNativeInterface.closeDevice(handle);
-    handle = 0;
+    JHardNativeInterface.closeDevice(this.handle);
+    this.handle = 0;
   }
 
   protected void finalize() throws Throwable {
     try {
-      close();
+      this.close();
     } finally {
       super.finalize();
     }
@@ -78,7 +78,7 @@ public class I2C {
    *  @see #write
    */
   public void endTransmission() {
-    if (!transmitting) {
+    if (!this.transmitting) {
       // silently ignore this case
       return;
     }
@@ -86,9 +86,9 @@ public class I2C {
       return;
     }
     // implement these flags if needed: https://github.com/raspberrypi/linux/blob/rpi-patches/Documentation/i2c/i2c-protocol
-    int ret = JHardNativeInterface.transferI2c(handle, slave, out, null);
-    transmitting = false;
-    out = null;
+    int ret = JHardNativeInterface.transferI2c(this.handle, this.slave, this.out, null);
+    this.transmitting = false;
+    this.out = null;
     if (ret < 0) {
       if (ret == EIO) {
         System.err.println("The device did not respond. Check the cabling and whether you are using the correct address.");
@@ -132,7 +132,7 @@ public class I2C {
    *  @see #endTransmission
    */
   public byte[] read(int len) {
-    if (!transmitting) {
+    if (!this.transmitting) {
       throw new RuntimeException("beginTransmisson has not been called");
     }
     byte[] in = new byte[len];
@@ -141,9 +141,9 @@ public class I2C {
       return in;
     }
 
-    int ret = JHardNativeInterface.transferI2c(handle, slave, out, in);
-    transmitting = false;
-    out = null;
+    int ret = JHardNativeInterface.transferI2c(this.handle, this.slave, this.out, in);
+    this.transmitting = false;
+    this.out = null;
     if (ret < 0) {
       if (ret == EIO) {
         System.err.println("The device did not respond. Check the cabling and whether you are using the correct address.");
@@ -161,7 +161,7 @@ public class I2C {
    *  @see #endTransmission
    */
   public void write(byte[] out) {
-    if (!transmitting) {
+    if (!this.transmitting) {
       throw new RuntimeException("beginTransmisson has not been called");
     }
 

@@ -32,7 +32,7 @@ public class PWM {
     if (pos == -1) {
       throw new IllegalArgumentException("Unsupported channel");
     }
-    chip = channel.substring(0, pos);
+    this.chip = channel.substring(0, pos);
     this.channel = Integer.parseInt(channel.substring(pos+4));
 
     if (JHardNativeInterface.isSimulated()) {
@@ -40,7 +40,7 @@ public class PWM {
     }
 
     // export channel through sysfs
-    String fn = "/sys/class/pwm/" + chip + "/export";
+    String fn = "/sys/class/pwm/" + this.chip + "/export";
     int ret = JHardNativeInterface.writeFile(fn, Integer.toString(this.channel));
     if (ret < 0) {
       if (ret == ENOENT) {
@@ -71,7 +71,7 @@ public class PWM {
       return;
     }
 
-    String fn = String.format("/sys/class/pwm/%s/pwm%d/enable", chip, channel);
+    String fn = String.format("/sys/class/pwm/%s/pwm%d/enable", this.chip, this.channel);
     int ret = JHardNativeInterface.writeFile(fn, "0");
     if (ret < 0) {
       throw new RuntimeException(JHardNativeInterface.getError(ret));
@@ -89,8 +89,8 @@ public class PWM {
     // XXX: implicit clear()?
     // XXX: also check GPIO
 
-    String fn = "/sys/class/pwm/" + chip + "/unexport";
-    int ret = JHardNativeInterface.writeFile(fn, Integer.toString(channel));
+    String fn = "/sys/class/pwm/" + this.chip + "/unexport";
+    int ret = JHardNativeInterface.writeFile(fn, Integer.toString(this.channel));
     if (ret < 0) {
       if (ret == ENOENT) {
         System.err.println("Make sure your kernel is compiled with PWM_SYSFS enabled and you have the necessary PWM driver for your platform");
@@ -145,7 +145,7 @@ public class PWM {
       return;
     }
     // set period
-    String fn = String.format("/sys/class/pwm/%s/pwm%d/period", chip, channel);
+    String fn = String.format("/sys/class/pwm/%s/pwm%d/period", this.chip, this.channel);
     // convert to nanoseconds
     int ret = JHardNativeInterface.writeFile(fn, String.format("%d", (int)(1_000_000_000 / period)));
     if (ret < 0) {
@@ -153,7 +153,7 @@ public class PWM {
     }
 
     // set duty cycle
-    fn = fn = String.format("/sys/class/pwm/%s/pwm%d/duty_cycle", chip, channel);
+    fn = fn = String.format("/sys/class/pwm/%s/pwm%d/duty_cycle", this.chip, this.channel);
     if (duty < 0.0 || 1.0 < duty) {
       System.err.println("Duty cycle must be between 0.0 and 1.0.");
       throw new IllegalArgumentException("Illegal argument");
@@ -165,7 +165,7 @@ public class PWM {
     }
 
     // enable output
-    fn = String.format("/sys/class/pwm/%s/pwm%d/enable", chip, channel);
+    fn = String.format("/sys/class/pwm/%s/pwm%d/enable", this.chip, this.channel);
     ret = JHardNativeInterface.writeFile(fn, "1");
     if (ret < 0) {
       throw new RuntimeException(fn + ": " + JHardNativeInterface.getError(ret));

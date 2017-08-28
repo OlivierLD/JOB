@@ -73,25 +73,25 @@ public class SoftwareServo {
       throw new RuntimeException("Servo is not attached");
     }
 
-    if (angle < 0 || 180 < angle) {
+    if (angle < 0 || angle > 180) {
       System.err.println("Only degree values between 0 and 180 can be used.");
       throw new IllegalArgumentException("Illegal value");
     }
-    pulse = (int)(minPulse + (angle/180.0) * (maxPulse-minPulse));
+    this.pulse = (int)(this.minPulse + (angle/180.0) * (this.maxPulse - this.minPulse));
 
-    if (handle < 0) {
+    if (this.handle < 0) {
       // start a new thread
-      GPIO.pinMode(pin, GPIO.OUTPUT);
+      GPIO.pinMode(this.pin, GPIO.OUTPUT);
       if (JHardNativeInterface.isSimulated()) {
         return;
       }
-      handle = JHardNativeInterface.servoStartThread(pin, pulse, period);
-      if (handle < 0) {
-        throw new RuntimeException(JHardNativeInterface.getError((int)handle));
+      this.handle = JHardNativeInterface.servoStartThread(this.pin, this.pulse, this.period);
+      if (this.handle < 0) {
+        throw new RuntimeException(JHardNativeInterface.getError((int)this.handle));
       }
     } else {
       // thread already running
-      int ret = JHardNativeInterface.servoUpdateThread(handle, pulse, period);
+      int ret = JHardNativeInterface.servoUpdateThread(this.handle, this.pulse, this.period);
       if (ret < 0) {
         throw new RuntimeException(JHardNativeInterface.getError(ret));
       }
@@ -103,19 +103,19 @@ public class SoftwareServo {
    *  @return true if attached, false is not
    */
   public boolean attached() {
-    return (pin != -1);
+    return (this.pin != -1);
   }
 
   /**
    *  Detach a servo motor from a GPIO pin
    */
   public void detach() {
-    if (0 <= handle) {
+    if (this.handle > 0) {
       // stop thread
-      int ret = JHardNativeInterface.servoStopThread(handle);
-      GPIO.pinMode(pin, GPIO.INPUT);
-      handle = -1;
-      pin = -1;
+      int ret = JHardNativeInterface.servoStopThread(this.handle);
+      GPIO.pinMode(this.pin, GPIO.INPUT);
+      this.handle = -1;
+      this.pin = -1;
       if (ret < 0) {
         throw new RuntimeException(JHardNativeInterface.getError(ret));
       }

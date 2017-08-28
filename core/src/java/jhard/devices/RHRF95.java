@@ -26,7 +26,7 @@ public class RHRF95 extends SPI {
 
   public RHRF95(String dev) {
     super(dev);
-    super.settings(SPI.DEFAULT_SPEED, Endianness.LITTLE_ENDIAN, SPIMode.MODE0); // TASK MODE0 includes the RST?
+    super.settings(SPI.DEFAULT_SPEED, Endianness.LITTLE_ENDIAN, SPIMode.MODE0); // TODO: MODE0 includes the RST?
   }
   // TODO The rest...
 }

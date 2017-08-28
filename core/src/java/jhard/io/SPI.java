@@ -68,9 +68,9 @@ public class SPI {
       return;
     }
 
-    handle = JHardNativeInterface.openDevice("/dev/" + dev);
-    if (handle < 0) {
-      throw new RuntimeException(JHardNativeInterface.getError(handle));
+    this.handle = JHardNativeInterface.openDevice("/dev/" + dev);
+    if (this.handle < 0) {
+      throw new RuntimeException(JHardNativeInterface.getError(this.handle));
     }
   }
 
@@ -82,8 +82,8 @@ public class SPI {
     if (JHardNativeInterface.isSimulated()) {
       return;
     }
-    JHardNativeInterface.closeDevice(handle);
-    handle = 0;
+    JHardNativeInterface.closeDevice(this.handle);
+    this.handle = 0;
   }
 
 
@@ -145,18 +145,18 @@ public class SPI {
     }
 
     // track the current setting per device across multiple instances
-    String curSettings = maxSpeed + "-" + endianness + "-" + mode;
-    if (!curSettings.equals(settings.get(dev))) {
-      int ret = JHardNativeInterface.setSpiSettings(handle, maxSpeed, endianness.order(), mode.intVal());
+    String curSettings = this.maxSpeed + "-" + this.endianness + "-" + this.mode;
+    if (!curSettings.equals(settings.get(this.dev))) {
+      int ret = JHardNativeInterface.setSpiSettings(this.handle, this.maxSpeed, this.endianness.order(), this.mode.intVal());
       if (ret < 0) {
-        System.err.println(JHardNativeInterface.getError(handle));
+        System.err.println(JHardNativeInterface.getError(this.handle));
         throw new RuntimeException("Error updating device configuration");
       }
-      settings.put(dev, curSettings);
+      settings.put(this.dev, curSettings);
     }
 
     byte[] in = new byte[out.length];
-    int transferred = JHardNativeInterface.transferSpi(handle, out, in);
+    int transferred = JHardNativeInterface.transferSpi(this.handle, out, in);
     if (transferred < 0) {
       throw new RuntimeException(JHardNativeInterface.getError(transferred));
     } else if (transferred < out.length) {

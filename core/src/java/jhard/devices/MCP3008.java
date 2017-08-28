@@ -28,7 +28,7 @@ public class MCP3008 extends SPI {
 	}
 
 	public float getAnalog(int channel) {
-		if (channel < 0 || 7 < channel) {
+		if (channel < 0 || channel > 7) {
 			System.err.println("Channel must be in [0..7]");
 			throw new IllegalArgumentException("Unexpected channel");
 		}
