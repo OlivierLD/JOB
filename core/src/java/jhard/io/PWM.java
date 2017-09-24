@@ -33,7 +33,7 @@ public class PWM {
       throw new IllegalArgumentException("Unsupported channel");
     }
     this.chip = channel.substring(0, pos);
-    this.channel = Integer.parseInt(channel.substring(pos+4));
+    this.channel = Integer.parseInt(channel.substring(pos + "/pwm".length()));
 
     if (JHardNativeInterface.isSimulated()) {
       return;
@@ -178,6 +178,6 @@ public class PWM {
    *  @param duty duty cycle, 0.0 (always off) to 1.0 (always on)
    */
   public void set(float duty) {
-    set(1_000, duty);
+    this.set(1_000, duty);
   }
 }
