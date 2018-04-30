@@ -45,7 +45,7 @@ public class DirectPWMServo {
 	}
 
 	public static void main(String... args) {
-		int pinNum = 5;
+		int pinNum = 5; // Physical #29
 		if (args.length > 0) {
 			try {
 				pinNum = Integer.parseInt(args[0]);

@@ -96,7 +96,7 @@ Run the script named `samplemenu.sh`:
 Make sure the required devices are correctly wired for the demos.
 
 ## Compatibility
-Should be comaptible with any JVM-aware languages. Samples to be provided.
+Should be compatible with any JVM-aware languages. Samples to be provided.
 
 ## Available device implementations
 - SSD1306
