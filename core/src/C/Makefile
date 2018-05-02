@@ -6,6 +6,7 @@ CC := gcc
 CFLAGS := -std=gnu99 -fPIC -g -ffast-math
 CFLAGS += -I$(shell dirname $(shell realpath $(shell which javac)))/../include
 CFLAGS += -I$(shell dirname $(shell realpath $(shell which javac)))/../include/linux
+# CFLAGS += -I$(shell dirname $(shell realpath $(shell which javac)))/../../../Headers
 LDFLAGS := -shared
 
 $(TARGET): $(OBJS)

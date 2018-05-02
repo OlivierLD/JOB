@@ -104,6 +104,7 @@ Should be compatible with any JVM-aware languages. Samples to be provided.
 - BMP180
 - BME280
 - Servos (direct, Software Servos)
+- ADS1x15 ADCs
 
 ## TODO
 A lot!
@@ -112,7 +113,6 @@ A lot!
 - HTU21DF
 - LoRa
 - FONA
-- PWM
 - ...etc
 
 ---
