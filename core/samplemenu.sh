@@ -16,6 +16,7 @@ do
   echo -e "| 6: BMP180 (I2C)      |"
   echo -e "| 7: BME280 (I2C)      |"
   echo -e "| 8: Servo             |"
+  echo -e "| 9: ADS1015 (I2C ADC) |"
   echo -e "+----------------------+"
   echo -e "| Q: Quit              |"
   echo -e "+----------------------+"
@@ -74,6 +75,13 @@ do
     8)
       echo -e "Sotfware Servo (have servo connected on pin 5 - physical #29)"
       sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=$LIB_PATH examples.io.servo.DirectPWMServo 5
+      echo -en "Hit [return]"
+      read a
+      ;;
+    9)
+      echo -e "ADS1015"
+      JAVA_OPTS=
+      sudo NATIVEDEBUG=true java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.ADS1015Sample
       echo -en "Hit [return]"
       read a
       ;;
