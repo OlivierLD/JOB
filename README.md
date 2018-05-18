@@ -79,18 +79,18 @@ This is the one used to refer to the location of `libjavahard-io.so`.
 Run the script named `samplemenu.sh`:
 ```bash
  $> ./samplemenu.sh
- +----------------------+
- | Sample Menu          |
- +----------------------+
- | 1: Led Counter       |
- | 2: Push Button input |
- | 3: MCP3008 (ADC)     |
- | 4: OLED SSD1306      |
- |   ...                |
- +----------------------+
- | Q: Quit              |
- +----------------------+
-  You choose >
+ ++---------------------------------------------+
+  |           S A M P L E S   M E N U           |
+  +----------------------+----------------------+
+  | 1: Led Counter       | 6: BMP180 (I2C)      |
+  | 2: Push Button input | 7: BME280 (I2C)      |
+  | 3: MCP3008 (ADC)     | 8: Servo             |
+  | 4: OLED SSD1306      | 9: ADS1015 (I2C ADC) |
+  | 5: GPIO Interrupt    |                      |
+  +----------------------+----------------------+
+  | Q: Quit                                     |
+  +---------------------------------------------+
+   You choose > 
 
 ```
 Make sure the required devices are correctly wired for the demos.

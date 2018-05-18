@@ -5,21 +5,17 @@ EXIT=false
 while [ "$EXIT" = "false" ]
 do
   clear
-  echo -e "+----------------------+"
-  echo -e "| Samples Menu         |"
-  echo -e "+----------------------+"
-  echo -e "| 1: Led Counter       |"
-  echo -e "| 2: Push Button input |"
-  echo -e "| 3: MCP3008 (ADC)     |"
-  echo -e "| 4: OLED SSD1306      |"
-  echo -e "| 5: GPIO Interrupt    |"
-  echo -e "| 6: BMP180 (I2C)      |"
-  echo -e "| 7: BME280 (I2C)      |"
-  echo -e "| 8: Servo             |"
-  echo -e "| 9: ADS1015 (I2C ADC) |"
-  echo -e "+----------------------+"
-  echo -e "| Q: Quit              |"
-  echo -e "+----------------------+"
+  echo -e "+---------------------------------------------+"
+  echo -e "|           S A M P L E S   M E N U           |"
+  echo -e "+----------------------+----------------------+"
+  echo -e "| 1: Led Counter       | 6: BMP180 (I2C)      |"
+  echo -e "| 2: Push Button input | 7: BME280 (I2C)      |"
+  echo -e "| 3: MCP3008 (ADC)     | 8: Servo             |"
+  echo -e "| 4: OLED SSD1306      | 9: ADS1015 (I2C ADC) |"
+  echo -e "| 5: GPIO Interrupt    |                      |"
+  echo -e "+----------------------+----------------------+"
+  echo -e "| Q: Quit                                     |"
+  echo -e "+---------------------------------------------+"
   echo -n " You choose > "
   read choice
   case $choice in

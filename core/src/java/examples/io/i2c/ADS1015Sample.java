@@ -5,8 +5,8 @@ import jhard.devices.ADS1x15;
 public class ADS1015Sample {
 
 	private final static ADS1x15.ICType ADC_TYPE = ADS1x15.ICType.IC_ADS1015;
-	private static int gain = 6_144;
-	private static int sps  =   250;
+	private static int gain = ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_4_096V.meaning(); // +/- 4.096 V
+	private static int sps  = ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning();  // 250 Samples per Second
 
 	private static boolean go = true;
 	private static void go(boolean b) {
@@ -25,7 +25,7 @@ public class ADS1015Sample {
 
 		while (go()) {
 			float value = ads1015.readADCSingleEnded(ADS1x15.Channels.CHANNEL_1, gain, sps);
-			System.out.println(String.format("Value: %f", value));
+			System.out.println(String.format("Value: %f, %.03f V", value, (value / 1_000)));
 		}
 		ads1015.close();
 	}
