@@ -79,7 +79,7 @@ This is the one used to refer to the location of `libjavahard-io.so`.
 Run the script named `samplemenu.sh`:
 ```
  $> ./samplemenu.sh
- ++---------------------------------------------+
+  +---------------------------------------------+
   |           S A M P L E S   M E N U           |
   +----------------------+----------------------+
   | 1: Led Counter       | 6: BMP180 (I2C)      |
