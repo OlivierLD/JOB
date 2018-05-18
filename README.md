@@ -34,31 +34,31 @@ See the header file `jhard.h`, and its corresponding implementation `jhard.c`.
 ## To build it
 You will need `javac` and `javah`.
 To know if they are available, type
-```bash
+```
  $> which javac
  $> which javah
 ```
 If at least one of the commands above returns nothing, then you need to update your `PATH`.
 If your `JAVA_HOME` variable is not set, set it, and update your `PATH`, as follow:
-```bash
+```
  $> JAVA_HOME=/opt/jdk/jdk1.8.0_112
  $> PATH=$JAVA_HOME/bin:$PATH
 ```
 After that, the commands above should return the expected values. You can check if this is correct by typing
-```bash
+```
  $> javac -version
  $> javah -version
 ```
 
 Compile the Java interface to the native code, from the project root:
-```bash
+```
  $> cd core
  $> mkdir build 2> /dev/null
  $> mkdir build/classes 2> /dev/null
  $> javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/jhard/io/JHardNativeInterface.java
 ```
 Then generate the native library:
-```bash
+```
  $> cd src/C
  $> make
 ```
@@ -66,7 +66,7 @@ The make command invokes the `javah` utility. See the content of `Makefile`.
 By then, you should see a `libjavahard-io.so` library in the `C` directory.
 
 Finally, do the `gradle` build from the project root:
-```bash
+```
  $> cd ../..
  $> ../gradlew clean shadowJar
 ```
@@ -77,7 +77,7 @@ This is a work in progress... The samples can be run from a single script named 
 This is the one used to refer to the location of `libjavahard-io.so`.
 
 Run the script named `samplemenu.sh`:
-```bash
+```
  $> ./samplemenu.sh
  ++---------------------------------------------+
   |           S A M P L E S   M E N U           |
@@ -90,7 +90,7 @@ Run the script named `samplemenu.sh`:
   +----------------------+----------------------+
   | Q: Quit                                     |
   +---------------------------------------------+
-   You choose > 
+   You choose >
 
 ```
 Make sure the required devices are correctly wired for the demos.
