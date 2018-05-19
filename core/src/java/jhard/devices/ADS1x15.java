@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
+ * WIP !!!! Not working yet...
+ *
  * Suitable for ADS1015 and ADS1115 ADCs.
  */
 public class ADS1x15 extends I2C {
@@ -161,9 +163,9 @@ public class ADS1x15 extends I2C {
 		ADS1015_REG_CONFIG_DR_250SPS(250, ADS1x15.ADS1015_REG_CONFIG_DR_250SPS),
 		ADS1015_REG_CONFIG_DR_490SPS(490, ADS1x15.ADS1015_REG_CONFIG_DR_490SPS),
 		ADS1015_REG_CONFIG_DR_920SPS(920, ADS1x15.ADS1015_REG_CONFIG_DR_920SPS),
-		ADS1015_REG_CONFIG_DR_1600SPS(1600, ADS1x15.ADS1015_REG_CONFIG_DR_1600SPS),
-		ADS1015_REG_CONFIG_DR_2400SPS(2400, ADS1x15.ADS1015_REG_CONFIG_DR_2400SPS),
-		ADS1015_REG_CONFIG_DR_3300SPS(3300, ADS1x15.ADS1015_REG_CONFIG_DR_3300SPS);
+		ADS1015_REG_CONFIG_DR_1600SPS(1_600, ADS1x15.ADS1015_REG_CONFIG_DR_1600SPS),
+		ADS1015_REG_CONFIG_DR_2400SPS(2_400, ADS1x15.ADS1015_REG_CONFIG_DR_2400SPS),
+		ADS1015_REG_CONFIG_DR_3300SPS(3_300, ADS1x15.ADS1015_REG_CONFIG_DR_3300SPS);
 
 		private final int meaning, value;
 
@@ -217,8 +219,8 @@ public class ADS1x15 extends I2C {
 		ADS1015_REG_CONFIG_PGA_4_096V(4_096, ADS1x15.ADS1015_REG_CONFIG_PGA_4_096V),
 		ADS1015_REG_CONFIG_PGA_2_048V(2_048, ADS1x15.ADS1015_REG_CONFIG_PGA_2_048V),
 		ADS1015_REG_CONFIG_PGA_1_024V(1_024, ADS1x15.ADS1015_REG_CONFIG_PGA_1_024V),
-		ADS1015_REG_CONFIG_PGA_0_512V(512, ADS1x15.ADS1015_REG_CONFIG_PGA_0_512V),
-		ADS1015_REG_CONFIG_PGA_0_256V(256, ADS1x15.ADS1015_REG_CONFIG_PGA_0_256V);
+		ADS1015_REG_CONFIG_PGA_0_512V(  512, ADS1x15.ADS1015_REG_CONFIG_PGA_0_512V),
+		ADS1015_REG_CONFIG_PGA_0_256V(  256, ADS1x15.ADS1015_REG_CONFIG_PGA_0_256V);
 
 		private final int meaning, value;
 
@@ -297,7 +299,7 @@ public class ADS1x15 extends I2C {
 
 		// Set pga value, so that getLastConversionResult() can use it,
 		// any function that accepts a pga value must update this.
-		this.pga = 6_144;
+		this.pga = ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning();
 	}
 
 	private void command(int reg, byte val) {
@@ -331,7 +333,7 @@ public class ADS1x15 extends I2C {
 
 	public float readADCSingleEnded(Channels channel) {
 		return readADCSingleEnded(channel,
-				pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(),
+				ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(),
 				ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
@@ -397,7 +399,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float readADCDifferential() {
-		return readADCDifferential(Channels.CHANNEL_0, Channels.CHANNEL_1, 6_144, 250);
+		return readADCDifferential(Channels.CHANNEL_0, Channels.CHANNEL_1, ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**
@@ -462,7 +464,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float readADCDifferential01() {
-		return readADCDifferential01(6_144, 250);
+		return readADCDifferential01(ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**
@@ -477,7 +479,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float readADCDifferential03() {
-		return readADCDifferential03(6_144, 250);
+		return readADCDifferential03(ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**
@@ -492,7 +494,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float readADCDifferential13() {
-		return readADCDifferential13(6_144, 250);
+		return readADCDifferential13(ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**
@@ -507,7 +509,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float readADCDifferential23() {
-		return readADCDifferential23(6_144, 250);
+		return readADCDifferential23(ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**
@@ -526,7 +528,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float startContinuousConversion(Channels channel) {
-		return startContinuousConversion(channel, 6_144, 250);
+		return startContinuousConversion(channel, ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**
@@ -595,7 +597,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float startContinuousDifferentialConversion(Channels chP, Channels chN) {
-		return startContinuousDifferentialConversion(chP, chN, 6_144, 250);
+		return startContinuousDifferentialConversion(chP, chN, ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**
@@ -686,7 +688,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public void startSingleEndedComparator(Channels channel, int thresholdHigh, int thresholdLow) {
-		startSingleEndedComparator(channel, thresholdHigh, thresholdLow, 6_144, 250);
+		startSingleEndedComparator(channel, thresholdHigh, thresholdLow, ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	public void startSingleEndedComparator(Channels channel, int thresholdHigh, int thresholdLow, int pga, int sps) {
@@ -793,7 +795,7 @@ public class ADS1x15 extends I2C {
 	}
 
 	public void startDifferentialComparator(Channels chP, Channels chN, int thresholdHigh, int thresholdLow) {
-		startDifferentialComparator(chP, chN, thresholdHigh, thresholdLow, 6_144, 250);
+		startDifferentialComparator(chP, chN, thresholdHigh, thresholdLow, ADS1x15.pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(), ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	public void startDifferentialComparator(Channels chP, Channels chN, int thresholdHigh, int thresholdLow, int pga, int sps) {
