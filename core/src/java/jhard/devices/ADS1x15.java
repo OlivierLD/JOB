@@ -2,7 +2,6 @@ package jhard.devices;
 
 import jhard.io.I2C;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -331,7 +330,9 @@ public class ADS1x15 extends I2C {
 	}
 
 	public float readADCSingleEnded(Channels channel) {
-		return readADCSingleEnded(channel, 6_144, 250);
+		return readADCSingleEnded(channel,
+				pgaADS1x15.ADS1015_REG_CONFIG_PGA_6_144V.meaning(),
+				ADS1x15.spsADS1015.ADS1015_REG_CONFIG_DR_250SPS.meaning());
 	}
 
 	/**

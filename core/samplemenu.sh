@@ -77,7 +77,7 @@ do
     9)
       echo -e "ADS1015"
       JAVA_OPTS=
-      sudo NATIVEDEBUG=true java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.ADS1015Sample
+      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.ADS1015Sample
       echo -en "Hit [return]"
       read a
       ;;
