@@ -17,14 +17,17 @@ public class ADS1015Sample {
 	}
 
 	public static void main(String... args) {
+		ADS1x15.Channels adcChannel = ADS1x15.Channels.CHANNEL_0;
 		ADS1x15 ads1015 = new ADS1x15(ADC_TYPE);
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			go(false);
 		}));
 
+		System.out.println(String.format("Reading %s, Channel %s, gain: %d", ADC_TYPE, adcChannel, gain));
+
 		while (go()) {
-			float value = ads1015.readADCSingleEnded(ADS1x15.Channels.CHANNEL_1, gain, sps);
+			float value = ads1015.readADCSingleEnded(adcChannel, gain, sps);
 			System.out.println(String.format("Value: %f, %.03f V", value, (value / 1_000)));
 		}
 		ads1015.close();
