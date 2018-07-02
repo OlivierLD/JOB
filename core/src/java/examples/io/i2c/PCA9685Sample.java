@@ -40,7 +40,9 @@ public class PCA9685Sample {
 			int pos = servoMin;
 			int sign = 1;
 			while (keepGoing()) {
-				servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, pos);
+				synchronized (servoBoard) {
+					servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, pos);
+				}
 				pos += (sign);
 				if (pos > servoMax || pos < servoMin) {
 					sign *= -1;
@@ -54,7 +56,9 @@ public class PCA9685Sample {
 			int pos = servoMin;
 			int sign = 1;
 			while (keepGoing()) {
-				servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, pos);
+				synchronized (servoBoard) {
+					servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, pos);
+				}
 				pos += (sign);
 				if (pos > servoMax || pos < servoMin) {
 					sign *= -1;
