@@ -25,66 +25,40 @@ public class PCA9685Sample {
 		final int CONTINUOUS_SERVO_CHANNEL = 14;
 		final int STANDARD_SERVO_CHANNEL = 15;
 
-		for (int i = 0; false && i < 5; i++) {
-			System.out.println("i=" + i);
-			servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, servoMin);
-			servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, servoMin);
-			delay(1_000);
-			servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, servoMax);
-			servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, servoMax);
-			delay(1_000);
-		}
-		servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, 0); // Stop the continuous one
-		servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, 0);   // Stop the standard one
-		System.out.println("Done with the demo.");
-
-		for (int i = servoMin; i <= servoMax; i++) {
-			System.out.println("i=" + i);
-			servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, i);
-			delay(10);
-		}
-		for (int i = servoMax; i >= servoMin; i--) {
-			System.out.println("i=" + i);
-			servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, i);
-			delay(10);
-		}
-
+		// Init
 		servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, 0); // Stop the continuous one
 		servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, 0);   // Stop the standard one
 
-		for (int i = servoMin; i <= servoMax; i++) {
-			System.out.println("i=" + i);
-			servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, i);
-			delay(100);
-		}
-		for (int i = servoMax; i >= servoMin; i--) {
-			System.out.println("i=" + i);
-			servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, i);
-			delay(100);
-		}
-
-		servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, 0); // Stop the continuous one
-		servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, 0);   // Stop the standard one
-		System.out.println("Done with the demo.");
-
-
-		if (false) {
-			System.out.println("Now, servoPulse");
-			servoBoard.setPWMFreq(250);
-			// The same with setServoPulse
-			for (int i = 0; i < 5; i++) {
-				servoBoard.setServoPulse(STANDARD_SERVO_CHANNEL, 1f);
-				servoBoard.setServoPulse(CONTINUOUS_SERVO_CHANNEL, 1f);
-				delay(1_000);
-				servoBoard.setServoPulse(STANDARD_SERVO_CHANNEL, 2f);
-				servoBoard.setServoPulse(CONTINUOUS_SERVO_CHANNEL, 2f);
-				delay(1_000);
+		Thread one = new Thread(() -> {
+			int pos = servoMin;
+			int sign = 1;
+			while (true) {
+				servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, pos);
+				pos += (sign);
+				if (pos > servoMax || pos < servoMin) {
+					sign *= -1;
+					pos += (sign);
+				}
+				delay(10);
 			}
-			// Stop, Middle
-			servoBoard.setServoPulse(STANDARD_SERVO_CHANNEL, 1.5f);
-			servoBoard.setServoPulse(CONTINUOUS_SERVO_CHANNEL, 1.5f);
+		});
 
-			servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, 0); // Stop the continuous one
-		}
+		Thread two = new Thread(() -> {
+			int pos = servoMin;
+			int sign = 1;
+			while (true) {
+				servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, pos);
+				pos += (sign);
+				if (pos > servoMax || pos < servoMin) {
+					sign *= -1;
+					pos += (sign);
+				}
+				delay(100);
+			}
+		});
+
+    one.start();
+    two.start();
+    
 	}
 }
