@@ -4,6 +4,13 @@ import jhard.devices.PCA9685;
 import static utils.MiscUtils.delay;
 
 public class PCA9685Sample {
+
+	private static boolean go = true;
+
+	private static boolean keepGoing() {
+		return go;
+	}
+
 	/*
 	 * Servo       | Standard |   Continuous
 	 * ------------+----------+-------------------
@@ -32,7 +39,7 @@ public class PCA9685Sample {
 		Thread one = new Thread(() -> {
 			int pos = servoMin;
 			int sign = 1;
-			while (true) {
+			while (keepGoing()) {
 				servoBoard.setPWM(CONTINUOUS_SERVO_CHANNEL, 0, pos);
 				pos += (sign);
 				if (pos > servoMax || pos < servoMin) {
@@ -46,7 +53,7 @@ public class PCA9685Sample {
 		Thread two = new Thread(() -> {
 			int pos = servoMin;
 			int sign = 1;
-			while (true) {
+			while (keepGoing()) {
 				servoBoard.setPWM(STANDARD_SERVO_CHANNEL, 0, pos);
 				pos += (sign);
 				if (pos > servoMax || pos < servoMin) {
@@ -57,8 +64,26 @@ public class PCA9685Sample {
 			}
 		});
 
+		final Thread main = Thread.currentThread();
+
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			go = false;
+			delay(1_000);
+			synchronized (main) {
+				main.notify();
+			}
+		}));
+
     one.start();
     two.start();
-    
+
+    synchronized (main) {
+    	try {
+    		main.wait();
+	    } catch (InterruptedException ie) {
+    		ie.printStackTrace();
+	    }
+    }
+		System.out.println("Bye!");
 	}
 }
