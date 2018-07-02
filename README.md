@@ -105,10 +105,14 @@ Should be compatible with any JVM-aware languages. Samples to be provided.
 - BME280
 - Servos (direct, Software Servos)
 - ADS1x15 ADCs
+- PCA9685 Servo Driver
 
 ## TODO
 A lot!
 
+- VL53L0X (Time of Flight Distance Sensor)
+- HMC5883L (Magnetomere/Compss)
+- TSL2561 (Light Sensor)
 - LSM303
 - HTU21DF
 - LoRa
