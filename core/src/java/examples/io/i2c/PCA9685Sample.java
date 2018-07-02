@@ -60,7 +60,7 @@ public class PCA9685Sample {
 					sign *= -1;
 					pos += (sign);
 				}
-				delay(100);
+				delay(20);
 			}
 		});
 
@@ -79,6 +79,7 @@ public class PCA9685Sample {
 
     synchronized (main) {
     	try {
+		    System.out.println("Main waiting");
     		main.wait();
 	    } catch (InterruptedException ie) {
     		ie.printStackTrace();
