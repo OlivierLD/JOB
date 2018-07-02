@@ -118,7 +118,6 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_readFile(
     jbyteArray _in) {
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
-//    fprintf(stdout, "C >> readFile\n");
       fprintf(stdout, "C >> readFile [%s]\n", fn);
     }
 	int file = open(fn, O_RDONLY);
@@ -145,7 +144,6 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_writeFile(
     jbyteArray _out) {
 	const char * fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
-//    fprintf(stdout, "C >> writeFile\n");
       fprintf(stdout, "C >> writeFile [%s]\n", fn);
     }
 	int file = open(fn, O_WRONLY);
@@ -172,7 +170,6 @@ JNIEXPORT jint JNICALL Java_jhard_io_JHardNativeInterface_pollDevice(
     jint timeout) {
 	const char *fn = (*env)->GetStringUTFChars(env, _fn, JNI_FALSE);
     if (nativeDebugEnabled()) {
-//    fprintf(stdout, "C >> writeFile\n");
       fprintf(stdout, "C >> pollDevice [%s]\n", fn);
     }
 	int file = open(fn, O_RDONLY|O_NONBLOCK);
@@ -305,7 +302,6 @@ JNIEXPORT jlong JNICALL Java_jhard_io_JHardNativeInterface_servoStartThread(
 	sprintf(path, "/sys/class/gpio/gpio%d/value", gpio);
 
 	if (nativeDebugEnabled()) {
-//    fprintf(stdout, "C >> startThread\n");
 	  fprintf(stdout, "C >> gpio, start thread [%s]\n", path);
 	}
 

@@ -39,7 +39,7 @@ void draw() {
 
 void dispose() {
   // Park the servos
-  pca9685.setPWM(SERVO_1, 0, 0); 
+  pca9685.setPWM(SERVO_1, 0, 0);
   pca9685.setPWM(SERVO_2, 0, 0);
   println("Done with the demo.");
 }
@@ -50,7 +50,7 @@ private void setAngle(int servo, float f) {
 //String mess = String.format("Servo %d, angle %.02f\272, pwm: %d", servo, f, pwm);
 //println(mess);
   try {
-      pca9685.setPWM(servo, 0, pwm);
+    pca9685.setPWM(servo, 0, pwm);
   } catch (IllegalArgumentException iae) {
     println(String.format("Cannot set servo %d to PWM %d", servo, pwm));
     iae.printStackTrace();

@@ -13,6 +13,7 @@ do
   echo -e "| 3: MCP3008 (ADC)     |  8: Servo                |"
   echo -e "| 4: OLED SSD1306      |  9: ADS1015 (I2C ADC)    |"
   echo -e "| 5: GPIO Interrupt    | 10: PCA9685 (I2C Servos) |"
+  echo -e "|                      | 11: STH10 (Pure GPIO)    |"
   echo -e "+----------------------+--------------------------+"
   echo -e "| Q: Quit                                         |"
   echo -e "+-------------------------------------------------+"
@@ -85,6 +86,13 @@ do
       echo -e "PCA9685"
       JAVA_OPTS=
       sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.PCA9685Sample
+      echo -en "Hit [return]"
+      read a
+      ;;
+    11)
+      echo -e "STH10"
+      JAVA_OPTS=
+      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.gpio.STH10Sample
       echo -en "Hit [return]"
       read a
       ;;
