@@ -9,7 +9,7 @@ This should make the translations from `Python` or `C` code into `Java` a bit ea
 
 Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
-> Note: GPIO Pin numbers are the ones available [here](https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/).
+> _Note_: GPIO Pin numbers are the ones available [here](https://www.raspberrypi.org/documentation/usage/gpio/README.md).
 
 ## How it works
 The low level interactions with the pins of the GPIO Header have to be done at the system level, they have to be performed in `C`.
