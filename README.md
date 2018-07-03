@@ -111,7 +111,7 @@ Make sure the core has been built:
  $> ../gradlew shadowJar
 ```
 
-The compile the Scala classes you want to run:
+Compile the Scala classes you want to run:
 ```
  $> scalac -sourcepath ./src/scala -cp ./build/libs/core-0.1-all.jar ./src/scala/i2c/BME280ScalaSample.scala -d ./build/classes
 ```
