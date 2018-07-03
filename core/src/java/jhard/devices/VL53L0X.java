@@ -1,8 +1,9 @@
-import processing.io.I2C;
+package jhard.devices;
 
-// VL53L0X is a Time of Flight Distance Sensor - ~30 to 1000mm
-// Details at https://www.adafruit.com/product/3317
-// code contributed by @OlivierLD
+import jhard.io.I2C;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class VL53L0X extends I2C {
 	public final static int VL53L0X_I2CADDR = 0x29;
@@ -70,6 +71,73 @@ public class VL53L0X extends I2C {
 	private final static int VCSEL_PERIOD_PRE_RANGE = 0;
 	private final static int VCSEL_PERIOD_FINAL_RANGE = 1;
 
+	private static class SequenceStep {
+		boolean tcc, dss, msrc, preRange, finalRange;
+
+		public SequenceStep tcc(boolean tcc) {
+			this.tcc = tcc;
+			return this;
+		}
+		public SequenceStep dss(boolean dss) {
+			this.dss = dss;
+			return this;
+		}
+		public SequenceStep msrc(boolean msrc) {
+			this.msrc = msrc;
+			return this;
+		}
+		public SequenceStep preRange(boolean preRange) {
+			this.preRange = preRange;
+			return this;
+		}
+		public SequenceStep finalRange(boolean finalRange) {
+			this.finalRange = finalRange;
+			return this;
+		}
+	}
+
+	private static class SPADInfo {
+		int count;
+		boolean isAperture;
+
+		public SPADInfo setCount(int count) {
+			this.count = count;
+			return this;
+		}
+		public SPADInfo setAperture(boolean aperture) {
+			this.isAperture = aperture;
+			return this;
+		}
+	}
+
+	private static class SequenceStepTimeouts {
+		int msrcDssTccMicrosec,
+				preRangeMicrosec,
+				finalRangeMicorsec,
+				finalRangeVcselPeriodPclks,
+				preRangeMclks;
+		public SequenceStepTimeouts msrcDssTccMicrosec(int msrcDssTccMicrosec) {
+			this.msrcDssTccMicrosec = msrcDssTccMicrosec;
+			return this;
+		}
+		public SequenceStepTimeouts preRangeMicrosec(int preRangeMicrosec) {
+			this.preRangeMicrosec = preRangeMicrosec;
+			return this;
+		}
+		public SequenceStepTimeouts finalRangeMicorsec(int finalRangeMicorsec) {
+			this.finalRangeMicorsec = finalRangeMicorsec;
+			return this;
+		}
+		public SequenceStepTimeouts finalRangeVcselPeriodPclks(int finalRangeVcselPeriodPclks) {
+			this.finalRangeVcselPeriodPclks = finalRangeVcselPeriodPclks;
+			return this;
+		}
+		public SequenceStepTimeouts preRangeMclks(int preRangeMclks) {
+			this.preRangeMclks = preRangeMclks;
+			return this;
+		}
+	}
+
 	private int decodeTimeout(int val) {
 		// format:"(LSByte * 2^MSByte) + 1"
 		return (int)((val &0xFF) * Math.pow(2.0,((val & 0xFF00) >> 8)) + 1);
@@ -124,22 +192,21 @@ public class VL53L0X extends I2C {
 
 		String[] deviceList = I2C.list();
 		if (verbose) {
-			StringBuffer sb = new StringBuffer();
-			for (String device : deviceList) {
-				sb.append((sb.length() > 0 ? ", " : "") + device);
-			}
-			println(String.format("Device list: %s", sb.toString()));
-			println(String.format("Bus %s, address 0x%02X", bus, address));
+			System.out.println(String.format("Device list: %s",
+					Arrays.asList(deviceList)
+							.stream()
+							.collect(Collectors.joining(", "))));
+			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
 		}
 
 		// Check identification registers for expected values.
 		// From section 3.2 of the datasheet.
-    int c0 = readbyte(0xC0) & 0xFF;
-    int c1 = readbyte(0xC1) & 0xFF;
-    int c2 = readbyte(0xC2) & 0xFF;
+		int c0 = readbyte(0xC0) & 0xFF;
+		int c1 = readbyte(0xC1) & 0xFF;
+		int c2 = readbyte(0xC2) & 0xFF;
 
 		if (c0 != 0xEE || c1 != 0xAA || c2 != 0x10) {
-      println(String.format("C0: %04X, C1: %04X, C2: %04X", c0, c1, c2));
+			System.out.println(String.format("C0: %04X, C1: %04X, C2: %04X", c0, c1, c2));
 			throw new RuntimeException("Failed to find expected ID register values. Check wiring!");
 		}
 		// Initialize access to the sensor.  This is based on the logic from:
@@ -166,11 +233,11 @@ public class VL53L0X extends I2C {
 		// be more easily readable from GLOBAL_CONFIG_SPAD_ENABLES_REF_0 through _6, so read it from there.
 		byte[] refSpadMap = new byte[7];
 //		self._device.readinto(ref_spad_map, start=1)
-    byte[] refSpadData = new byte[6];
+		byte[] refSpadData = new byte[6];
 		refSpadData = readSpadMap(); // TODO Verify
-    for (int i=0; i<6; i++) { // Concatenate the 2 byte[]
-      refSpadMap[i+1] = refSpadData[i];
-    }
+		for (int i=0; i<6; i++) { // Concatenate the 2 byte[]
+			refSpadMap[i+1] = refSpadData[i];
+		}
 
 		command((byte) 0xFF, (byte) 0x01);
 		command((byte) DYNAMIC_SPAD_REF_EN_START_OFFSET, (byte) 0x00);
@@ -286,7 +353,7 @@ public class VL53L0X extends I2C {
 		command((byte) SYSTEM_SEQUENCE_CONFIG, (byte) 0xE8);
 
 		if (verbose) {
-			println("Constructor OK.");
+			System.out.println("Constructor OK.");
 		}
 	}
 
@@ -331,7 +398,7 @@ public class VL53L0X extends I2C {
 	}
 
 	private void performSingleRefCalibration(int vhvInitByte)
-			{
+	{
 		// based on VL53L0X_perform_single_ref_calibration() from ST API.
 		command((byte)SYSRANGE_START, (byte)(0x01 | vhvInitByte & 0xFF));
 		long start = System.currentTimeMillis();
@@ -514,23 +581,23 @@ public class VL53L0X extends I2C {
 		return (hi << 8) + lo; // & 0xFFFF;
 	}
 
-  byte[] readSpadMap() {
-    this.beginTransmission(this.address);
-    // command byte for reading the data
-    this.write(GLOBAL_CONFIG_SPAD_ENABLES_REF_0);
-    byte[] data = this.read(6);
-    this.endTransmission();
-    return data;
-  }
+	byte[] readSpadMap() {
+		this.beginTransmission(this.address);
+		// command byte for reading the data
+		this.write(GLOBAL_CONFIG_SPAD_ENABLES_REF_0);
+		byte[] data = this.read(6);
+		this.endTransmission();
+		return data;
+	}
 
-  private void command(byte[] arr) {
-    super.beginTransmission(this.address);
-    for (int i=0; i<arr.length; i++) {
-      this.write(arr[i]);
-    }
-    // command byte for writing to EEPROM
-    super.endTransmission();
-  }
+	private void command(byte[] arr) {
+		super.beginTransmission(this.address);
+		for (int i=0; i<arr.length; i++) {
+			this.write(arr[i]);
+		}
+		// command byte for writing to EEPROM
+		super.endTransmission();
+	}
 
 	private void command(int reg, byte val) {
 		super.beginTransmission(this.address);
@@ -539,11 +606,11 @@ public class VL53L0X extends I2C {
 		super.endTransmission();
 	}
 
-  private void writeU16(int reg, int val) {
-    super.beginTransmission(this.address);
-    super.write(reg);
-    super.write((byte)((val >> 8) & 0xFF));
-    super.write((byte)(val & 0xFF));
-    super.endTransmission();
-  }
+	private void writeU16(int reg, int val) {
+		super.beginTransmission(this.address);
+		super.write(reg);
+		super.write((byte)((val >> 8) & 0xFF));
+		super.write((byte)(val & 0xFF));
+		super.endTransmission();
+	}
 }

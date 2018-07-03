@@ -27,7 +27,7 @@ This `C` file will be compiled into a system library (with an `.so` extension), 
 
 Below are the detailed steps of the process.
 
-The Java class to start from is `JavaHardNativeInterface.java`.
+The Java class to start from is `JHardNativeInterface.java`.
 See the header file `jhard.h`, and its corresponding implementation `jhard.c`.
 
 ---
@@ -72,8 +72,13 @@ Finally, do the `gradle` build from the project root:
 ```
 This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar contains all the required dependencies.
 
+A script summarizes all those operations, just run
+```
+ $> ./jni.sh
+```
+
 ## To run it
-This is a work in progress... The samples can be run from a single script named `samplemenu.h`, see ho the `java.library.path` variable is set.
+This is a work in progress... The samples can be run from a single script named `samplemenu.sh`, see how the `java.library.path` variable is set.
 This is the one used to refer to the location of `libjavahard-io.so`.
 
 Run the script named `samplemenu.sh`:
@@ -99,22 +104,23 @@ Make sure the required devices are correctly wired for the demos.
 Should be compatible with any JVM-aware languages. Samples to be provided.
 
 ## Available device implementations
-- SSD1306
+- SSD1306 (128x32 I<sup><small>2</small></sup>C oled screen).
 - GPIO push-button (with interrupt, or not)
-- BMP180
-- BME280
+- BMP180 (I<sup><small>2</small></sup>C Pressure, temperature (=> altitude))
+- BME280 (I<sup><small>2</small></sup>C Pressure, temperature (=> altitude), humidity)
 - Servos (direct, Software Servos)
-- ADS1x15 ADCs
-- PCA9685 Servo Driver
+- ADS1x15 (I<sup><small>2</small></sup>C ADCs)
+- PCA9685 (I<sup><small>2</small></sup>C Servo Driver)
+- STH10 (GPIO Temperature, Humidity)
+- VL53L0X (I<sup><small>2</small></sup>C Time of Flight Distance Sensor)
 
 ## TODO
 A lot!
 
-- VL53L0X (Time of Flight Distance Sensor)
-- HMC5883L (Magnetomere/Compss)
-- TSL2561 (Light Sensor)
-- LSM303
-- HTU21DF
+- HMC5883L (I<sup><small>2</small></sup>C Magnetometer/Compass)
+- TSL2561 (I<sup><small>2</small></sup>C Light Sensor)
+- LSM303 (I<sup><small>2</small></sup>C Triple-axis Accelerometer + Magnetometer (Compass) Board)
+- HTU21DF (I<sup><small>2</small></sup>C Temperature, Humidity)
 - LoRa
 - FONA
 - ...etc

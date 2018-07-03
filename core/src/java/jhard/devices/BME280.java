@@ -317,13 +317,35 @@ public class BME280 extends I2C {
 		this.standardSeaLevelPressure = standardSeaLevelPressure;
 	}
 
-	protected double readAltitude() throws Exception {
-		// "Calculates the altitude in meters"
+	public double readAltitude() throws Exception {
+		return readAltitude(null);
+	}
+	public double readAltitude(Double press) throws Exception {
+		// Calculates the altitude in meters
 		double altitude = 0.0;
-		float pressure = readPressure();
+		double pressure;
+		if (press == null) {
+			pressure = readPressure();
+		} else {
+			pressure = press;
+		}
 		altitude = 44330.0 * (1.0 - Math.pow(pressure / standardSeaLevelPressure, 0.1903));
 		if (verbose) {
 			System.out.println("DBG: Altitude = " + altitude);
+		}
+		return altitude;
+	}
+
+	/**
+	 * More accurate than the above.
+	 * @param pressure
+	 * @param temperature
+	 * @return altitude, based on PRMSL standardSeaLevelPressure
+	 */
+	public double readAltitude(double pressure, double temperature) {
+		double altitude = 0.0;
+		if (standardSeaLevelPressure != 0) {
+			altitude = ((Math.pow(standardSeaLevelPressure / pressure, 1 / 5.257)  - 1) * (temperature + 273.25)) / 0.0065;
 		}
 		return altitude;
 	}
