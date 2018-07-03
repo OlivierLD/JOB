@@ -1,6 +1,8 @@
 package examples.io.i2c;
 
 import jhard.devices.PCA9685;
+import utils.MiscUtils;
+
 import static utils.MiscUtils.delay;
 
 public class PCA9685Sample {
@@ -76,6 +78,7 @@ public class PCA9685Sample {
 			synchronized (main) {
 				main.notify();
 			}
+			MiscUtils.delay(1_000L);
 		}));
 
     one.start();

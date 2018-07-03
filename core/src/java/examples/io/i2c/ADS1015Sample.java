@@ -1,6 +1,7 @@
 package examples.io.i2c;
 
 import jhard.devices.ADS1x15;
+import utils.MiscUtils;
 
 public class ADS1015Sample {
 
@@ -22,6 +23,8 @@ public class ADS1015Sample {
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			go(false);
+			ads1015.close();
+			MiscUtils.delay(1_000L);
 		}));
 
 		System.out.println(String.format("Reading %s, Channel %s, gain: %d", ADC_TYPE, adcChannel, gain));
@@ -30,6 +33,6 @@ public class ADS1015Sample {
 			float value = ads1015.readADCSingleEnded(adcChannel, gain, sps);
 			System.out.println(String.format("Value: %f, %.03f V", value, (value / 1_000)));
 		}
-		ads1015.close();
+		System.out.println("Done.");
 	}
 }

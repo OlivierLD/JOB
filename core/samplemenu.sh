@@ -5,19 +5,20 @@ EXIT=false
 while [ "$EXIT" = "false" ]
 do
   clear
-  echo -e "+-------------------------------------------------+"
-  echo -e "|           S A M P L E S   M E N U               |"
-  echo -e "+----------------------+--------------------------+"
-  echo -e "| 1: Led Counter       |  6: BMP180 (I2C)         |"
-  echo -e "| 2: Push Button input |  7: BME280 (I2C)         |"
-  echo -e "| 3: MCP3008 (ADC)     |  8: Servo                |"
-  echo -e "| 4: OLED SSD1306      |  9: ADS1015 (I2C ADC)    |"
-  echo -e "| 5: GPIO Interrupt    | 10: PCA9685 (I2C Servos) |"
-  echo -e "|                      | 11: STH10 (Pure GPIO)    |"
-  echo -e "|                      | 12: VL53L0X (I2C ToF)    |"
-  echo -e "+----------------------+--------------------------+"
-  echo -e "| Q: Quit                                         |"
-  echo -e "+-------------------------------------------------+"
+  echo -e "+------------------------------------------------------------+"
+  echo -e "|                 S A M P L E S   M E N U                    |"
+  echo -e "+----------------------------+-------------------------------+"
+  echo -e "|  1: Led Counter            |  6: BMP180 (I2C env sensor)   |"
+  echo -e "|  2: Push Button input      |  7: BME280 (I2C env sensor)   |"
+  echo -e "|  3: MCP3008 (ADC)          |  8: Servo                     |"
+  echo -e "|  4: OLED SSD1306           |  9: ADS1015 (I2C ADC)         |"
+  echo -e "|  5: GPIO Interrupt         | 10: PCA9685 (I2C Servos)      |"
+  echo -e "|                            | 11: STH10 (Pure GPIO)         |"
+  echo -e "|                            | 12: VL53L0X (I2C ToF)         |"
+  echo -e "|                            | 13: TSL2561 (I2C LightSensor) |"
+  echo -e "+----------------------------+-------------------------------+"
+  echo -e "|  Q: Quit                                                   |"
+  echo -e "+------------------------------------------------------------+"
   echo -n " You choose > "
   read choice
   case $choice in
@@ -101,6 +102,13 @@ do
       echo -e "VL53L0X"
       JAVA_OPTS=
       sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.VL53L0XSample
+      echo -en "Hit [return]"
+      read a
+      ;;
+    13)
+      echo -e "TSL2561"
+      JAVA_OPTS=
+      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.io.i2c.TSL2561Sample
       echo -en "Hit [return]"
       read a
       ;;

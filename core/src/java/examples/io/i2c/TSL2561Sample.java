@@ -1,26 +1,22 @@
 package examples.io.i2c;
 
-import jhard.devices.VL53L0X;
+import jhard.devices.TSL2561;
 import utils.MiscUtils;
 
-public class VL53L0XSample {
+public class TSL2561Sample {
 	private static boolean go = true;
 	public static void main(String... args) {
-		VL53L0X vl53l0x = new VL53L0X();
+		TSL2561 tsl2561 = new TSL2561();
 
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			go = false;
-			vl53l0x.close();
+			tsl2561.close();
 			MiscUtils.delay(1_000L);
 		}));
 
-		int previous = -1;
 		while (go) {
-			int range = vl53l0x.range();
-			if (range != previous) {
-				System.out.println(String.format("Dist: %d mm", range));
-			}
-			previous = range;
+			double lux = tsl2561.readLux();
+			System.out.println(String.format("Light: %.02f lux", lux));
 		}
 		System.out.println("Done.");
 	}
