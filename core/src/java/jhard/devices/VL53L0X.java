@@ -206,7 +206,7 @@ public class VL53L0X extends I2C {
 		int c2 = readbyte(0xC2) & 0xFF;
 
 		if (c0 != 0xEE || c1 != 0xAA || c2 != 0x10) {
-			System.out.println(String.format("C0: %04X, C1: %04X, C2: %04X", c0, c1, c2));
+			System.err.println(String.format("C0: %04X, C1: %04X, C2: %04X", c0, c1, c2));
 			throw new RuntimeException("Failed to find expected ID register values. Check wiring!");
 		}
 		// Initialize access to the sensor.  This is based on the logic from:
