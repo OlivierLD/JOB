@@ -103,6 +103,28 @@ Make sure the required devices are correctly wired for the demos.
 ## Compatibility
 Should be compatible with any JVM-aware languages. Samples to be provided.
 
+#### Scala
+To compile and run the Scala code:
+
+Make sure the core has been built:
+```
+ $> ../gradlew shadowJar
+```
+
+The compile the Scala classes you want to run:
+```
+ $> scalac -sourcepath ./src/scala -cp ./build/libs/core-0.1-all.jar ./src/scala/i2c/BME280ScalaSample.scala -d ./build/classes
+```
+Then to run it:
+```
+ $> export LIB_PATH="src/C"
+ $> scala -cp ./build/libs/core-0.1-all.jar:./build/classes -Djava.library.path=$LIB_PATH i2c.BME280ScalaSample
+ Hello, Scala world! Reading sensors.
+ Device ready
+ Temp:20.4 ºC, Press:1015.6 hPa, Hum:64.0 %
+ $>
+```
+
 ## Available device implementations
 - SSD1306 (128x32 I<sup><small>2</small></sup>C oled screen).
 - GPIO push-button (with interrupt, or not)

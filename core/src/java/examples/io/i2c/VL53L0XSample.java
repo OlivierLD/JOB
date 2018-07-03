@@ -20,6 +20,6 @@ public class VL53L0XSample {
 			}
 			previous = range;
 		}
-
+		System.out.println("Done.");
 	}
 }
