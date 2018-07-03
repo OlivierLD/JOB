@@ -135,12 +135,12 @@ Then to run it:
 - PCA9685 (I<sup><small>2</small></sup>C Servo Driver)
 - STH10 (GPIO Temperature, Humidity)
 - VL53L0X (I<sup><small>2</small></sup>C Time of Flight Distance Sensor)
+- TSL2561 (I<sup><small>2</small></sup>C Light Sensor)
 
 ## TODO
 A lot!
 
 - HMC5883L (I<sup><small>2</small></sup>C Magnetometer/Compass)
-- TSL2561 (I<sup><small>2</small></sup>C Light Sensor)
 - LSM303 (I<sup><small>2</small></sup>C Triple-axis Accelerometer + Magnetometer (Compass) Board)
 - HTU21DF (I<sup><small>2</small></sup>C Temperature, Humidity)
 - LoRa
