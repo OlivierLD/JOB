@@ -131,11 +131,13 @@ From `Gradle`:
  $> ../gradlew runGroovyScript
 ```
 
-After installing `groovy`:
+After installing `groovy`, from the `core` ddirectory:
 ```
  $> export GROOVY_HOME=/usr/local/opt/groovy/libexec
+ $> export CLASSPATH=$(find $GROOVY_HOME/lib -name '*.jar' | tr '\n' ':')
+ $> export CLASSPATH=$CLASSPATH:$PWD/build/libs/core-0.1-all.jar
  $> cd src/groovy
- $> groovy -cp ../../build/libs/core-0.1-all.jar SensorReader
+ $> groovy SensorReader
  ==================
  Now running some RPi stuff from Groovy
  ==================
@@ -145,6 +147,20 @@ After installing `groovy`:
 
  $>
 ```
+After setting `GROOVY_HOME` and `CLASSPATH`, you can also run the sc ript from the `core` folder:
+```
+ $> groovy src/main/SensorReader
+ ==================
+ Now running some RPi stuff from Groovy
+ ==================
+ Temperature: 21.32 C
+ Pressure   : 1015.65 hPa
+ Humidity   : 65.40 %
+
+ $>
+```
+
+Do also try `groovysh` and `groovyConsole`.
 
 ## Available device implementations
 - SSD1306 (128x32 I<sup><small>2</small></sup>C oled screen).
