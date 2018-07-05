@@ -54,6 +54,7 @@ task runGroovyScript(type: JavaExec) {
   description 'Run Groovy script'
   // Set main property to name of Groovy script class.
   main = 'SensorReader'
+  systemProperty 'java.library.path', 'src/C'
   // Set classpath for running the Groovy script.
   classpath = sourceSets.main.runtimeClasspath
 }
