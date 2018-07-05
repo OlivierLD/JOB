@@ -125,6 +125,27 @@ Then to run it:
  $>
 ```
 
+#### Groovy
+From `Gradle`:
+```
+ $> ../gradlew runGroovyScript
+```
+
+After installing `groovy`:
+```
+ $> export GROOVY_HOME=/usr/local/opt/groovy/libexec
+ $> cd src/groovy
+ $> groovy -cp ../../build/libs/core-0.1-all.jar SensorReader
+ ==================
+ Now running some RPi stuff from Groovy
+ ==================
+ Temperature: 21.32 C
+ Pressure   : 1015.65 hPa
+ Humidity   : 65.40 %
+
+ $>
+```
+
 ## Available device implementations
 - SSD1306 (128x32 I<sup><small>2</small></sup>C oled screen).
 - GPIO push-button (with interrupt, or not)

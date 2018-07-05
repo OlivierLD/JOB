@@ -3,7 +3,7 @@ plugins {
   id 'java'
   id 'scala'
 //id 'kotlin'
-//id 'groovy'
+  id 'groovy'
   id 'maven'
   id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
@@ -13,6 +13,9 @@ version = '0.1'
 
 sourceSets {
   main {
+    groovy {
+      srcDirs = ['src/groovy']
+    }
     java {
       srcDirs = ['src/java']
     }
@@ -37,9 +40,20 @@ dependencies {
   compile "org.scala-lang:scala-compiler:2.12.3"
   compile 'com.typesafe.akka:akka-actor_2.11:2.3.11'
 
+  compile 'org.codehaus.groovy:groovy-all:2.4.6'
+  compile 'org.codehaus.groovy:http-builder:0.4.0'
+
   compile project(':common-utils')
 }
 
 shadowJar {
   zip64 true
+}
+
+task runGroovyScript(type: JavaExec) {
+  description 'Run Groovy script'
+  // Set main property to name of Groovy script class.
+  main = 'SensorReader'
+  // Set classpath for running the Groovy script.
+  classpath = sourceSets.main.runtimeClasspath
 }
