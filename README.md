@@ -131,7 +131,7 @@ From `Gradle`:
  $> ../gradlew runGroovyScript
 ```
 
-After installing `groovy`, from the `core` ddirectory:
+After installing `groovy`, from the `core` directory:
 ```
  $> export GROOVY_HOME=/usr/local/opt/groovy/libexec
  $> export CLASSPATH=$(find $GROOVY_HOME/lib -name '*.jar' | tr '\n' ':')
@@ -147,7 +147,7 @@ After installing `groovy`, from the `core` ddirectory:
 
  $>
 ```
-After setting `GROOVY_HOME` and `CLASSPATH`, you can also run the sc ript from the `core` folder:
+After setting `GROOVY_HOME` and `CLASSPATH`, you can also run the script from the `core` folder:
 ```
  $> groovy src/main/SensorReader
  ==================
