@@ -131,7 +131,7 @@ Make sure the required devices are correctly wired for the demos.
 ## Compatibility
 Should be compatible with any *JVM-aware* languages. Some samples to be provided (more to come).
 
-#### Scala
+#### [Scala](https://www.scala-lang.org/)
 To compile and run the Scala code:
 
 Make sure the core has been built:
@@ -153,7 +153,7 @@ Then to run it:
  $>
 ```
 
-#### Groovy
+#### [Groovy](http://groovy-lang.org/)
 From `Gradle` (located in the `core` directory):
 ```
  $> ../gradlew runGroovyScript
@@ -178,7 +178,7 @@ After installing `groovy`, from the `core` directory:
 ```
 After setting `GROOVY_HOME` and `CLASSPATH`, you can also run the script from the `core` folder:
 ```
- $> groovy src/main/SensorReader
+ $> groovy -Djava.library.path=$LIB_PATH src/main/SensorReader
  ==================
  Now running some RPi stuff from Groovy
  ==================
@@ -197,11 +197,11 @@ The others should work too, there is no reason not to.
 
 #### REPL
 `REPL` stands for `Read-Evaluate-Print-Loop`. It is an interactive command-line console, that allows the user
-to type expressions in the corresponding language, and have it evaluated immediately, it is _very_ useful in a development phase.
+to type expressions in the corresponding language, and have them evaluated immediately, it is _very_ useful in a development phase.
 
 - Scala has one, just type `scala` in a terminal.
 - Groovy has one, type `groovysh` in a terminal.
-- Since Java9, Java has one too, type `jshell` inn a terminal.
+- Since Java9, Java has one too, type `jshell` in a terminal.
 
 Example of `groovysh`:
 ```
