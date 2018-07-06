@@ -131,14 +131,12 @@ Make sure the required devices are correctly wired for the demos.
 ## Compatibility
 Should be compatible with any *JVM-aware* languages. Some samples to be provided (more to come).
 
-#### [Scala](https://www.scala-lang.org/)
-To compile and run the Scala code:
-
 Make sure the core has been built:
 ```
  $> ../gradlew shadowJar
 ```
 
+#### [Scala](https://www.scala-lang.org/)
 Compile the Scala classes you want to run:
 ```
  $> scalac -sourcepath ./src/scala -cp ./build/libs/core-0.1-all.jar ./src/scala/i2c/BME280ScalaSample.scala -d ./build/classes
