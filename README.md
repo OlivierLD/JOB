@@ -129,7 +129,7 @@ Run the script named `samplemenu.sh`:
 Make sure the required devices are correctly wired for the demos.
 
 ## Compatibility
-Should be compatible with any JVM-aware languages. Samples to be provided.
+Should be compatible with any *JVM-aware* languages. Some samples to be provided (more to come).
 
 #### Scala
 To compile and run the Scala code:
@@ -154,7 +154,7 @@ Then to run it:
 ```
 
 #### Groovy
-From `Gradle`:
+From `Gradle` (located in the `core` directory):
 ```
  $> ../gradlew runGroovyScript
 ```
@@ -190,6 +190,33 @@ After setting `GROOVY_HOME` and `CLASSPATH`, you can also run the script from th
 ```
 
 Do also try `groovysh` and `groovyConsole`.
+
+#### Others
+`Scala` and `Groovy` are - by far - not the only JVM-compatible languages.
+The others should work too, there is no reason not to.
+
+#### REPL
+`REPL` stands for `Read-Evaluate-Print-Loop`. It is an interactive command-line console, that allows the user
+to type expressions in the corresponding language, and have it evaluated immediately, it is _very_ useful in a development phase.
+
+- Scala has one, just type `scala` in a terminal.
+- Groovy has one, type `groovysh` in a terminal.
+- Since Java9, Java has one too, type `jshell` inn a terminal.
+
+Example of `groovysh`:
+```
+$> groovysh -Djava.library.path=$LIB_PATH
+Groovy Shell (2.5.0, JVM: 1.8.0_144)
+Type ':help' or ':h' for help.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+groovy:000> import jhard.devices.BME280
+===> jhard.devices.BME280
+sensor = new BME280()
+===> jhard.devices.BME280@1c80e49b
+groovy:000> sensor.readTemperature()
+===> 21.33
+groovy:000>
+```
 
 ## Available device implementations
 - SSD1306 (128x32 I<sup><small>2</small></sup>C oled screen).
