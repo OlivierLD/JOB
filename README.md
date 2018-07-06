@@ -9,7 +9,7 @@ This should make the translations from `Python` or `C` code into `Java` a bit ea
 
 Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
-> _Note_: GPIO Pin numbers are the ones available [here](https://www.raspberrypi.org/documentation/usage/gpio/README.md).
+> _Note_: GPIO Pin numbers are the ones available [here](https://www.raspberrypi.org/documentation/usage/gpio/README.md), or below, in the BCM columns.
 ```
        +-----+-----+--------------+-----++-----+--------------+-----+-----+
        | BCM | wPi | Name         |  Physical  |         Name | wPi | BCM |
