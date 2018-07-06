@@ -235,7 +235,6 @@ A lot!
 - LSM303 (I<sup><small>2</small></sup>C Triple-axis Accelerometer + Magnetometer (Compass) Board)
 - HTU21DF (I<sup><small>2</small></sup>C Temperature, Humidity)
 - LoRa
-- FONA
 - ...etc
 
 ---
