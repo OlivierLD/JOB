@@ -158,13 +158,19 @@ From `Gradle` (located in the `core` directory):
 ```
 
 After installing `groovy`, from the `core` directory:
+
+On Mac OS, `GROOVY_HOME` would be like `/usr/local/opt/groovy/libexec`.
+
+On a Raspberry PI, after using `SDKMan` to install `groovy`, `GROOVY_HOME` would be like `/home/pi/.sdkman/candidates/groovy/2.5.0`.
+
 ```
- $> export GROOVY_HOME=/usr/local/opt/groovy/libexec
+ $> export GROOVY_HOME=/home/pi/.sdkman/candidates/groovy/2.5.0
  $> export CLASSPATH=$(find $GROOVY_HOME/lib -name '*.jar' | tr '\n' ':')
  $> export CLASSPATH=$CLASSPATH:$PWD/build/libs/core-0.1-all.jar
  $> export LIB_PATH=$PWD/src/C
+ $> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LIB_PATH
  $> cd src/groovy
- $> groovy -Djava.library.path=$LIB_PATH SensorReader
+ $> groovy SensorReader
  ==================
  Now running some RPi stuff from Groovy
  ==================
@@ -176,7 +182,7 @@ After installing `groovy`, from the `core` directory:
 ```
 After setting `GROOVY_HOME` and `CLASSPATH`, you can also run the script from the `core` folder:
 ```
- $> groovy -Djava.library.path=$LIB_PATH src/main/SensorReader
+ $> groovy src/main/SensorReader
  ==================
  Now running some RPi stuff from Groovy
  ==================
