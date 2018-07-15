@@ -77,6 +77,10 @@ public class LED {
     }
   }
 
+  public boolean isSimulated() {
+    return JHardNativeInterface.isSimulated();
+  }
+
   /**
    *  Sets the brightness
    *  @param bright 0.0 (off) to 1.0 (maximum)

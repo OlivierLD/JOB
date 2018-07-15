@@ -47,7 +47,6 @@ public class SPI {
     public int order() { return this.order; }
   }
 
-
   protected Endianness endianness = Endianness.LITTLE_ENDIAN; // MSBFIRST;
   protected String dev;
   protected int handle;
@@ -74,6 +73,9 @@ public class SPI {
     }
   }
 
+  public boolean isSimulated() {
+    return JHardNativeInterface.isSimulated();
+  }
 
   /**
    *  Closes the SPI interface

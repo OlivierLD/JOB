@@ -1,4 +1,5 @@
 import processing.io.I2C;
+import processing.io.NativeInterface;
 
 /**
  * BME280. Pressure (-> Altitude), Temperature, Humidity.
@@ -369,6 +370,10 @@ public class BME280 extends I2C {
 		return new BME280Data(temp, press, alt, hum);
 	}
 
+  public boolean isSimulating() {
+    return NativeInterface.isSimulated();
+  }
+  
 	/**
 	 * Read a 16 bit word, unsigned, Little Endian.
 	 * @param register the one to read

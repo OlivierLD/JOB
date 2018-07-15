@@ -23,6 +23,9 @@ public class SoftwareServo {
     JHardNativeInterface.loadLibrary();
   }
 
+  public boolean isSimulated() {
+    return JHardNativeInterface.isSimulated();
+  }
 
   /**
    *  Closes a servo motor

@@ -47,6 +47,9 @@ public class GPIO {
     JHardNativeInterface.loadLibrary();
   }
 
+  public boolean isSimulated() {
+    return JHardNativeInterface.isSimulated();
+  }
 
   public static void analogWrite(int pin, int value) {
     // currently this can't be done in a non-platform-specific way

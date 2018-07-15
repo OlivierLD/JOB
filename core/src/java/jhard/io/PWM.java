@@ -63,6 +63,10 @@ public class PWM {
     }
   }
 
+  public boolean isSimulated() {
+    return JHardNativeInterface.isSimulated();
+  }
+
   /**
    *  Disables the PWM output
    */

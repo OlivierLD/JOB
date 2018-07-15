@@ -36,6 +36,10 @@ public class I2C {
     }
   }
 
+  public boolean isSimulated() {
+	  return JHardNativeInterface.isSimulated();
+  }
+
   /**
    *  Begins a transmission to an attached device
    *  @see #write

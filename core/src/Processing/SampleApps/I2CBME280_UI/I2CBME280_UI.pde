@@ -1,4 +1,5 @@
 import processing.io.*;
+import java.util.*;
 
 /**
  * With a Graphical User Interface
@@ -11,14 +12,22 @@ int tubeBottom = 380;
 int intRadius =  20;
 int extRadius = 180;
 
+List<Float> humBuffer;
+List<Float> tempBuffer;
+List<Float> pressBuffer;
+int MAX_BUFFER_SIZE = 200;
 
 void setup() {
-	size(1000, 400);
+	size(1000, 600);
 	noStroke();
 	noFill();
 	textSize(10);
   System.setProperty("bme280.verbose", "false");
 	bme280 = new BME280();
+  humBuffer = new ArrayList<Float>(MAX_BUFFER_SIZE);
+  tempBuffer = new ArrayList<Float>(MAX_BUFFER_SIZE);
+  pressBuffer = new ArrayList<Float>(MAX_BUFFER_SIZE);
+  frameRate(1f); // once per second
 }
 
 int pressureFrom = 973, pressureTo = 1053; // 1013 is centered.
@@ -27,10 +36,34 @@ int temperatureFrom = -20, temperatureTo = 50;
 
 void draw() {
 	background(0);
+  if (bme280.isSimulating()) {
+    textSize(12);
+    fill(255);
+    text("Simulating", 12, 390);
+  }
   try {
 	  float temp = bme280.readTemperature();
 	  float hum = bme280.readHumidity();
 	  float press = bme280.readPressure();
+
+    if (bme280.isSimulating()) {
+      temp = Simulators.TempSimulator.get();
+      hum = Simulators.HumSimulator.get();
+      press = Simulators.PressSimulator.get() * 100f;
+    }
+
+    humBuffer.add(new Float(hum));
+    tempBuffer.add(new Float(temp));
+    pressBuffer.add(new Float(press / 100f));
+    while (humBuffer.size() > MAX_BUFFER_SIZE) {
+      humBuffer.remove(0);
+    }
+    while (tempBuffer.size() > MAX_BUFFER_SIZE) {
+      tempBuffer.remove(0);
+    }
+    while (pressBuffer.size() > MAX_BUFFER_SIZE) {
+      pressBuffer.remove(0);
+    }
 
 		drawDisplay(press / 100f,
             		pressureFrom,
@@ -65,6 +98,8 @@ void draw() {
              1,                  // minor
              5,                  // Major
              "\272C");           // Unit
+            
+    drawGraph();   
 	} catch (Exception ex) {
     ex.printStackTrace();
   }
@@ -163,4 +198,63 @@ void drawTube(float value, int from, int to, int tubeWidth, int tubeHeight, int 
   String label = String.format("%.01f %s", value, unit);
   float strW = textWidth(label);
   text(label, xOffset - (strW / 2), 40 + yOffset);
+}
+
+int graphHeight = 190;
+void drawGraph() {
+//println(String.format("Hum: %d, Temp: %d", humBuffer.size(), tempBuffer.size()));
+  if (humBuffer.size() > 0 && tempBuffer.size() > 0 && pressBuffer.size() > 0) {
+    fill(255); // white
+    rect(10, 400, width - 20, graphHeight);
+    stroke(0, 0, 255); // blue
+    Iterator<Float> humIter = humBuffer.iterator();
+    int idx = 0;
+    float prevX = -1, prevY = -1;
+    while (humIter.hasNext()) {
+      float f = humIter.next().floatValue();
+      float x = ((float)idx / (float)(humBuffer.size() - 1)) * (float)(width - 20);
+      float y = ((f - humidityFrom) / (humidityTo - humidityFrom)) * graphHeight;
+//    println(String.format("Idx %d, x:%f, y:%f", idx, x, y));
+      if (prevX != -1 && prevY != -1) { // Draw line
+        line(prevX + 10, 400 + (graphHeight - prevY), x + 10, 400 + (graphHeight - y));
+      }
+      prevX = x;
+      prevY = y;
+      idx++;
+    }
+    stroke(255, 0, 0); // red
+    Iterator<Float> tempIter = tempBuffer.iterator();
+    idx = 0;
+    prevX = -1; 
+    prevY = -1;
+    while (tempIter.hasNext()) {
+      float f = tempIter.next().floatValue();
+      float x = ((float)idx / (float)(tempBuffer.size() - 1)) * (float)(width - 20);
+      float y = ((f - temperatureFrom) / (temperatureTo - temperatureFrom)) * graphHeight;
+//    println(String.format("Idx %d, x:%f, y:%f", idx, x, y));
+      if (prevX != -1 && prevY != -1) { // Draw line
+        line(prevX + 10, 400 + (graphHeight - prevY), x + 10, 400 + (graphHeight - y));
+      }
+      prevX = x;
+      prevY = y;
+      idx++;
+    }
+    color(255, 204, 0); // Goldish
+    Iterator<Float> pressIter = pressBuffer.iterator();
+    idx = 0;
+    prevX = -1; 
+    prevY = -1;
+    while (pressIter.hasNext()) {
+      float f = pressIter.next().floatValue();
+      float x = ((float)idx / (float)(pressBuffer.size() - 1)) * (float)(width - 20);
+      float y = ((f - pressureFrom) / (pressureTo - pressureFrom)) * graphHeight;
+//    println(String.format("Idx %d, x:%f, y:%f", idx, x, y));
+      if (prevX != -1 && prevY != -1) { // Draw line
+        line(prevX + 10, 400 + (graphHeight - prevY), x + 10, 400 + (graphHeight - y));
+      }
+      prevX = x;
+      prevY = y;
+      idx++;
+    }
+  }
 }
