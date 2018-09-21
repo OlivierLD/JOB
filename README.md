@@ -1,5 +1,5 @@
-# JavaHard
-### An Hardware I/O library for the Raspberry PI.
+# JOB - *J*ava *O*n *B*oards
+### An Hardware I/O library for the Raspberry PI and similar small single-board computers.
 
 Deeply inspired by the work [Gottfried Haider](https://github.com/gohai/processing) (with his authorization) has done for the Raspberry PI to communicate with [Processing](http://processing.org).
 
