@@ -64,7 +64,7 @@ int nativeDebugEnabled() {
   return debug;
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_openDevice(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_openDevice(
   JNIEnv *env,
   jclass cls,
   jstring _fn) {
@@ -84,7 +84,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_openDevice(
 	}
 }
 
-JNIEXPORT jstring JNICALL Java_job_io_JHardNativeInterface_getError(
+JNIEXPORT jstring JNICALL Java_job_io_JOBNativeInterface_getError(
     JNIEnv *env,
     jclass cls,
     jint _errno) {
@@ -96,7 +96,7 @@ JNIEXPORT jstring JNICALL Java_job_io_JHardNativeInterface_getError(
 	}
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_closeDevice(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_closeDevice(
     JNIEnv *env,
     jclass cls,
     jint handle) {
@@ -111,7 +111,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_closeDevice(
 	}
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_readFile(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_readFile(
     JNIEnv *env,
     jclass cls,
     jstring _fn,
@@ -137,7 +137,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_readFile(
 	return len;
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_writeFile(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_writeFile(
     JNIEnv *env,
     jclass cls,
     jstring _fn,
@@ -163,7 +163,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_writeFile(
 	return len;
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_pollDevice(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_pollDevice(
     JNIEnv *env,
     jclass cls,
     jstring _fn,
@@ -205,7 +205,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_pollDevice(
 	}
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_transferI2c(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_transferI2c(
     JNIEnv *env,
     jclass cls,
     jint handle,
@@ -277,7 +277,7 @@ static void * servoThread(
 	} while (TRUE);
 }
 
-JNIEXPORT jlong JNICALL Java_job_io_JHardNativeInterface_servoStartThread(
+JNIEXPORT jlong JNICALL Java_job_io_JOBNativeInterface_servoStartThread(
     JNIEnv *env,
     jclass cls,
     jint gpio,
@@ -329,7 +329,7 @@ JNIEXPORT jlong JNICALL Java_job_io_JHardNativeInterface_servoStartThread(
 	return (intptr_t)state;
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_servoUpdateThread(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_servoUpdateThread(
     JNIEnv *env,
     jclass cls,
     jlong handle,
@@ -341,7 +341,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_servoUpdateThread(
 	return 0;
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_servoStopThread(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_servoStopThread(
     JNIEnv *env,
     jclass cls,
     jlong handle) {
@@ -356,7 +356,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_servoStopThread(
 	return 0;
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_setSpiSettings(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_setSpiSettings(
     JNIEnv *env,
     jclass cls,
     jint handle,
@@ -391,7 +391,7 @@ JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_setSpiSettings(
 	return 0;
 }
 
-JNIEXPORT jint JNICALL Java_job_io_JHardNativeInterface_transferSpi(
+JNIEXPORT jint JNICALL Java_job_io_JOBNativeInterface_transferSpi(
     JNIEnv *env,
     jclass cls,
     jint handle,
