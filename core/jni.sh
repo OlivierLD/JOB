@@ -7,12 +7,12 @@ PATH=$JAVA_HOME/bin:$PATH
 mkdir build 2> /dev/null
 mkdir build/classes 2> /dev/null
 echo \>\> Compiling Java
-javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/jhard/io/JHardNativeInterface.java
+javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/job/io/JOBNativeInterface.java
 echo \>\> Running javah
 javah -jni -cp ./build/classes -o src/C/jhard.h jhard.io.JHardNativeInterface
 echo \>\> Here you should implement jhard.c, including jhard.h, and compile it
 cd src/C
-echo \>\> Library must be named libjhard-io.so and not only jhard-io.so
+echo \>\> Library must be named libjob-io.so and not only job-io.so
 echo \>\> Compiling C
 make
 cd ../..

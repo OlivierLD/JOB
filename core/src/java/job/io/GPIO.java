@@ -44,11 +44,11 @@ public class GPIO {
 
 
   static {
-    JHardNativeInterface.loadLibrary();
+    JOBNativeInterface.loadLibrary();
   }
 
   public boolean isSimulated() {
-    return JHardNativeInterface.isSimulated();
+    return JOBNativeInterface.isSimulated();
   }
 
   public static void analogWrite(int pin, int value) {
@@ -208,15 +208,15 @@ public class GPIO {
   public static int digitalRead(int pin) {
     checkValidPin(pin);
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return LOW;
     }
 
     String fName = String.format("/sys/class/gpio/gpio%d/value", pin);
     byte in[] = new byte[2];
-    int ret = JHardNativeInterface.readFile(fName, in);
+    int ret = JOBNativeInterface.readFile(fName, in);
     if (ret < 0) {
-      throw new RuntimeException(JHardNativeInterface.getError(ret));
+      throw new RuntimeException(JOBNativeInterface.getError(ret));
     } else if (1 <= ret && in[0] == '0') {
       return LOW;
     } else if (1 <= ret && in[0] == '1') {
@@ -256,15 +256,15 @@ public class GPIO {
       throw new IllegalArgumentException("Illegal value");
     }
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
 
     String fName = String.format("/sys/class/gpio/gpio%d/value", pin);
-    int ret = JHardNativeInterface.writeFile(fName, out);
+    int ret = JOBNativeInterface.writeFile(fName, out);
     if (ret < 0) {
       if (ret != ENOENT) {    // Pin might not yet be exported
-        throw new RuntimeException(JHardNativeInterface.getError(ret));
+        throw new RuntimeException(JOBNativeInterface.getError(ret));
       }
     }
   }
@@ -309,17 +309,17 @@ public class GPIO {
       throw new IllegalArgumentException("Unknown mode");
     }
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
 
     String fName = String.format("/sys/class/gpio/gpio%d/edge", pin);
-    int ret = JHardNativeInterface.writeFile(fName, out);
+    int ret = JOBNativeInterface.writeFile(fName, out);
     if (ret < 0) {
       if (ret == ENOENT) {
         System.err.println("Make sure your called pinMode on the input pin");
       }
-      throw new RuntimeException(JHardNativeInterface.getError(ret));
+      throw new RuntimeException(JOBNativeInterface.getError(ret));
     }
   }
 
@@ -354,13 +354,13 @@ public class GPIO {
   public static void pinMode(int pin, int mode) {
     checkValidPin(pin);
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
 
     // export pin through sysfs
     String fName = "/sys/class/gpio/export";
-    int ret = JHardNativeInterface.writeFile(fName, Integer.toString(pin));
+    int ret = JOBNativeInterface.writeFile(fName, Integer.toString(pin));
     if (ret < 0) {
       if (ret == ENOENT) {
         System.err.println("Make sure your kernel is compiled with GPIO_SYSFS enabled");
@@ -369,7 +369,7 @@ public class GPIO {
         System.err.println("GPIO pin " + pin + " does not seem to be available on your platform");
       }
       if (ret != EBUSY) {   // returned when the pin is already exported
-        throw new RuntimeException(fName + ": " + JHardNativeInterface.getError(ret));
+        throw new RuntimeException(fName + ": " + JOBNativeInterface.getError(ret));
       }
     }
     // set direction and default level for outputs
@@ -394,11 +394,11 @@ public class GPIO {
     // retry for 500ms when writing to the file fails with -EPERM
     long start = System.currentTimeMillis();
     do {
-      ret = JHardNativeInterface.writeFile(fName, out);
+      ret = JOBNativeInterface.writeFile(fName, out);
     } while (ret == -1 && (System.currentTimeMillis() - start) < 500);
 
     if (ret < 0) {
-      throw new RuntimeException(fName + ": " + JHardNativeInterface.getError(ret));
+      throw new RuntimeException(fName + ": " + JOBNativeInterface.getError(ret));
     }
   }
 
@@ -435,19 +435,19 @@ public class GPIO {
   public static void releasePin(int pin) {
     checkValidPin(pin);
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
 
     String fName = "/sys/class/gpio/unexport";
-    int ret = JHardNativeInterface.writeFile(fName, Integer.toString(pin));
+    int ret = JOBNativeInterface.writeFile(fName, Integer.toString(pin));
     if (ret < 0) {
       if (ret == ENOENT) {
         System.err.println("Make sure your kernel is compiled with GPIO_SYSFS enabled");
       }
       // EINVAL is returned when trying to unexport pins that weren't exported to begin with, ignore this case
       if (ret != EINVAL) {
-        throw new RuntimeException(JHardNativeInterface.getError(ret));
+        throw new RuntimeException(JOBNativeInterface.getError(ret));
       }
     }
   }
@@ -493,7 +493,7 @@ public class GPIO {
   protected static boolean waitForInterrupt(int pin, int timeout) {
     checkValidPin(pin);
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       // pretend the interrupt happens after 200ms
       try {
         Thread.sleep(200);
@@ -502,12 +502,12 @@ public class GPIO {
     }
 
     String fName = String.format("/sys/class/gpio/gpio%d/value", pin);
-    int ret = JHardNativeInterface.pollDevice(fName, timeout);
+    int ret = JOBNativeInterface.pollDevice(fName, timeout);
     if (ret < 0) {
       if (ret == ENOENT) {    // ENOENT
         System.err.println("Make sure your called pinMode on the input pin");
       }
-      throw new RuntimeException(JHardNativeInterface.getError(ret));
+      throw new RuntimeException(JOBNativeInterface.getError(ret));
     } else if (ret == 0) {
       // timeout
       return false;

@@ -23,21 +23,21 @@ public class I2C {
    *  @see #list
    */
   public I2C(String bus) {
-    JHardNativeInterface.loadLibrary();
+    JOBNativeInterface.loadLibrary();
     this.bus = bus;
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
 
-    this.handle = JHardNativeInterface.openDevice("/dev/" + bus);
+    this.handle = JOBNativeInterface.openDevice("/dev/" + bus);
     if (this.handle < 0) {
-      throw new RuntimeException(JHardNativeInterface.getError(this.handle));
+      throw new RuntimeException(JOBNativeInterface.getError(this.handle));
     }
   }
 
   public boolean isSimulated() {
-	  return JHardNativeInterface.isSimulated();
+	  return JOBNativeInterface.isSimulated();
   }
 
   /**
@@ -61,10 +61,10 @@ public class I2C {
    *  Closes the I2C device
    */
   public void close() {
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
-    JHardNativeInterface.closeDevice(this.handle);
+    JOBNativeInterface.closeDevice(this.handle);
     this.handle = 0;
   }
 
@@ -86,18 +86,18 @@ public class I2C {
       // silently ignore this case
       return;
     }
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
     // implement these flags if needed: https://github.com/raspberrypi/linux/blob/rpi-patches/Documentation/i2c/i2c-protocol
-    int ret = JHardNativeInterface.transferI2c(this.handle, this.slave, this.out, null);
+    int ret = JOBNativeInterface.transferI2c(this.handle, this.slave, this.out, null);
     this.transmitting = false;
     this.out = null;
     if (ret < 0) {
       if (ret == EIO) {
         System.err.println("The device did not respond. Check the cabling and whether you are using the correct address.");
       }
-      throw new RuntimeException(JHardNativeInterface.getError(ret));
+      throw new RuntimeException(JOBNativeInterface.getError(ret));
     }
   }
 
@@ -106,7 +106,7 @@ public class I2C {
    *  @return String array
    */
   public static String[] list() {
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       // as on the Raspberry Pi
       return new String[]{ "i2c-1" };
     }
@@ -141,18 +141,18 @@ public class I2C {
     }
     byte[] in = new byte[len];
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return in;
     }
 
-    int ret = JHardNativeInterface.transferI2c(this.handle, this.slave, this.out, in);
+    int ret = JOBNativeInterface.transferI2c(this.handle, this.slave, this.out, in);
     this.transmitting = false;
     this.out = null;
     if (ret < 0) {
       if (ret == EIO) {
         System.err.println("The device did not respond. Check the cabling and whether you are using the correct address.");
       }
-      throw new RuntimeException(JHardNativeInterface.getError(ret));
+      throw new RuntimeException(JOBNativeInterface.getError(ret));
     }
     return in;
   }

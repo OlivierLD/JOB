@@ -55,8 +55,8 @@ This `C` file will be compiled into a system library (with an `.so` extension), 
 
 Below are the detailed steps of the process.
 
-The Java class to start from is `JHardNativeInterface.java`.
-See the header file `jhard.h`, and its corresponding implementation `jhard.c`.
+The Java class to start from is `JOBNativeInterface.java`.
+See the header file `job.h`, and its corresponding implementation `job.c`.
 
 ---
 ## To build it
@@ -83,7 +83,7 @@ Compile the Java interface to the native code, from the project root:
  $> cd core
  $> mkdir build 2> /dev/null
  $> mkdir build/classes 2> /dev/null
- $> javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/jhard/io/JHardNativeInterface.java
+ $> javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/job/io/JOBNativeInterface.java
 ```
 Then generate the native library:
 ```
@@ -91,7 +91,7 @@ Then generate the native library:
  $> make
 ```
 The make command invokes the `javah` utility. See the content of `Makefile`.
-By then, you should see a `libjavahard-io.so` library in the `C` directory.
+By then, you should see a `libjob-io.so` library in the `C` directory.
 
 Finally, do the `gradle` build from the project root:
 ```

@@ -60,31 +60,31 @@ public class SPI {
    *  @see #list
    */
   public SPI(String dev) {
-    JHardNativeInterface.loadLibrary();
+    JOBNativeInterface.loadLibrary();
     this.dev = dev;
 
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
 
-    this.handle = JHardNativeInterface.openDevice("/dev/" + dev);
+    this.handle = JOBNativeInterface.openDevice("/dev/" + dev);
     if (this.handle < 0) {
-      throw new RuntimeException(JHardNativeInterface.getError(this.handle));
+      throw new RuntimeException(JOBNativeInterface.getError(this.handle));
     }
   }
 
   public boolean isSimulated() {
-    return JHardNativeInterface.isSimulated();
+    return JOBNativeInterface.isSimulated();
   }
 
   /**
    *  Closes the SPI interface
    */
   public void close() {
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return;
     }
-    JHardNativeInterface.closeDevice(this.handle);
+    JOBNativeInterface.closeDevice(this.handle);
     this.handle = 0;
   }
 
@@ -103,7 +103,7 @@ public class SPI {
    *  @return Device list
    */
   public static String[] list() {
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       // as on the Raspberry Pi
       return new String[]{ "spidev0.0", "spidev0.1" };
     }
@@ -142,25 +142,25 @@ public class SPI {
    *  @return bytes read in (array is the same length as out)
    */
   public byte[] transfer(byte[] out) {
-    if (JHardNativeInterface.isSimulated()) {
+    if (JOBNativeInterface.isSimulated()) {
       return new byte[out.length];
     }
 
     // track the current setting per device across multiple instances
     String curSettings = this.maxSpeed + "-" + this.endianness + "-" + this.mode;
     if (!curSettings.equals(settings.get(this.dev))) {
-      int ret = JHardNativeInterface.setSpiSettings(this.handle, this.maxSpeed, this.endianness.order(), this.mode.intVal());
+      int ret = JOBNativeInterface.setSpiSettings(this.handle, this.maxSpeed, this.endianness.order(), this.mode.intVal());
       if (ret < 0) {
-        System.err.println(JHardNativeInterface.getError(this.handle));
+        System.err.println(JOBNativeInterface.getError(this.handle));
         throw new RuntimeException("Error updating device configuration");
       }
       settings.put(this.dev, curSettings);
     }
 
     byte[] in = new byte[out.length];
-    int transferred = JHardNativeInterface.transferSpi(this.handle, out, in);
+    int transferred = JOBNativeInterface.transferSpi(this.handle, out, in);
     if (transferred < 0) {
-      throw new RuntimeException(JHardNativeInterface.getError(transferred));
+      throw new RuntimeException(JOBNativeInterface.getError(transferred));
     } else if (transferred < out.length) {
       throw new RuntimeException("Fewer bytes transferred than requested: " + transferred);
     }

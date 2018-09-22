@@ -43,11 +43,11 @@ public class SoftwareServo {
    *  @param parent typically use "this"
    */
   public SoftwareServo(Object parent) {
-    JHardNativeInterface.loadLibrary();
+    JOBNativeInterface.loadLibrary();
   }
 
   public boolean isSimulated() {
-    return JHardNativeInterface.isSimulated();
+    return JOBNativeInterface.isSimulated();
   }
 
   /**
@@ -108,18 +108,18 @@ public class SoftwareServo {
     if (this.handle < 0) {
       // start a new thread
       GPIO.pinMode(this.pin, GPIO.OUTPUT);
-      if (JHardNativeInterface.isSimulated()) {
+      if (JOBNativeInterface.isSimulated()) {
         return;
       }
-      this.handle = JHardNativeInterface.servoStartThread(this.pin, this.pulse, this.period);
+      this.handle = JOBNativeInterface.servoStartThread(this.pin, this.pulse, this.period);
       if (this.handle < 0) {
-        throw new RuntimeException(JHardNativeInterface.getError((int)this.handle));
+        throw new RuntimeException(JOBNativeInterface.getError((int)this.handle));
       }
     } else {
       // thread already running
-      int ret = JHardNativeInterface.servoUpdateThread(this.handle, this.pulse, this.period);
+      int ret = JOBNativeInterface.servoUpdateThread(this.handle, this.pulse, this.period);
       if (ret < 0) {
-        throw new RuntimeException(JHardNativeInterface.getError(ret));
+        throw new RuntimeException(JOBNativeInterface.getError(ret));
       }
     }
   }
@@ -138,12 +138,12 @@ public class SoftwareServo {
   public void detach() {
     if (this.handle > 0) {
       // stop thread
-      int ret = JHardNativeInterface.servoStopThread(this.handle);
+      int ret = JOBNativeInterface.servoStopThread(this.handle);
       GPIO.pinMode(this.pin, GPIO.INPUT);
       this.handle = -1;
       this.pin = -1;
       if (ret < 0) {
-        throw new RuntimeException(JHardNativeInterface.getError(ret));
+        throw new RuntimeException(JOBNativeInterface.getError(ret));
       }
     }
   }

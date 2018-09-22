@@ -1,6 +1,6 @@
 package job.io;
 
-public class JHardNativeInterface {
+public class JOBNativeInterface {
 
   protected static boolean loaded = false;
   protected static boolean alwaysSimulate = false;
@@ -9,10 +9,10 @@ public class JHardNativeInterface {
     if (!loaded) {
       if (isSimulated()) {
         System.err.println(String.format(
-            "The JavaHard I/O library is not supported on this platform [%s].\nInstead of values from actual hardware ports, your code will only receive stand-in values that allow you to test the remainder of its functionality.",
+            "The JOB I/O library is not supported on this platform [%s].\nInstead of values from actual hardware ports, your code will only receive stand-in values that allow you to test the remainder of its functionality.",
             System.getProperty("os.name")));
       } else {
-        System.loadLibrary("javahard-io");
+        System.loadLibrary("job-io");
       }
       loaded = true;
     }

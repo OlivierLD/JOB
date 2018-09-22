@@ -1,7 +1,7 @@
 package job.devices;
 
 import job.io.GPIO;
-import job.io.JHardNativeInterface;
+import job.io.JOBNativeInterface;
 import utils.MiscUtils;
 import utils.StringUtils;
 
@@ -83,7 +83,7 @@ public class STH10 {
 			T2_SO = 0.00008;
 
 	private int dataPin, clockPin;
-	private boolean simulating = JHardNativeInterface.isSimulated();
+	private boolean simulating = JOBNativeInterface.isSimulated();
 
 	public STH10() {
 		this(DEFAULT_DATA_PIN, DEFAULT_CLOCK_PIN);

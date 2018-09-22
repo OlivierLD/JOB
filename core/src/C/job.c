@@ -33,7 +33,7 @@
 #include <sys/param.h>
 #include <time.h>
 #include <unistd.h>
-#include "jhard.h"
+#include "job.h"
 
 #ifndef TRUE
 #define TRUE 1
