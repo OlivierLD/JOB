@@ -2,7 +2,7 @@ package gpio
 
 import java.util.function.Consumer
 
-import jhard.io.GPIO
+import job.io.GPIO
 
 /**
   * Push button (pin 27) interrupt demo.

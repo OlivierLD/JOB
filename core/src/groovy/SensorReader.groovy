@@ -1,4 +1,4 @@
-import jhard.devices.BME280
+import job.devices.BME280
 import java.text.NumberFormat
 import java.text.DecimalFormat
 

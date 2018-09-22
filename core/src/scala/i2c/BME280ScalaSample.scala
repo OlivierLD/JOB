@@ -1,6 +1,6 @@
 package i2c
 
-import jhard.devices.BME280
+import job.devices.BME280
 
 /*
  * Requires a BME280

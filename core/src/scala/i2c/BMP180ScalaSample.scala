@@ -1,6 +1,6 @@
 package i2c
 
-import jhard.devices.BMP180
+import job.devices.BMP180
 
 /*
  * Requires a BMP180
