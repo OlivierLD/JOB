@@ -5,8 +5,31 @@ package jhard.io;
  */
 public class SoftwareServo {
 
+	/**
+	 * <b>In theory</b>, PWM servos support those values:
+	 *<pre>
+	 * Servo Pulse | Standard |   Continuous
+	 * ------------+----------+-------------------
+	 *       1.5ms |   0 deg  |     Stop
+	 *       2.0ms |  90 deg  | FullSpeed forward
+	 *       1.0ms | -90 deg  | FullSpeed backward
+	 * ------------+----------+-------------------
+	 *</pre>
+	 * <b><i>BUT</i></b> this may vary a lot.<br/>
+	 * Servos like <a href="https://www.adafruit.com/product/169">https://www.adafruit.com/product/169</a> or <a href="https://www.adafruit.com/product/155">https://www.adafruit.com/product/155</a>
+	 * have min and max values like 0.5ms 2.5ms, which is quite different from the "theorical" values. Servos are analog devices...
+	 * <br/>
+	 * <pre>
+	 * pulse = (int)(minPulse + (angle/180.0) * (maxPulse - minPulse));
+	 * -90 : 544 + (  0 / 180) * (2400 - 544) =   544 => ~0.5ms
+	 *   0 : 544 + ( 90 / 180) * (2400 - 544) = 1,472 => ~1.5ms
+	 * +90 : 544 + (180 / 180) * (2400 - 544) = 2,400 => ~2.5ms
+	 * </pre>
+	 * The values below, [544..2400], sound suitable for the servos mentioned above.
+	 */
   public static final int DEFAULT_MIN_PULSE = 544;
   public static final int DEFAULT_MAX_PULSE = 2_400;
+
 
   protected int pin = -1;           // gpio number (-1 .. not attached)
   protected long handle = -1;       // native thread id (<0 .. not started)
