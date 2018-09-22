@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'jhard-io'
+group = 'job-io'
 version = '0.1'
 
 repositories {

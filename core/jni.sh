@@ -9,8 +9,8 @@ mkdir build/classes 2> /dev/null
 echo \>\> Compiling Java
 javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/job/io/JOBNativeInterface.java
 echo \>\> Running javah
-javah -jni -cp ./build/classes -o src/C/jhard.h jhard.io.JHardNativeInterface
-echo \>\> Here you should implement jhard.c, including jhard.h, and compile it
+javah -jni -cp ./build/classes -o src/C/job.h job.io.JOBNativeInterface
+echo \>\> Here you should implement job.c, including job.h, and compile it
 cd src/C
 echo \>\> Library must be named libjob-io.so and not only job-io.so
 echo \>\> Compiling C

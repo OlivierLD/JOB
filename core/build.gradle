@@ -8,7 +8,7 @@ plugins {
   id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
-group = 'jhard-io'
+group = 'job-io'
 version = '0.1'
 
 sourceSets {
