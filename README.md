@@ -240,6 +240,7 @@ A lot!
 - HMC5883L (I<sup><small>2</small></sup>C Magnetometer/Compass)
 - LSM303 (I<sup><small>2</small></sup>C Triple-axis Accelerometer + Magnetometer (Compass) Board)
 - HTU21DF (I<sup><small>2</small></sup>C Temperature, Humidity)
+- HC-SR04 (Ultra sonic Range Sensor)
 - LoRa
 - ...etc
 
