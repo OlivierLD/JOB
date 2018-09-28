@@ -10,7 +10,7 @@ do
   echo -e "+----------------------------+-------------------------------+"
   echo -e "|  1: Led Counter            |  6: BMP180 (I2C env sensor)   |"
   echo -e "|  2: Push Button input      |  7: BME280 (I2C env sensor)   |"
-  echo -e "|  3: MCP3008 (ADC)          |  8: Servo                     |"
+  echo -e "|  3: MCP3008 (ADC)          |  8: Servo (Direct GPIO)       |"
   echo -e "|  4: OLED SSD1306           |  9: ADS1015 (I2C ADC)         |"
   echo -e "|  5: GPIO Interrupt         | 10: PCA9685 (I2C Servos)      |"
   echo -e "|                            | 11: STH10 (Pure GPIO)         |"
