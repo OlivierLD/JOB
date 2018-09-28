@@ -46,7 +46,7 @@ public class STH10 {
 
 	private boolean DEBUG = "true".equals(System.getProperty("sth10.verbose"));
 
-	private static Map<String, Byte> COMMANDS = new HashMap<String, Byte>();
+	private static Map<String, Byte> COMMANDS = new HashMap<>();
 
 	// STH10 commands
 	private final static String TEMPERATURE_CMD = "Temperature";

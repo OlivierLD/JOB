@@ -17,7 +17,7 @@ public class SoftwareServo {
 	 *</pre>
 	 * <b><i>BUT</i></b> this may vary a lot.<br/>
 	 * Servos like <a href="https://www.adafruit.com/product/169">https://www.adafruit.com/product/169</a> or <a href="https://www.adafruit.com/product/155">https://www.adafruit.com/product/155</a>
-	 * have min and max values like 0.5ms 2.5ms, which is quite different from the "theorical" values. Servos are analog devices...
+	 * have min and max values like 0.5ms 2.5ms, which is quite different from the "theoretical" values. Servos are analog devices...
 	 * <br/>
 	 * <pre>
 	 * pulse = (int)(minPulse + (angle/180.0) * (maxPulse - minPulse));
@@ -89,29 +89,32 @@ public class SoftwareServo {
     this.maxPulse = maxPulse;
   }
 
+	/**
+	 *
+	 * @param angle in degrees, [0..180]
+	 * @return the equivalent pulse in micro-seconds.
+	 */
+  protected int angleToPulse(float angle) {
+  	return (int)(this.minPulse + (angle / 180.0) * (this.maxPulse - this.minPulse));
+  }
   /**
-   *  Moves a servo motor to a given orientation
-   *  @param angle angle in degrees (controls speed and direction on continuous-rotation servos)
+   *  Set the servo pulse. Can be in voked directly for a Continuous servo
+   *  @param pulseToSet pulse in micro-seconds
    */
-  public void write(float angle) {
+  public void write(int pulseToSet) {
     if (!this.attached()) {
       System.err.println("You need to call attach(pin) before write(angle).");
       throw new RuntimeException("Servo is not attached");
     }
 
-    if (angle < 0 || angle > 180) {
-      System.err.println("Only degree values between 0 and 180 can be used.");
-      throw new IllegalArgumentException("Illegal value");
-    }
-    this.pulse = (int)(this.minPulse + (angle/180.0) * (this.maxPulse - this.minPulse));
-
+	  this.pulse = pulseToSet;
     if (this.handle < 0) {
       // start a new thread
       GPIO.pinMode(this.pin, GPIO.OUTPUT);
       if (JOBNativeInterface.isSimulated()) {
         return;
       }
-      this.handle = JOBNativeInterface.servoStartThread(this.pin, this.pulse, this.period);
+	    this.handle = JOBNativeInterface.servoStartThread(this.pin, this.pulse, this.period);
       if (this.handle < 0) {
         throw new RuntimeException(JOBNativeInterface.getError((int)this.handle));
       }
@@ -124,7 +127,16 @@ public class SoftwareServo {
     }
   }
 
-  /**
+	/**
+	 * Suitable for a Standard servo.
+	 * @param angle in degrees [0..180]
+	 */
+	public void write(float angle) {
+		int pulse = angleToPulse(angle);
+		this.write(pulse);
+	}
+
+	/**
    *  Returns whether a servo motor is attached to a pin
    *  @return true if attached, false is not
    */

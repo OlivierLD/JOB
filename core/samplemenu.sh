@@ -16,6 +16,7 @@ do
   echo -e "|                            | 11: STH10 (Pure GPIO)         |"
   echo -e "|                            | 12: VL53L0X (I2C ToF)         |"
   echo -e "|                            | 13: TSL2561 (I2C LightSensor) |"
+  echo -e "|                            | 14: HC_SR04 (GPIO RangeSensor)|"
   echo -e "+----------------------------+-------------------------------+"
   echo -e "|  Q: Quit                                                   |"
   echo -e "+------------------------------------------------------------+"
@@ -109,6 +110,13 @@ do
       echo -e "TSL2561"
       JAVA_OPTS=
       sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.jobio.i2c.TSL2561Sample
+      echo -en "Hit [return]"
+      read a
+      ;;
+    14)
+      echo -e "HC_SR04"
+      JAVA_OPTS=
+      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar $JAVA_OPTS -Djava.library.path=$LIB_PATH examples.jobio.gpio.HC_SR04Sample
       echo -en "Hit [return]"
       read a
       ;;
