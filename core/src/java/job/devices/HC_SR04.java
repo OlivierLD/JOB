@@ -83,7 +83,7 @@ public class HC_SR04 {
 			GPIO.pinMode(this.echoPin, GPIO.INPUT);
 			GPIO.digitalWrite(this.trigPin, false); // LOW
 			if (DEBUG) {
-				System.out.println(String.format(">> Constructor"));
+				System.out.println(String.format(">> Constructor."));
 			}
 		}
 	}

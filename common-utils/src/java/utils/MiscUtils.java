@@ -27,5 +27,4 @@ public class MiscUtils {
 	public static void delay(float sec) {
 		delay(Math.round(sec * 1_000));
 	}
-
 }

@@ -28,7 +28,9 @@ public class HC_SR04Sample {
 				dist = 0;
 				ex.printStackTrace();
 			}
-			System.out.println(String.format("Dist: %.02f cm", dist));
+			if (!"true".equals(System.getProperty("hc_sr04.verbose"))) { // Otherwise, displayed already
+				System.out.println(String.format("Dist: %.02f cm", dist));
+			}
 			MiscUtils.delay(500L);
 		}
 	}
