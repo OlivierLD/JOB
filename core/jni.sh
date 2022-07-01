@@ -1,8 +1,9 @@
 #!/bin/bash
-if [[ "$JAVA_HOME" == "" ]]; then
-  JAVA_HOME=/opt/jdk/jdk1.8.0_112
-fi
-PATH=${JAVA_HOME}/bin:${PATH}
+# We assume Java is setup.
+#if [[ "${JAVA_HOME}" == "" ]]; then
+#  JAVA_HOME=/opt/jdk/jdk1.8.0_112
+#fi
+#PATH=${JAVA_HOME}/bin:${PATH}
 mkdir build 2> /dev/null
 mkdir build/classes 2> /dev/null
 echo \>\> Compiling Java
@@ -11,7 +12,7 @@ echo \>\> Running javah
 javah -jni -cp ./build/classes -o src/C/job.h job.io.JOBNativeInterface
 echo \>\> Here you should implement job.c, including job.h, and compile it
 cd src/C
-echo \>\> Library must be named libjob-io.so and not only job-io.so
+echo \>\> Warning: Library must be named libjob-io.so and not only job-io.so
 echo \>\> Compiling C
 make
 cd ../..
