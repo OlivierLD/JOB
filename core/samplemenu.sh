@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 LIB_PATH="src/C"
+NATIVEDEBUG=false
 EXIT=false
 while [[ "${EXIT}" == "false" ]]; do
   clear
@@ -24,19 +25,19 @@ while [[ "${EXIT}" == "false" ]]; do
   case $choice in
     1)
       echo -e "Led Counter"
-      sudo java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.led.LedCounter
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.led.LedCounter
       echo -en "Hit [return]"
       read a
       ;;
     2)
       echo -e "Push Button"
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.SimpleInput
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.SimpleInput
       echo -en "Hit [return]"
       read a
       ;;
     3)
       echo -e "ADC and potentiometer"
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.spi.MCP3008Sample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.spi.MCP3008Sample
       echo -en "Hit [return]"
       read a
       ;;
@@ -45,13 +46,13 @@ while [[ "${EXIT}" == "false" ]]; do
       JAVA_OPTS=
       JAVA_OPTS="${JAVA_OPTS} -Dverbose=true"
       JAVA_OPTS="${JAVA_OPTS} -Ddump.screen=false"
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.SSD1306Sample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.SSD1306Sample
       echo -en "Hit [return]"
       read a
       ;;
     5)
       echo -e "GPIO Interrupt (have a push button connected on pin 27 - physical #13)"
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.PinInterrupt
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.PinInterrupt
       echo -en "Hit [return]"
       read a
       ;;
@@ -73,49 +74,49 @@ while [[ "${EXIT}" == "false" ]]; do
       ;;
     8)
       echo -e "Sotfware Servo (have servo connected on pin 5 - physical #29)"
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.servo.DirectPWMServo 5
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.servo.DirectPWMServo 5
       echo -en "Hit [return]"
       read a
       ;;
     9)
       echo -e "ADS1015"
       JAVA_OPTS=
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.ADS1015Sample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.ADS1015Sample
       echo -en "Hit [return]"
       read a
       ;;
     10)
       echo -e "PCA9685"
       JAVA_OPTS=
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.PCA9685Sample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.PCA9685Sample
       echo -en "Hit [return]"
       read a
       ;;
     11)
       echo -e "STH10"
       JAVA_OPTS=
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.gpio.STH10Sample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.gpio.STH10Sample
       echo -en "Hit [return]"
       read a
       ;;
     12)
       echo -e "VL53L0X"
       JAVA_OPTS=
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.VL53L0XSample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.VL53L0XSample
       echo -en "Hit [return]"
       read a
       ;;
     13)
       echo -e "TSL2561"
       JAVA_OPTS=
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.TSL2561Sample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.i2c.TSL2561Sample
       echo -en "Hit [return]"
       read a
       ;;
     14)
       echo -e "HC_SR04"
       JAVA_OPTS=
-      sudo NATIVEDEBUG=false java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.gpio.HC_SR04Sample
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.gpio.HC_SR04Sample
       echo -en "Hit [return]"
       read a
       ;;
