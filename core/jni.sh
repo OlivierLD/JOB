@@ -1,9 +1,8 @@
 #!/bin/bash
-if [ "$JAVA_HOME" = "" ]
-then
+if [[ "$JAVA_HOME" == "" ]]; then
   JAVA_HOME=/opt/jdk/jdk1.8.0_112
 fi
-PATH=$JAVA_HOME/bin:$PATH
+PATH=${JAVA_HOME}/bin:${PATH}
 mkdir build 2> /dev/null
 mkdir build/classes 2> /dev/null
 echo \>\> Compiling Java
