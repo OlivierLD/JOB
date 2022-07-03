@@ -4,9 +4,9 @@ public class StringUtils {
 	/**
 	 * Right pad, with blanks
 	 *
-	 * @param s
-	 * @param len
-	 * @return
+	 * @param s Original String
+	 * @param len Final String length
+	 * @return the added String
 	 */
 	public static String rpad(String s, int len) {
 		return rpad(s, len, " ");
@@ -23,9 +23,9 @@ public class StringUtils {
 	/**
 	 * Left pad, with blanks
 	 *
-	 * @param s
-	 * @param len
-	 * @return
+	 * @param s Original String
+	 * @param len Final String length
+	 * @return the added String
 	 */
 	public static String lpad(String s, int len) {
 		return lpad(s, len, " ");

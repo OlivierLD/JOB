@@ -3,13 +3,13 @@ package job.devices;
 import job.io.GPIO;
 import job.io.JOBNativeInterface;
 import utils.MiscUtils;
-import utils.StringUtils;
+//import utils.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 
 /*
  * HC-SR04, Ultrasonic range sensor
@@ -46,13 +46,13 @@ import java.util.Map;
 public class HC_SR04 {
 
 	private final static Format DF22 = new DecimalFormat("#0.00");
-	private static boolean DEBUG = "true".equals(System.getProperty("hc_sr04.verbose"));
+	private final static boolean DEBUG = "true".equals(System.getProperty("hc_sr04.verbose"));
 
 	private final static int DEFAULT_TRIGGER_PIN = 23;
 	private final static int DEFAULT_ECHO_PIN    = 24;
 
-	private int trigPin, echoPin;
-	private boolean simulating = JOBNativeInterface.isSimulated();
+	private final int trigPin, echoPin;
+	private final boolean simulating = JOBNativeInterface.isSimulated();
 
 	private final static double SOUND_SPEED = 34_300d;       // in cm, 343.00 m/s
 	private final static double DIST_FACT = SOUND_SPEED / 2; // round trip
@@ -71,19 +71,19 @@ public class HC_SR04 {
 		this.echoPin = echo;
 
 		if ("true".equals(System.getProperty("gpio.verbose"))) {
-			System.out.println(String.format("GPIO> Opening GPIO (%s)", this.getClass().getName()));
+			System.out.printf("GPIO> Opening GPIO (%s)\n", this.getClass().getName());
 		}
 
 		if (simulating) {
 			if ("true".equals(System.getProperty("gpio.verbose"))) {
-				System.out.println(String.format("GPIO> Will simulate (for %s)", this.getClass().getName()));
+				System.out.printf("GPIO> Will simulate (for %s)\n", this.getClass().getName());
 			}
 		} else {
 			GPIO.pinMode(this.trigPin, GPIO.OUTPUT);
 			GPIO.pinMode(this.echoPin, GPIO.INPUT);
 			GPIO.digitalWrite(this.trigPin, false); // LOW
 			if (DEBUG) {
-				System.out.println(String.format(">> Constructor."));
+				System.out.println(">> Constructor.");
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public class HC_SR04 {
 			return false;
 		} else {
 			if (DEBUG) {
-				System.out.println(String.format("Echo took too long!! (more than %d \u03bcs", MAX_WAIT));
+				System.out.printf("Echo took too long!! (more than %d \u03bcs\n", MAX_WAIT);
 			}
 			return true;
 		}
@@ -126,11 +126,11 @@ public class HC_SR04 {
 
 		// Wait for the signal to return
 		long now = System.currentTimeMillis();
-		while (GPIO.digitalRead(this.echoPin) == GPIO.LOW && !tooLong(now)); // && (start == 0 || (start != 0 && (start - top) < BILLION)))
+		while (GPIO.digitalRead(this.echoPin) == GPIO.LOW && !tooLong(now)) { /* Allowed here */ } // && (start == 0 || (start != 0 && (start - top) < BILLION)))
 		long start = System.nanoTime();
 		// There it is, the echo comes back.
 		now = System.currentTimeMillis();
-		while (GPIO.digitalRead(this.echoPin) == GPIO.HIGH && !tooLong(now));
+		while (GPIO.digitalRead(this.echoPin) == GPIO.HIGH && !tooLong(now)) { /* Allowed here */ }
 		long end = System.nanoTime();
 
 		//  System.out.println(">>> TOP: start=" + start + ", end=" + end);
@@ -141,7 +141,7 @@ public class HC_SR04 {
 			if (DEBUG) {
 //			System.out.println(String.format("TravelTime: %d \u00e5s (nano sec), pulseDuration: %s", travelTime, DF_N.format(pulseDuration)));
 				if (distance < 1_000) { // Less than 10 meters, in cm.
-					System.out.println(String.format("Distance: %s cm. Duration: %s \u00e5s", DF22.format(distance), NumberFormat.getInstance().format(travelTime))); // + " (" + pulseDuration + " = " + end + " - " + start + ")");
+					System.out.printf("Distance: %s cm. Duration: %s \u00e5s\n", DF22.format(distance), NumberFormat.getInstance().format(travelTime)); // + " (" + pulseDuration + " = " + end + " - " + start + ")");
 				} else {
 					System.out.println("   >>> Too far:" + DF22.format(distance) + " cm.");
 				}

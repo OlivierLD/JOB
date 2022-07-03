@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class VL53L0X extends I2C {
 	public final static int VL53L0X_I2CADDR = 0x29;
 
-	private boolean verbose = "true".equals(System.getProperty("vl53l0x.verbose"));
+	private final static boolean VERBOSE = "true".equals(System.getProperty("vl53l0x.verbose"));
 
 	private final static int SYSRANGE_START = 0x00;
 	private final static int SYSTEM_THRESH_HIGH = 0x0C;
@@ -164,7 +164,7 @@ public class VL53L0X extends I2C {
 		return (int)(((timeoutPeriodMclks * macroPeriodNs) + (int)(macroPeriodNs / 2f)) / 1000f);
 	}
 
-	private int ioTimeout = 0;
+	private final int ioTimeout = 0;
 	private int stopVariable = 0;
 	private int configControl = 0;
 	private float signalRateLimit = 0f;
@@ -172,7 +172,7 @@ public class VL53L0X extends I2C {
 	private int measurementTimingBudgetMicrosec = 0, measurementTimingBudget = 0;
 
 	public final static String DEFAULT_BUS = "i2c-1";
-	private int address;
+	private final int address;
 
 	public VL53L0X() {
 		this(DEFAULT_BUS, VL53L0X_I2CADDR);
@@ -191,12 +191,13 @@ public class VL53L0X extends I2C {
 		this.address = address;
 
 		String[] deviceList = I2C.list();
-		if (verbose) {
-			System.out.println(String.format("Device list: %s",
-					Arrays.asList(deviceList)
-							.stream()
-							.collect(Collectors.joining(", "))));
-			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
+		if (VERBOSE) {
+//			System.out.printf("Device list: %s\n",
+//					Arrays.stream(deviceList)
+//							.collect(Collectors.joining(", ")));
+			System.out.printf("Device list: %s\n",
+							  String.join(", ", deviceList));
+			System.out.printf("Bus %s, address 0x%02X\n", bus, address);
 		}
 
 		// Check identification registers for expected values.
@@ -206,7 +207,7 @@ public class VL53L0X extends I2C {
 		int c2 = readbyte(0xC2) & 0xFF;
 
 		if (c0 != 0xEE || c1 != 0xAA || c2 != 0x10) {
-			System.err.println(String.format("C0: %04X, C1: %04X, C2: %04X", c0, c1, c2));
+			System.err.printf("C0: %04X, C1: %04X, C2: %04X\n", c0, c1, c2);
 			throw new RuntimeException("Failed to find expected ID register values. Check wiring!");
 		}
 		// Initialize access to the sensor.  This is based on the logic from:
@@ -352,7 +353,7 @@ public class VL53L0X extends I2C {
 		// restore the previous Sequence Config
 		command((byte) SYSTEM_SEQUENCE_CONFIG, (byte) 0xE8);
 
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("Constructor OK.");
 		}
 	}

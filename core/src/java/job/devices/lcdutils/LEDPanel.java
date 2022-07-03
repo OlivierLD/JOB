@@ -5,13 +5,13 @@ import java.awt.Graphics;
 
 public class LEDPanel
   extends javax.swing.JPanel {
-  private Color ledColor = Color.red;
+  private final Color ledColor = Color.red;
   private boolean withGrid = false;
 
-  private static int NB_LINES =  32;
-  private static int NB_COLS  = 128;
+  private final static int NB_LINES =  32;
+  private final static int NB_COLS  = 128;
 
-  private int nbLines, nbCols;
+  private final int nbLines, nbCols;
 
   private boolean[][] ledOnOff;
 
@@ -80,9 +80,7 @@ public class LEDPanel
       return;
     }
     for (int r=0; r<this.nbLines; r++) {
-      for (int c=0; c<this.nbCols; c++) {
-        ledOnOff[r][c] = leds[r][c];
-      }
+      System.arraycopy(leds[r], 0, ledOnOff[r], 0, this.nbCols);
     }
     this.repaint();
   }

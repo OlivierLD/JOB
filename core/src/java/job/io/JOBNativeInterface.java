@@ -8,9 +8,9 @@ public class JOBNativeInterface {
   public static void loadLibrary() {
     if (!loaded) {
       if (isSimulated()) {
-        System.err.println(String.format(
+        System.err.printf(
             "The JOB I/O library is not supported on this platform [%s].\nInstead of values from actual hardware ports, your code will only receive stand-in values that allow you to test the remainder of its functionality.",
-            System.getProperty("os.name")));
+            System.getProperty("os.name"));
       } else {
         System.loadLibrary("job-io");
       }

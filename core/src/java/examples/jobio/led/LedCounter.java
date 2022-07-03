@@ -1,11 +1,11 @@
 package examples.jobio.led;
 
 import job.io.LED;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+//import java.util.Arrays;
+//import java.util.stream.Collectors;
 
 public class LedCounter {
-  private LED leds[];
+  private LED[] leds;
 
   // the Raspberry Pi has two build-in LEDs we can control
   // led0 (green) and led1 (red)
@@ -14,11 +14,11 @@ public class LedCounter {
   }
 
   private void setup() {
-    String available[] = LED.list();
-    System.out.println(String.format("Available: %s",
-      Arrays.asList(available)
-        .stream()
-        .collect(Collectors.joining(", "))));
+    String[] available = LED.list();
+//    System.out.println(String.format("Available: %s",
+//      Arrays.stream(available)
+//        .collect(Collectors.joining(", "))));
+    System.out.printf("Available: %s\n", String.join(", ", available));
 
     // create an object for each LED and store it in an array
     leds = new LED[available.length];
@@ -50,9 +50,7 @@ public class LedCounter {
   public static void main(String... args) {
     LedCounter ledCounter = new LedCounter();
 
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      ledCounter.shutdown();
-    }));
+    Runtime.getRuntime().addShutdownHook(new Thread(ledCounter::shutdown));
 
     for (int i=0; i<10; i++) {
       ledCounter.flip();

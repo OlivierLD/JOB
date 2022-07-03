@@ -98,7 +98,7 @@ public class SoftwareServo {
   	return (int)(this.minPulse + (angle / 180.0) * (this.maxPulse - this.minPulse));
   }
   /**
-   *  Set the servo pulse. Can be in voked directly for a Continuous servo
+   *  Set the servo pulse. Can be invoked directly for a Continuous servo
    *  @param pulseToSet pulse in micro-seconds
    */
   public void write(int pulseToSet) {

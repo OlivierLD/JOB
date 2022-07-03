@@ -20,14 +20,14 @@ public class SPI {
     MODE2(2), // CPOL=1, CPHA=0
     MODE3(3); // CPOL=1, CPHA=1
 
-    private int intVal;
+    private final int intVal;
     SPIMode(int intVal) {
       this.intVal = intVal;
     }
     public int intVal() {
       return this.intVal;
     }
-  };
+  }
 
 	/**
 	 *  most significant bit first, most common
@@ -42,7 +42,7 @@ public class SPI {
     LITTLE_ENDIAN(MSB_FIRST),
     BIG_ENDIAN(LSB_FIRST);
 
-	  private int order;
+    private final int order;
     Endianness(int order) { this.order = order; }
     public int order() { return this.order; }
   }
@@ -119,7 +119,7 @@ public class SPI {
       }
     }
     // listFiles() does not guarantee ordering
-    String[] tmp = devs.toArray(new String[devs.size()]);
+    String[] tmp = devs.toArray(new String[0]);
     Arrays.sort(tmp);
     return tmp;
   }

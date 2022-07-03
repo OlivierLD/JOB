@@ -142,7 +142,7 @@ public class LED {
       }
     }
     // listFiles() does not guarantee ordering
-    String[] tmp = devs.toArray(new String[devs.size()]);
+    String[] tmp = devs.toArray(new String[0]);
     Arrays.sort(tmp);
     return tmp;
   }

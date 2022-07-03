@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Suitable for ADS1015 and ADS1115 ADCs.
  */
 public class ADS1x15 extends I2C {
-	private static boolean verbose = ("true".equals(System.getProperty("ads1x.verbose", "false")));
+	private final static boolean VERBOSE = ("true".equals(System.getProperty("ads1x.verbose", "false")));
 
 	// IC Identifiers
 	public enum ICType {
@@ -29,7 +29,7 @@ public class ADS1x15 extends I2C {
 
 	public final static String DEFAULT_BUS = "i2c-1";
 
-	private int address;
+	private final int address;
 	private final static int ADS1x15_ADDRESS = 0x48;
 	// Pointer Register
 	public final static int ADS1015_REG_POINTER_MASK = 0x03;
@@ -138,7 +138,7 @@ public class ADS1x15 extends I2C {
 				}
 			}
 			if (!found) {
-				if (verbose) {
+				if (VERBOSE) {
 					System.out.println("Value [" + val + "] not found, defaulting to [" + def + "]");
 				}
 				// Check if default value is in the list
@@ -193,7 +193,7 @@ public class ADS1x15 extends I2C {
 				}
 			}
 			if (!found) {
-				if (verbose) {
+				if (VERBOSE) {
 					System.out.println("Value [" + val + "] not found, defaulting to [" + def + "]");
 				}
 				// Check if default value is in the list
@@ -248,7 +248,7 @@ public class ADS1x15 extends I2C {
 				}
 			}
 			if (!found) {
-				if (verbose) {
+				if (VERBOSE) {
 					System.out.println("Value [" + val + "] not found, defaulting to [" + def + "]");
 				}
 				// Check if default value is in the list
@@ -268,7 +268,7 @@ public class ADS1x15 extends I2C {
 		}
 	}
 
-	private ICType adcType;
+	private final ICType adcType;
 	private int pga;
 
 	public ADS1x15() {
@@ -289,12 +289,12 @@ public class ADS1x15 extends I2C {
 		this.adcType = icType;
 
 		String[] deviceList = I2C.list();
-		if (verbose) {
-			System.out.println(String.format("Device list: %s",
-					Arrays.asList(deviceList)
-							.stream()
-							.collect(Collectors.joining(", "))));
-			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
+		if (VERBOSE) {
+//			System.out.printf("Device list: %s\n",
+//					Arrays.stream(deviceList)
+//							.collect(Collectors.joining(", ")));
+			System.out.printf("Device list: %s\n", String.join(", ", deviceList));
+			System.out.printf("Bus %s, address 0x%02X\n", bus, address);
 		}
 
 		// Set pga value, so that getLastConversionResult() can use it,
@@ -428,7 +428,7 @@ public class ADS1x15 extends I2C {
 		} else if ((chP == Channels.CHANNEL_1) & (chN == Channels.CHANNEL_3)) { // 1 3
 			config |= ADS1015_REG_CONFIG_MUX_DIFF_1_3;
 		} else {
-			if (verbose) {
+			if (VERBOSE) {
 				System.out.printf("ADS1x15: Invalid channels specified: %d, %d\n", chP, chN);
 				return -1;
 			}
@@ -640,8 +640,8 @@ public class ADS1x15 extends I2C {
 		} else if ((chP == Channels.CHANNEL_1) & (chN == Channels.CHANNEL_3)) {
 			config |= ADS1015_REG_CONFIG_MUX_DIFF_1_3;
 		} else {
-			if (verbose) {
-				System.out.printf("ADS1x15: Invalid channels specified: %d, %d", chP, chN);
+			if (VERBOSE) {
+				System.out.printf("ADS1x15: Invalid channels specified: %d, %d\n", chP, chN);
 			}
 			return -1;
 		}
@@ -873,8 +873,8 @@ public class ADS1x15 extends I2C {
 		} else if ((chP == Channels.CHANNEL_1) & (chN == Channels.CHANNEL_3)) {
 			config |= ADS1015_REG_CONFIG_MUX_DIFF_1_3;
 		} else {
-			if (verbose) {
-				System.out.printf("ADS1x15: Invalid channels specified: %d, %d", chP, chN);
+			if (VERBOSE) {
+				System.out.printf("ADS1x15: Invalid channels specified: %d, %d\n", chP, chN);
 			}
 			return;
 		}

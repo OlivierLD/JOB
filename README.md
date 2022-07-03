@@ -8,7 +8,7 @@ It is supposed to be as light as possible, and as close the the registers as pos
 
 This should make the translations from `Python` or `C` code into `Java` a bit easier.
 
-Based on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
+Based at least on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
 > _Note_: GPIO Pin numbers are the ones available [here](https://www.raspberrypi.org/documentation/usage/gpio/README.md), or below, in the BCM columns.
 ```
@@ -101,12 +101,12 @@ Finally, do the `gradle` build from the project root:
 ```
 This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar contains all the required dependencies.
 
-A script summarizes all those operations, just run
+A script _**summarizes all**_ those operations, just run
 ```
  $> ./jni.sh
 ```
 
-## To run it
+## To run it, put it to work
 This is a work in progress... The samples can be run from a single script named `samplemenu.sh`, see how the `java.library.path` variable is set.
 This is the one used to refer to the location of `libjavahard-io.so`.
 
@@ -214,10 +214,10 @@ $> groovysh -Djava.library.path=$LIB_PATH
 Groovy Shell (2.5.0, JVM: 1.8.0_144)
 Type ':help' or ':h' for help.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-groovy:000> import jhard.devices.BME280
-===> jhard.devices.BME280
+groovy:000> import job.devices.BME280
+===> job.devices.BME280
 sensor = new BME280()
-===> jhard.devices.BME280@1c80e49b
+===> job.devices.BME280@1c80e49b
 groovy:000> sensor.readTemperature()
 ===> 21.33
 groovy:000>
@@ -245,4 +245,7 @@ A lot!
 - LoRa
 - ...etc
 
+
+- Put it in a Maven repo
+- 
 ---

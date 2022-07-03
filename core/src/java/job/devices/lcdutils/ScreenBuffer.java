@@ -3,6 +3,8 @@ package job.devices.lcdutils;
 import job.devices.lcdutils.img.ImgInterface;
 
 import java.awt.Polygon;
+import java.util.stream.IntStream;
+
 import utils.StringUtils;
 
 public class ScreenBuffer {
@@ -24,13 +26,13 @@ public class ScreenBuffer {
 	}
 
 	private int w = 128, // Actual values, defaulted to SSD1306
-							h = 32;
+				h = 32;
 	// This is the buffer that will be pushed on the device
-	private byte[] screenBuffer = null;
+	private final byte[] screenBuffer;
 
 	// This represents the led array (128x32). 'X' means on, ' ' means off.
 	// The dumpScreen method displays this one.
-	private char[][] screenMatrix = null;
+	private final char[][] screenMatrix;
 
 	public ScreenBuffer() {
 		this(WIDTH, HEIGHT);
@@ -57,9 +59,7 @@ public class ScreenBuffer {
 				screenMatrix[i][j] = (mode == Mode.WHITE_ON_BLACK ? ' ' : 'X');
 			}
 		}
-		for (int i = 0; i < this.screenBuffer.length; i++) {
-			this.screenBuffer[i] = (mode == Mode.WHITE_ON_BLACK ? (byte)0 : (byte)1);
-		}
+		IntStream.range(0, this.screenBuffer.length).forEach(i -> this.screenBuffer[i] = (mode == Mode.WHITE_ON_BLACK ? (byte) 0 : (byte) 1));
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class ScreenBuffer {
 	public void text(String txt, int xPx, int yPx, int fontFact, Mode mode, boolean rotate) {
 		int xProgress = xPx;
 		for (int i = 0; i < txt.length(); i++) {         // For each character of the string to display
-			String c = new String(new char[]{txt.charAt(i)});
+			String c = String.valueOf(txt.charAt(i));
 			if (CharacterMatrixes.characters.containsKey(c)) {
 				String[] matrix = CharacterMatrixes.characters.get(c); // Horizontal pixel lines, top to bottom.
 				// Assume all pixel lines have the same length
@@ -340,7 +340,7 @@ public class ScreenBuffer {
 	public int strlen(String s) {
 		int len = 0;
 		for (int i = 0; i < s.length(); i++) { // For each character of the string to display
-			String c = new String(new char[]{s.charAt(i)});
+			String c = String.valueOf(s.charAt(i));
 			if (CharacterMatrixes.characters.containsKey(c)) {
 				String[] matrix = CharacterMatrixes.characters.get(c);
 				len += matrix[0].length();

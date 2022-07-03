@@ -26,8 +26,8 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-  compile project(':common-utils')
-  compile project(':core')
+  implementation project(':common-utils')
+  implementation project(':core')
 }
 
 repositories {

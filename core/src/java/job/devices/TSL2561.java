@@ -59,12 +59,12 @@ public class TSL2561 extends I2C {
 	public final static double TSL2561_LUX_B8C = 0.000;   // (0x0000)  // 0.000 * 2^LUX_SCALE
 	public final static double TSL2561_LUX_M8C = 0.000;   // (0x0000)  // 0.000 * 2^LUX_SCALE
 
-	private boolean verbose = "true".equals(System.getProperty("tls2561.verbose"));
+	private final static boolean VERBOSE = "true".equals(System.getProperty("tls2561.verbose"));
 	private int gain = TSL2561_GAIN_1X;
 	private int integration = TSL2561_INTEGRATIONTIME_402MS;
-	private int pause = 800;
+	private final int pause = 800;
 
-	private int address;
+	private final int address;
 
 	public TSL2561() {
 		this(DEFAULT_BUS, TSL2561_ADDRESS);
@@ -83,13 +83,13 @@ public class TSL2561 extends I2C {
 		this.address = address;
 
 		String[] deviceList = I2C.list();
-		if (verbose) {
-			StringBuffer sb = new StringBuffer();
+		if (VERBOSE) {
+			StringBuilder sb = new StringBuilder();
 			for (String device : deviceList) {
 				sb.append((sb.length() > 0 ? ", " : "") + device);
 			}
-			System.out.println(String.format("Device list: %s", sb.toString()));
-			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
+			System.out.printf("Device list: %s\n", sb.toString());
+			System.out.printf("Bus %s, address 0x%02X\n", bus, address);
 		}
 		turnOn();
 	}
@@ -116,7 +116,7 @@ public class TSL2561 extends I2C {
 		}
 		if (gain != this.gain || integration != this.integration) {
 			command(TSL2561_COMMAND_BIT | TSL2561_REGISTER_TIMING, (byte) (gain | integration));
-			if (verbose) {
+			if (VERBOSE) {
 				System.out.println("Setting low gain");
 			}
 			this.gain = gain;
@@ -158,7 +158,7 @@ public class TSL2561 extends I2C {
 		}
 		double ratio = (ir / (float) ambient);
 
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("IR Result:" + ir);
 			System.out.println("Ambient Result:" + ambient);
 		}
@@ -192,8 +192,8 @@ public class TSL2561 extends I2C {
 	 */
 	/**
 	 * Read an Unsigned byte from register.
-	 * @param register
-	 * @return
+	 * @param register register
+	 * @return unsigned 8-bit int
 	 */
 	private int readU8(int register) {
 		super.beginTransmission(this.address);
@@ -207,7 +207,7 @@ public class TSL2561 extends I2C {
 		int lo = this.readU8(register);
 		int hi = this.readU8(register + 1);
 		int result = (hi << 8) + lo; // Big Endian
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("(U16) I2C: Device " + toHex(TSL2561_ADDRESS) + " returned " + toHex(result) + " from reg " + toHex(register));
 		}
 		return result;

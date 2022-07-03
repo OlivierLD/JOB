@@ -4,9 +4,6 @@ import job.io.I2C;
 import utils.MiscUtils;
 import utils.StringUtils;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import static utils.MiscUtils.delay;
 
 /**
@@ -87,10 +84,10 @@ public class BME280 extends I2C {
 	public final static int DEFAULT_ADDR = BME280_I2CADDR;
 	public final static String DEFAULT_BUS = "i2c-1";
 
-	private int address;
-	private int mode = BME280_OSAMPLE_8;
+	private final int address;
+	private final int mode = BME280_OSAMPLE_8;
 
-	private static boolean verbose = "true".equals(System.getProperty("bme280.verbose", "false"));
+	private final static boolean VERBOSE = "true".equals(System.getProperty("bme280.verbose", "false"));
 
 	public BME280() {
 		this(DEFAULT_BUS, DEFAULT_ADDR);
@@ -106,12 +103,13 @@ public class BME280 extends I2C {
 		this.address = address;
 
 		String[] deviceList = I2C.list();
-		if (verbose) {
-			System.out.println(String.format("Device list: %s",
-				Arrays.asList(deviceList)
-						.stream()
-						.collect(Collectors.joining(", "))));
-			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
+		if (VERBOSE) {
+//			System.out.printf("Device list: %s\n",
+//				Arrays.stream(deviceList)
+//						.collect(Collectors.joining(", ")));
+			System.out.printf("Device list: %s\n",
+					String.join(", ", deviceList));
+			System.out.printf("Bus %s, address 0x%02X\n", bus, address);
 		}
 
 		// Soft reset
@@ -121,7 +119,7 @@ public class BME280 extends I2C {
 
 		try {
 			this.readCalibrationData();
-			if (verbose) {
+			if (VERBOSE) {
 				this.showCalibrationData();
 			}
 		} catch (Exception ex) {
@@ -132,7 +130,7 @@ public class BME280 extends I2C {
 		tFine = 0.0f;
 	}
 
-	public void readCalibrationData() throws Exception {
+	public void readCalibrationData() /*throws Exception*/ {
 		// Reads the calibration data from the IC
 		dig_T1 = readU16LE(BME280_REGISTER_DIG_T1);
 		dig_T2 = readS16LE(BME280_REGISTER_DIG_T2);
@@ -206,16 +204,16 @@ public class BME280 extends I2C {
 		super.endTransmission();
 	}
 
-	private int readRawTemp() throws Exception {
+	private int readRawTemp() /*throws Exception*/ {
 		// Reads the raw (uncompensated) temperature from the sensor
 		int meas = mode;
-		if (verbose) {
-			System.out.println(String.format("readRawTemp: 1 - meas=%d", meas));
+		if (VERBOSE) {
+			System.out.printf("readRawTemp: 1 - meas=%d\n", meas);
 		}
 		this.command(BME280_REGISTER_CONTROL_HUM, (byte) meas); // HUM ?
 		meas = mode << 5 | mode << 2 | 1;
-		if (verbose) {
-			System.out.println(String.format("readRawTemp: 2 - meas=%d", meas));
+		if (VERBOSE) {
+			System.out.printf("readRawTemp: 2 - meas=%d\n", meas);
 		}
 		this.command(BME280_REGISTER_CONTROL, (byte) meas);
 
@@ -227,53 +225,53 @@ public class BME280 extends I2C {
 		int lsb = this.readU8(BME280_REGISTER_TEMP_DATA + 1);
 		int xlsb = this.readU8(BME280_REGISTER_TEMP_DATA + 2);
 		int raw = ((msb << 16) | (lsb << 8) | xlsb) >> 4;
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("DBG: Raw Temp: " + (raw & 0xFFFF) + ", " + raw + String.format(", msb: 0x%04X lsb: 0x%04X xlsb: 0x%04X", msb, lsb, xlsb));
 		}
 		return raw;
 	}
 
-	private int readRawPressure() throws Exception {
+	private int readRawPressure() /*throws Exception*/ {
 		// Reads the raw (uncompensated) pressure level from the sensor
 		int msb = this.readU8(BME280_REGISTER_PRESSURE_DATA);
 		int lsb = this.readU8(BME280_REGISTER_PRESSURE_DATA + 1);
 		int xlsb = this.readU8(BME280_REGISTER_PRESSURE_DATA + 2);
 		int raw = ((msb << 16) | (lsb << 8) | xlsb) >> 4;
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("DBG: Raw Press: " + (raw & 0xFFFF) + ", " + raw + String.format(", msb: 0x%04X lsb: 0x%04X xlsb: 0x%04X", msb, lsb, xlsb));
 		}
 		return raw;
 	}
 
-	private int readRawHumidity() throws Exception {
+	private int readRawHumidity() /*throws Exception*/ {
 		int msb = this.readU8(BME280_REGISTER_HUMIDITY_DATA);
 		int lsb = this.readU8(BME280_REGISTER_HUMIDITY_DATA + 1);
 		int raw = (msb << 8) | lsb;
 		return raw;
 	}
 
-	protected float readTemperature() throws Exception {
+	protected float readTemperature() /*throws Exception*/ {
 		// Gets the compensated temperature in degrees celcius
 		float UT = readRawTemp();
-		float var1 = 0;
-		float var2 = 0;
-		float temp = 0.0f;
+		float var1;
+		float var2;
+		float temp;
 
 		// Read raw temp before aligning it with the calibration values
 		var1 = (UT / 16384.0f - dig_T1 / 1024.0f) * (float) dig_T2;
 		var2 = ((UT / 131072.0f - dig_T1 / 8192.0f) * (UT / 131072.0f - dig_T1 / 8192.0f)) * (float) dig_T3;
 		tFine = (int) (var1 + var2);
 		temp = (var1 + var2) / 5120.0f;
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("DBG: Calibrated temperature = " + temp + " C");
 		}
 		return temp;
 	}
 
-	protected float readPressure() throws Exception {
+	protected float readPressure() /*throws Exception*/ {
 		// Gets the compensated pressure in pascal
 		int adc = readRawPressure();
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("ADC:" + adc + ", tFine:" + tFine);
 		}
 		float var1 = (tFine / 2.0f) - 64000.0f;
@@ -289,13 +287,13 @@ public class BME280 extends I2C {
 		var1 = dig_P9 * p * p / 2147483648.0f;
 		var2 = p * dig_P8 / 32768.0f;
 		p = p + (var1 + var2 + dig_P7) / 16.0f;
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("DBG: Pressure = " + p + " Pa");
 		}
 		return p;
 	}
 
-	protected float readHumidity() throws Exception {
+	protected float readHumidity() /*throws Exception*/ {
 		int adc = readRawHumidity();
 		float h = tFine - 76800.0f;
 		h = (adc - (dig_H4 * 64.0f + dig_H5 / 16384.8f * h)) *
@@ -305,7 +303,7 @@ public class BME280 extends I2C {
 			h = 100;
 		else if (h < 0)
 			h = 0;
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("DBG: Humidity = " + h);
 		}
 		return h;
@@ -317,10 +315,10 @@ public class BME280 extends I2C {
 		this.standardSeaLevelPressure = standardSeaLevelPressure;
 	}
 
-	public double readAltitude() throws Exception {
+	public double readAltitude() /*throws Exception*/ {
 		return readAltitude(null);
 	}
-	public double readAltitude(Double press) throws Exception {
+	public double readAltitude(Double press) /*throws Exception*/ {
 		// Calculates the altitude in meters
 		double altitude = 0.0;
 		double pressure;
@@ -330,7 +328,7 @@ public class BME280 extends I2C {
 			pressure = press;
 		}
 		altitude = 44330.0 * (1.0 - Math.pow(pressure / standardSeaLevelPressure, 0.1903));
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("DBG: Altitude = " + altitude);
 		}
 		return altitude;
@@ -338,8 +336,8 @@ public class BME280 extends I2C {
 
 	/**
 	 * More accurate than the above.
-	 * @param pressure
-	 * @param temperature
+	 * @param pressure pressure
+	 * @param temperature temperature
 	 * @return altitude, based on PRMSL standardSeaLevelPressure
 	 */
 	public double readAltitude(double pressure, double temperature) {
@@ -454,8 +452,8 @@ public class BME280 extends I2C {
 
 	/**
 	 * read unsigned byte from register
-	 * @param register
-	 * @return
+	 * @param register register
+	 * @return Unsigned Int 8-bit
 	 */
 	private int readU8(int register) {
 		super.beginTransmission(this.address);
@@ -467,8 +465,8 @@ public class BME280 extends I2C {
 
 	/**
 	 * read signed byte from register
-	 * @param register
-	 * @return
+	 * @param register register
+	 * @return Signed Int 8-bit
 	 */
 	private int readS8(int register) {
 		int val = this.readU8(register);

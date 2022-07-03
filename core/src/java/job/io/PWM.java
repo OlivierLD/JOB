@@ -134,7 +134,7 @@ public class PWM {
       }
     }
     // listFiles() does not guarantee ordering
-    String[] tmp = devs.toArray(new String[devs.size()]);
+    String[] tmp = devs.toArray(new String[0]);
     Arrays.sort(tmp);
     return tmp;
   }
@@ -151,13 +151,13 @@ public class PWM {
     // set period
     String fName = String.format("/sys/class/pwm/%s/pwm%d/period", this.chip, this.channel);
     // convert to nanoseconds
-    int ret = JOBNativeInterface.writeFile(fName, String.format("%d", (int)(1_000_000_000 / period)));
+    int ret = JOBNativeInterface.writeFile(fName, String.format("%d", (1_000_000_000 / period)));
     if (ret < 0) {
       throw new RuntimeException(fName + ": " + JOBNativeInterface.getError(ret));
     }
 
     // set duty cycle
-    fName = fName = String.format("/sys/class/pwm/%s/pwm%d/duty_cycle", this.chip, this.channel);
+    fName = String.format("/sys/class/pwm/%s/pwm%d/duty_cycle", this.chip, this.channel);
     if (duty < 0.0 || 1.0 < duty) {
       System.err.println("Duty cycle must be between 0.0 and 1.0.");
       throw new IllegalArgumentException("Illegal argument");

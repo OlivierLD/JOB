@@ -44,9 +44,9 @@ import java.util.Map;
  */
 public class STH10 {
 
-	private boolean DEBUG = "true".equals(System.getProperty("sth10.verbose"));
+	private final boolean DEBUG = "true".equals(System.getProperty("sth10.verbose"));
 
-	private static Map<String, Byte> COMMANDS = new HashMap<>();
+	private final static Map<String, Byte> COMMANDS = new HashMap<>();
 
 	// STH10 commands
 	private final static String TEMPERATURE_CMD = "Temperature";
@@ -82,8 +82,8 @@ public class STH10 {
 			T1_S0 = 0.01,
 			T2_SO = 0.00008;
 
-	private int dataPin, clockPin;
-	private boolean simulating = JOBNativeInterface.isSimulated();
+	private final int dataPin, clockPin;
+	private final boolean simulating = JOBNativeInterface.isSimulated();
 
 	public STH10() {
 		this(DEFAULT_DATA_PIN, DEFAULT_CLOCK_PIN);
@@ -95,18 +95,18 @@ public class STH10 {
 		this.clockPin = clock;
 
 		if ("true".equals(System.getProperty("gpio.verbose"))) {
-			System.out.println(String.format("GPIO> Opening GPIO (%s)", this.getClass().getName()));
+			System.out.printf("GPIO> Opening GPIO (%s)\n", this.getClass().getName());
 		}
 
 		if (simulating) {
 			if ("true".equals(System.getProperty("gpio.verbose"))) {
-				System.out.println(String.format("GPIO> Will simulate (for %s)", this.getClass().getName()));
+				System.out.printf("GPIO> Will simulate (for %s)\n", this.getClass().getName());
 			}
 		} else {
 			GPIO.pinMode(this.dataPin, GPIO.OUTPUT);
 			GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 			if (DEBUG) {
-				System.out.println(String.format(">> Constructor >>\telapsed:\t%d\tlastOp was\t%s", elapsed("STH10 - pinMode"), previousOp));
+				System.out.printf(">> Constructor >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("STH10 - pinMode"), previousOp);
 			}
 		}
 		this.init();
@@ -114,12 +114,12 @@ public class STH10 {
 
 	private void init() {
 		if (DEBUG) {
-			System.out.println(String.format(">> Init >>\telapsed:\t%d\tlastOp was\t%s", elapsed("init - 1"), previousOp));
+			System.out.printf(">> Init >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("init - 1"), previousOp);
 		}
 		this.resetConnection();
 		byte mask = 0x0;
 		if (DEBUG) {
-			System.out.println(String.format(">> Init, writeStatusRegister, with mask %s >>\telapsed:\t%d\tlastOp was\t%s", StringUtils.lpad(Integer.toBinaryString(mask), 8, "0"), elapsed("init - 2"), previousOp));
+			System.out.printf(">> Init, writeStatusRegister, with mask %s >>\telapsed:\t%d\tlastOp was\t%s\n", StringUtils.lpad(Integer.toBinaryString(mask), 8, "0"), elapsed("init - 2"), previousOp);
 		}
 		this.writeStatusRegister(mask);
 		if (DEBUG) {
@@ -134,7 +134,7 @@ public class STH10 {
 		if (!simulating) {
 			value = this.readMeasurement();
 			if (DEBUG) {
-				System.out.println(String.format(">> Read temperature raw value %d, 0x%s\telapsed:\t%d\tlastOp was\t%s", value, StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readTemperature - 1"), previousOp));
+				System.out.printf(">> Read temperature raw value %d, 0x%s\telapsed:\t%d\tlastOp was\t%s\n", value, StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readTemperature - 1"), previousOp);
 			}
 			return (value * D2_SO_C) + (D1_VDD_C); // Celcius
 		} else {
@@ -159,7 +159,7 @@ public class STH10 {
 		if (!simulating) {
 			value = this.readMeasurement();
 			if (DEBUG) {
-				System.out.println(String.format(">> Read humidity raw value %d, 0x%s\telapsed:\t%d\tlastOp was\t%s", value, StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readHumidity - 1"), previousOp));
+				System.out.printf(">> Read humidity raw value %d, 0x%s\telapsed:\t%d\tlastOp was\t%s\n", value, StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readHumidity - 1"), previousOp);
 			}
 			double linearHumidity = C1_SO + (C2_SO * value) + (C3_SO * Math.pow(value, 2));
 			double humidity = ((t - 25) * (T1_S0 + (T2_SO * value)) + linearHumidity); // %
@@ -179,14 +179,14 @@ public class STH10 {
 		byte msb = this.getByte();
 		value = (msb << 8);
 		if (DEBUG) {
-			System.out.println(String.format(">>> After MSB: %s\telapsed:\t%d\tlastOp was\t%s", StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readMeasurement - 1"), previousOp));
+			System.out.printf(">>> After MSB: %s\telapsed:\t%d\tlastOp was\t%s\n", StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readMeasurement - 1"), previousOp);
 		}
 		this.sendAck();
 		// LSB
 		byte lsb = this.getByte();
 		value |= (lsb & 0xFF);
 		if (DEBUG) {
-			System.out.println(String.format(">>> After LSB: %s\telapsed:\t%d\tlastOp was\t%s", StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readMeasurement - 2"), previousOp));
+			System.out.printf(">>> After LSB: %s\telapsed:\t%d\tlastOp was\t%s\n", StringUtils.lpad(Integer.toBinaryString(value), 16, "0"), elapsed("readMeasurement - 2"), previousOp);
 		}
 		this.endTx();
 		return (value);
@@ -196,7 +196,7 @@ public class STH10 {
 		GPIO.pinMode(this.dataPin, GPIO.OUTPUT);
 		GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 		if (DEBUG) {
-			System.out.println(String.format(">> resetConnection >>\telapsed:\t%d\tlastOp was\t%s", elapsed("resetConnection - pinMode"), previousOp));
+			System.out.printf(">> resetConnection >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("resetConnection - pinMode"), previousOp);
 		}
 
 		this.flipPin(this.dataPin, GPIO.HIGH);
@@ -219,37 +219,37 @@ public class STH10 {
 	 */
 	private void flipPin(int pin, int state) {
 		if (DEBUG) {
-			System.out.println(String.format(">> flipPin %d to %s\telapsed:\t%d\tlastOp was\t%s", pin, (state == GPIO.HIGH ? "HIGH" : "LOW"), elapsed("flipPin - 1"), previousOp));
+			System.out.printf(">> flipPin %d to %s\telapsed:\t%d\tlastOp was\t%s\n", pin, (state == GPIO.HIGH ? "HIGH" : "LOW"), elapsed("flipPin - 1"), previousOp);
 		}
 		if (!simulating) {
 			GPIO.digitalWrite(pin, state);
 			if (pin == this.clockPin) {
 				if (DEBUG) {
-					System.out.println(String.format("   >> Flipping CLK, delaying\telapsed:\t%d\tlastOp was\t%s", elapsed("flipPin - 2"), previousOp));
+					System.out.printf("   >> Flipping CLK, delaying\telapsed:\t%d\tlastOp was\t%s\n", elapsed("flipPin - 2"), previousOp);
 				}
 				MiscUtils.delay(0L, 100); // 0.1 * 1E-6 sec. 100 * 1E-9
 			}
 		}
 		if (DEBUG) {
-			System.out.println(String.format("-- pin is now %s\telapsed:\t%d\tlastOp was\t%s", (state == GPIO.HIGH ? "HIGH" : "LOW"), elapsed("flipPin - 3"), previousOp));
+			System.out.printf("-- pin is now %s\telapsed:\t%d\tlastOp was\t%s\n", (state == GPIO.HIGH ? "HIGH" : "LOW"), elapsed("flipPin - 3"), previousOp);
 		}
 	}
 
 	private void sendByte(byte data) {
 		if (DEBUG) {
-			System.out.println(String.format(">> sendByte %d [%s]\telapsed:\t%d\tlastOp was\t%s", data, StringUtils.lpad(Integer.toBinaryString(data), 8,"0"), elapsed("sendByte - 1"), previousOp));
+			System.out.printf(">> sendByte %d [%s]\telapsed:\t%d\tlastOp was\t%s\n", data, StringUtils.lpad(Integer.toBinaryString(data), 8,"0"), elapsed("sendByte - 1"), previousOp);
 		}
 		if (!simulating) {
 			GPIO.pinMode(this.dataPin, GPIO.OUTPUT);
 			GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 			if (DEBUG) {
-				System.out.println(String.format(">> sendByte >>\telapsed:\t%d\tlastOp was\t%s", elapsed("sendByte - pinMode"), previousOp));
+				System.out.printf(">> sendByte >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("sendByte - pinMode"), previousOp);
 			}
 		}
 		for (int i=0; i<8; i++) {
 			int bit = data & (1 << (7 - i));
 			if (DEBUG) {
-				System.out.println(String.format("  -- Bit #%d, %d, %s\telapsed:\t%d\tlastOp was\t%s", (i + 1), bit, (bit == 0 ? "LOW" : "HIGH"), elapsed("sendByte - 2"), previousOp));
+				System.out.printf("  -- Bit #%d, %d, %s\telapsed:\t%d\tlastOp was\t%s\n", (i + 1), bit, (bit == 0 ? "LOW" : "HIGH"), elapsed("sendByte - 2"), previousOp);
 			}
 			this.flipPin(this.dataPin, (bit == 0 ? GPIO.LOW : GPIO.HIGH));
 
@@ -257,13 +257,13 @@ public class STH10 {
 			this.flipPin(this.clockPin, GPIO.LOW);
 		}
 		if (DEBUG) {
-			System.out.println(String.format("<< sendByte << \telapsed:\t%d\tlastOp was\t%s", elapsed("sendByte - 3"), previousOp));
+			System.out.printf("<< sendByte << \telapsed:\t%d\tlastOp was\t%s\n", elapsed("sendByte - 3"), previousOp);
 		}
 	}
 
 	private byte getByte() {
 		if (DEBUG) {
-			System.out.println(String.format(">> getByte >>\telapsed:\t%d\tlastOp was\t%s", elapsed("getByte - 1"), previousOp));
+			System.out.printf(">> getByte >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("getByte - 1"), previousOp);
 		}
 		byte b = 0x0;
 
@@ -271,7 +271,7 @@ public class STH10 {
 			GPIO.pinMode(this.dataPin, GPIO.INPUT);
 			GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 			if (DEBUG) {
-				System.out.println(String.format(">> getByte >>\telapsed:\t%d\tlastOp was\t%s", elapsed("getByte - pinMode"), previousOp));
+				System.out.printf(">> getByte >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("getByte - pinMode"), previousOp);
 			}
 
 			for (int i = 0; i < 8; i++) {
@@ -281,26 +281,26 @@ public class STH10 {
 					b |= (1 << (7 - i));
 				}
 				if (DEBUG) {
-					System.out.println(String.format(" -- getting byte %d, byte is %s\telapsed:\t%d\tlastOp was\t%s", i, StringUtils.lpad(Integer.toBinaryString(b & 0x00FF), 8, "0"), elapsed("getByte - 2"), previousOp));
+					System.out.printf(" -- getting byte %d, byte is %s\telapsed:\t%d\tlastOp was\t%s\n", i, StringUtils.lpad(Integer.toBinaryString(b & 0x00FF), 8, "0"), elapsed("getByte - 2"), previousOp);
 				}
 				this.flipPin(this.clockPin, GPIO.LOW);
 			}
 		}
 		if (DEBUG) {
-			System.out.println(String.format("<< getByte %d 0b%s <<\telapsed:\t%d\tlastOp was\t%s", (b & 0x00FF), StringUtils.lpad(Integer.toBinaryString(b & 0x00FF), 8, "0"), elapsed("getByte - 3"), previousOp));
+			System.out.printf("<< getByte %d 0b%s <<\telapsed:\t%d\tlastOp was\t%s\n", (b & 0x00FF), StringUtils.lpad(Integer.toBinaryString(b & 0x00FF), 8, "0"), elapsed("getByte - 3"), previousOp);
 		}
 		return (byte)(b & 0x00FF);
 	}
 
 	private void startTx() {
 		if (DEBUG) {
-			System.out.println(String.format(">> startTx >>\telapsed:\t%d\tlastOp was\t%s", elapsed("startTx - 1"), previousOp));
+			System.out.printf(">> startTx >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("startTx - 1"), previousOp);
 		}
 		if (!simulating) {
 			GPIO.pinMode(this.dataPin, GPIO.OUTPUT);
 			GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 			if (DEBUG) {
-				System.out.println(String.format(">> startTx >>\telapsed:\t%d\tlastOp was\t%s", elapsed("startTx - pinMode"), previousOp));
+				System.out.printf(">> startTx >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("startTx - pinMode"), previousOp);
 			}
 
 			this.flipPin(this.dataPin, GPIO.HIGH);
@@ -315,19 +315,19 @@ public class STH10 {
 			this.flipPin(this.clockPin, GPIO.LOW);
 		}
 		if (DEBUG) {
-			System.out.println(String.format("<< startTx <<\telapsed:\t%d\tlastOp was\t%s", elapsed("startTx - 2"), previousOp));
+			System.out.printf("<< startTx <<\telapsed:\t%d\tlastOp was\t%s\n", elapsed("startTx - 2"), previousOp);
 		}
 	}
 
 	private void endTx() {
 		if (DEBUG) {
-			System.out.println(String.format(">> endTx >>\telapsed:\t%d\tlastOp was\t%s", elapsed("endTx - 1"), previousOp));
+			System.out.printf(">> endTx >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("endTx - 1"), previousOp);
 		}
 		if (!simulating) {
 			GPIO.pinMode(this.dataPin, GPIO.OUTPUT);
 			GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 			if (DEBUG) {
-				System.out.println(String.format(">> endTx >>\telapsed:\t%d\tlastOp was\t%s", elapsed("endTx - pinMode"), previousOp));
+				System.out.printf(">> endTx >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("endTx - pinMode"), previousOp);
 			}
 
 			this.flipPin(this.dataPin, GPIO.HIGH);
@@ -336,27 +336,27 @@ public class STH10 {
 			this.flipPin(this.clockPin, GPIO.LOW);
 		}
 		if (DEBUG) {
-			System.out.println(String.format("<< endTx <<\telapsed:\t%d\tlastOp was\t%s", elapsed("endTx - 2"), previousOp));
+			System.out.printf("<< endTx <<\telapsed:\t%d\tlastOp was\t%s\n", elapsed("endTx - 2"), previousOp);
 		}
 	}
 
 	private void writeStatusRegister(byte mask) {
 		if (DEBUG) {
-			System.out.println(String.format(">> writeStatusRegister, mask %d >>\telapsed:\t%d\tlastOp was\t%s", mask, elapsed("writeStatusRegister - 1"), previousOp));
+			System.out.printf(">> writeStatusRegister, mask %d >>\telapsed:\t%d\tlastOp was\t%s\n", mask, elapsed("writeStatusRegister - 1"), previousOp);
 		}
 		byte cmd = COMMANDS.get(WRITE_STATUS_REGISTER_CMD);
 		if (DEBUG) {
-			System.out.println(String.format(">> writeStatusRegister, sendCommandSHT, cmd %d\telapsed:\t%d\tlastOp was\t%s", cmd, elapsed("writeStatusRegister - 2"), previousOp));
+			System.out.printf(">> writeStatusRegister, sendCommandSHT, cmd %d\telapsed:\t%d\tlastOp was\t%s\n", cmd, elapsed("writeStatusRegister - 2"), previousOp);
 		}
 		this.sendCommandSHT(cmd, false);
 		this.sendByte(mask);
 		if (DEBUG) {
-			System.out.println(String.format(">> writeStatusRegister, getAck, cmd %d\telapsed:\t%d\tlastOp was\t%s", cmd, elapsed("writeStatusRegister - 3"), previousOp));
+			System.out.printf(">> writeStatusRegister, getAck, cmd %d\telapsed:\t%d\tlastOp was\t%s\n", cmd, elapsed("writeStatusRegister - 3"), previousOp);
 		}
 		this.getAck(WRITE_STATUS_REGISTER_CMD);
 		this.statusRegister = mask;
 		if (DEBUG) {
-			System.out.println(String.format("<< writeStatusRegister, mask %d <<\telapsed:\t%d\tlastOp was\t%s", mask, elapsed("writeStatusRegister - 4"), previousOp));
+			System.out.printf("<< writeStatusRegister, mask %d <<\telapsed:\t%d\tlastOp was\t%s\n", mask, elapsed("writeStatusRegister - 4"), previousOp);
 		}
 	}
 
@@ -369,7 +369,7 @@ public class STH10 {
 	}
 	private void sendCommandSHT(byte command, boolean measurement) {
 		if (DEBUG) {
-			System.out.println(String.format(">> sendCommandSHT %d >>\telapsed:\t%d\tlastOp was\t%s", command, elapsed("sendCommandSHT - 1"), previousOp));
+			System.out.printf(">> sendCommandSHT %d >>\telapsed:\t%d\tlastOp was\t%s\n", command, elapsed("sendCommandSHT - 1"), previousOp);
 		}
 		if (!COMMANDS.containsValue(command)) {
 			throw new RuntimeException(String.format("Command 0b%8s not found.", StringUtils.lpad(Integer.toBinaryString(command), 8, "0")));
@@ -377,8 +377,7 @@ public class STH10 {
 		String commandName = COMMANDS.keySet()
 				.stream()
 				.filter(entry -> command == COMMANDS.get(entry))
-				.findFirst()
-				.get();
+				.findFirst().get();
 
 		this.startTx();
 		this.sendByte(command);
@@ -386,7 +385,7 @@ public class STH10 {
 
 		if (measurement) {
 			if (DEBUG) {
-				System.out.println(String.format(">> sendCommandSHT with measurement, %d\telapsed:\t%d\tlastOp was\t%s", command, elapsed("sendCommandSHT - 2"), previousOp));
+				System.out.printf(">> sendCommandSHT with measurement, %d\telapsed:\t%d\tlastOp was\t%s\n", command, elapsed("sendCommandSHT - 2"), previousOp);
 			}
 			int state = (!simulating ? GPIO.digitalRead(this.dataPin) : GPIO.HIGH);
 			// SHT1x is taking measurement.
@@ -396,43 +395,43 @@ public class STH10 {
 			this.waitForResult();
 		}
 		if (DEBUG) {
-			System.out.println(String.format("<< sendCommandSHT <<\telapsed:\t%d\tlastOp was\t%s", elapsed("sendCommandSHT - 3"), previousOp));
+			System.out.printf("<< sendCommandSHT <<\telapsed:\t%d\tlastOp was\t%s\n", elapsed("sendCommandSHT - 3"), previousOp);
 		}
 	}
 
 	private void getAck(String commandName) {
 		if (DEBUG) {
-			System.out.println(String.format(">> getAck, command %s >>\telapsed:\t%d\tlastOp was\t%s", commandName, elapsed("getAck - 1"), previousOp));
-			System.out.println(String.format(">> %d INPUT %d OUTPUT\telapsed:\t%d\tlastOp was\t%s", this.dataPin, this.clockPin, elapsed("getAck - 2"), previousOp));
+			System.out.printf(">> getAck, command %s >>\telapsed:\t%d\tlastOp was\t%s\n", commandName, elapsed("getAck - 1"), previousOp);
+			System.out.printf(">> %d INPUT %d OUTPUT\telapsed:\t%d\tlastOp was\t%s\n", this.dataPin, this.clockPin, elapsed("getAck - 2"), previousOp);
 		}
 		if (!simulating) {
 			GPIO.pinMode(this.dataPin, GPIO.INPUT);
 			GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 			if (DEBUG) {
-				System.out.println(String.format(">> getAck >>\telapsed:\t%d\tlastOp was\t%s", elapsed("getAck - pinMode"), previousOp));
+				System.out.printf(">> getAck >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("getAck - pinMode"), previousOp);
 			}
 
 			if (DEBUG) {
-				System.out.println(String.format(">> getAck, flipping %d to HIGH\telapsed:\t%d\tlastOp was\t%s", this.clockPin, elapsed("getAck - 3"), previousOp));
+				System.out.printf(">> getAck, flipping %d to HIGH\telapsed:\t%d\tlastOp was\t%s\n", this.clockPin, elapsed("getAck - 3"), previousOp);
 			}
 			this.flipPin(this.clockPin, GPIO.HIGH);
 			if (DEBUG) {
-				System.out.println(String.format(">> getAck, >>> getState %d\telapsed:\t%d\tlastOp was\t%s", this.clockPin, elapsed("getAck - 4"), previousOp));
+				System.out.printf(">> getAck, >>> getState %d\telapsed:\t%d\tlastOp was\t%s\n", this.clockPin, elapsed("getAck - 4"), previousOp);
 			}
 			int state = GPIO.digitalRead(this.dataPin);
 			if (DEBUG) {
-				System.out.println(String.format(">> getAck, getState %d = %s\telapsed:\t%d\tlastOp was\t%s", this.dataPin, (state == GPIO.HIGH ? "HIGH" : "LOW"), elapsed("getAck - 5"), previousOp));
+				System.out.printf(">> getAck, getState %d = %s\telapsed:\t%d\tlastOp was\t%s\n", this.dataPin, (state == GPIO.HIGH ? "HIGH" : "LOW"), elapsed("getAck - 5"), previousOp);
 			}
 			if (state == GPIO.HIGH) {
 				throw new RuntimeException(String.format("SHTx failed to properly receive ack after command [%s, 0b%8s]", commandName, StringUtils.lpad(Integer.toBinaryString(COMMANDS.get(commandName)), 8, "0")));
 			}
 			if (DEBUG) {
-				System.out.println(String.format(">> getAck, flipping %d to LOW\telapsed:\t%d\tlastOp was\t%s", this.clockPin, elapsed("getAck - 6"), previousOp));
+				System.out.printf(">> getAck, flipping %d to LOW\telapsed:\t%d\tlastOp was\t%s\n", this.clockPin, elapsed("getAck - 6"), previousOp);
 			}
 			this.flipPin(this.clockPin, GPIO.LOW);
 		}
 		if (DEBUG) {
-			System.out.println(String.format("<< getAck <<\telapsed:\t%d\tlastOp was\t%s", elapsed("getAck - 7"), previousOp));
+			System.out.printf("<< getAck <<\telapsed:\t%d\tlastOp was\t%s\n", elapsed("getAck - 7"), previousOp);
 		}
 	}
 
@@ -441,7 +440,7 @@ public class STH10 {
 			GPIO.pinMode(this.dataPin, GPIO.OUTPUT);
 			GPIO.pinMode(this.clockPin, GPIO.OUTPUT);
 			if (DEBUG) {
-				System.out.println(String.format(">> sendAck >>\telapsed:\t%d\tlastOp was\t%s", elapsed("sendAck - pinMode"), previousOp));
+				System.out.printf(">> sendAck >>\telapsed:\t%d\tlastOp was\t%s\n", elapsed("sendAck - pinMode"), previousOp);
 			}
 
 			this.flipPin(this.dataPin, GPIO.HIGH);
@@ -462,12 +461,12 @@ public class STH10 {
 				state = GPIO.digitalRead(this.dataPin);
 				if (state == GPIO.LOW) {
 					if (DEBUG) {
-						System.out.println(String.format(">> waitForResult completed iteration %d\telapsed:\t%d\tlastOp was\t%s", t, elapsed("waitForResult - 1"), previousOp));
+						System.out.printf(">> waitForResult completed iteration %d\telapsed:\t%d\tlastOp was\t%s\n", t, elapsed("waitForResult - 1"), previousOp);
 					}
 					break;
 				} else {
 					if (DEBUG) {
-						System.out.println(String.format(">> waitForResult still waiting - iteration %d\telapsed:\t%d\tlastOp was\t%s", t, elapsed("waitForResult - 2"), previousOp));
+						System.out.printf(">> waitForResult still waiting - iteration %d\telapsed:\t%d\tlastOp was\t%s\n", t, elapsed("waitForResult - 2"), previousOp);
 					}
 				}
 			}

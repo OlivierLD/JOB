@@ -111,7 +111,7 @@ public class I2C {
       return new String[]{ "i2c-1" };
     }
 
-    ArrayList<String> devs = new ArrayList<String>();
+    ArrayList<String> devs = new ArrayList<>();
     File dir = new File("/dev");
     File[] files = dir.listFiles();
     if (files != null) {
@@ -122,7 +122,7 @@ public class I2C {
       }
     }
     // listFiles() does not guarantee ordering
-    String[] tmp = devs.toArray(new String[devs.size()]);
+    String[] tmp = devs.toArray(new String[0]);
     Arrays.sort(tmp);
     return tmp;
   }

@@ -3,9 +3,6 @@ package job.devices;
 import job.io.I2C;
 import utils.MiscUtils;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 public class PCA9685 extends I2C {
 	public final static int PCA9685_ADDRESS = 0x40;
 
@@ -25,10 +22,10 @@ public class PCA9685 extends I2C {
 
 	public final static int DEFAULT_ADDR = PCA9685_ADDRESS;
 	public final static String DEFAULT_BUS = "i2c-1";
-	private int address;
+	private final int address;
 	private int freq = 60;
 
-	private static boolean verbose = "true".equals(System.getProperty("bme280.verbose", "false"));
+	private final static boolean VERBOSE = "true".equals(System.getProperty("bme280.verbose", "false"));
 
 	public PCA9685() {
 		this(DEFAULT_BUS, DEFAULT_ADDR);
@@ -44,12 +41,13 @@ public class PCA9685 extends I2C {
 		this.address = address;
 
 		String[] deviceList = I2C.list();
-		if (verbose) {
-			System.out.println(String.format("Device list: %s",
-					Arrays.asList(deviceList)
-							.stream()
-							.collect(Collectors.joining(", "))));
-			System.out.println(String.format("Bus %s, address 0x%02X", bus, address));
+		if (VERBOSE) {
+//			System.out.printf("Device list: %s\n",
+//					Arrays.stream(deviceList)
+//							.collect(Collectors.joining(", ")));
+			System.out.printf("Device list: %s\n",
+					String.join(", ", deviceList));
+			System.out.printf("Bus %s, address 0x%02X\n", bus, address);
 		}
 		// Reseting
 		this.command(MODE1, (byte) 0x00);
@@ -64,12 +62,12 @@ public class PCA9685 extends I2C {
 		preScaleVal /= 4_096.0;            // 4096: 12-bit
 		preScaleVal /= freq;
 		preScaleVal -= 1.0;
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("Setting PWM frequency to " + freq + " Hz");
 			System.out.println("Estimated pre-scale: " + preScaleVal);
 		}
 		double preScale = Math.floor(preScaleVal + 0.5);
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println("Final pre-scale: " + preScale);
 		}
 
@@ -117,7 +115,7 @@ public class PCA9685 extends I2C {
 		pulseLength /= 4_096;       // 12 bits of resolution
 		int pulse = (int) (pulseMS * 1_000);
 		pulse /= pulseLength;
-		if (verbose) {
+		if (VERBOSE) {
 			System.out.println(pulseLength + " us per bit, pulse:" + pulse);
 		}
 		this.setPWM(channel, 0, pulse);
@@ -139,8 +137,8 @@ public class PCA9685 extends I2C {
 
 	/**
 	 * read unsigned byte from register
-	 * @param register
-	 * @return
+	 * @param register register
+	 * @return Unsigned 8-bit int
 	 */
 	private byte readU8(int register) {
 		super.beginTransmission(this.address);

@@ -28,7 +28,7 @@ import static utils.MiscUtils.delay;
  */
 public class LedPanelMain
 		extends java.awt.Frame {
-	private LedPanelMain instance = this;
+	private final LedPanelMain instance = this;
 	private LEDPanel ledPanel;
 	private JPanel bottomPanel;
 	private JCheckBox gridCheckBox;
@@ -77,9 +77,7 @@ public class LedPanelMain
 		againButton = new JButton("Play again");
 		bottomPanel.add(againButton, null);
 		againButton.addActionListener(actionEvent -> {
-				Thread go = new Thread(() -> {
-						instance.doYourJob();
-					});
+				Thread go = new Thread(instance::doYourJob);
 				go.start();
 			});
 
@@ -408,7 +406,7 @@ public class LedPanelMain
 						"We're reaching the end",
 						"* The End *"
 				};
-				int len = 0;
+				int len;
 				for (int t = 0; t < 80; t++) {
 					sb.clear();
 					for (int i = 0; i < txt.length; i++) {
@@ -443,7 +441,7 @@ public class LedPanelMain
 						int x = strOffset - i,
 								y = 26 + (int) (16 * Math.sin(virtualAngle));
 //          System.out.println("Displaying " + ca[c] + " at " + x + ", " + y + ", i=" + i + ", strOffset=" + strOffset);
-						sb.text(new String(new char[]{ca[c]}), x, y);
+						sb.text(String.valueOf(ca[c]), x, y);
 					}
 					lcd.setBuffer(sb.getScreenBuffer());
 					lcd.display();
@@ -539,9 +537,8 @@ public class LedPanelMain
 		// Display available characters:
 		Map<String, String[]> characters = CharacterMatrixes.characters;
 		Set<String> keys = characters.keySet();
-		List<String> kList = new ArrayList<String>(keys.size());
-		for (String k : keys)
-			kList.add(k);
+		List<String> kList = new ArrayList<>(keys.size());
+		kList.addAll(keys);
 		// Sort here
 		Collections.sort(kList);
 		for (String k : kList)
