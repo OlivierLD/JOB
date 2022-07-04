@@ -1,8 +1,8 @@
 package examples.jobio.led;
 
 import job.io.LED;
-//import java.util.Arrays;
-//import java.util.stream.Collectors;
+
+import java.util.Arrays;
 
 public class LedCounter {
   private LED[] leds;
@@ -15,9 +15,6 @@ public class LedCounter {
 
   private void setup() {
     String[] available = LED.list();
-//    System.out.println(String.format("Available: %s",
-//      Arrays.stream(available)
-//        .collect(Collectors.joining(", "))));
     System.out.printf("Available: %s\n", String.join(", ", available));
 
     // create an object for each LED and store it in an array
@@ -42,15 +39,13 @@ public class LedCounter {
 
   public void shutdown() {
     // cleanup
-    for (int i=0; i < leds.length; i++) {
-      leds[i].close();
-    }
+    Arrays.stream(leds).forEach(LED::close);
   }
 
   public static void main(String... args) {
     LedCounter ledCounter = new LedCounter();
 
-    Runtime.getRuntime().addShutdownHook(new Thread(ledCounter::shutdown));
+    Runtime.getRuntime().addShutdownHook(new Thread(ledCounter::shutdown, "Interrupter"));
 
     for (int i=0; i<10; i++) {
       ledCounter.flip();

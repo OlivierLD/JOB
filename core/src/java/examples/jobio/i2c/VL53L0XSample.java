@@ -12,13 +12,13 @@ public class VL53L0XSample {
 			go = false;
 			vl53l0x.close();
 			MiscUtils.delay(1_000L);
-		}));
+		}, "Interrupter"));
 
 		int previous = -1;
 		while (go) {
 			int range = vl53l0x.range();
 			if (range != previous) {
-				System.out.println(String.format("Dist: %d mm", range));
+				System.out.printf("Dist: %d mm\n", range);
 			}
 			previous = range;
 		}

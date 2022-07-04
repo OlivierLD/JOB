@@ -12,11 +12,11 @@ public class TSL2561Sample {
 			go = false;
 			tsl2561.close();
 			MiscUtils.delay(1_000L);
-		}));
+		}, "Interrupter"));
 
 		while (go) {
 			double lux = tsl2561.readLux();
-			System.out.println(String.format("Light: %.02f lux", lux));
+			System.out.printf("Light: %.02f lux\n", lux);
 		}
 		System.out.println("Done.");
 	}

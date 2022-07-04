@@ -2,9 +2,6 @@ package job.devices;
 
 import job.io.I2C;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 /**
  * WIP !!!! Not working yet...
  *
@@ -345,9 +342,9 @@ public class ADS1x15 extends I2C {
 	 * The pga must be given in mV, see page 13 for the supported values.
 	 *
 	 * @param channel 0-3
-	 * @param pga
-	 * @param sps     Samples per second
-	 * @return
+	 * @param pga PGA ? TODO Get the meaning
+	 * @param sps Samples per second
+	 * @return The value
 	 */
 	public float readADCSingleEnded(Channels channel, int pga, int sps) {
 		// Disable comparator, Non-latching, Alert/Rdy active low

@@ -9,6 +9,7 @@ public class DirectPWMServo {
 
 	private static DirectPWMServo instance = null;
 	private DirectPWMServo() {
+		instance = this;
 	}
 
 	public static synchronized DirectPWMServo getInstance() {
@@ -34,7 +35,7 @@ public class DirectPWMServo {
 		try {
 			retString = stdin.readLine();
 		} catch (Exception e) {
-			System.out.println(e);
+			System.err.println(e);
 			try {
 				userInput("<Oooch/>");
 			} catch (Exception exception) {

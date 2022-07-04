@@ -52,7 +52,7 @@ public class PCA9685Sample {
 				}
 				delay(10);
 			}
-		});
+		}, "Actuator");
 
 		Thread two = new Thread(() -> {
 			int pos = servoMin;

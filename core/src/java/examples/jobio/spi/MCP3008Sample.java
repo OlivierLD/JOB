@@ -24,12 +24,9 @@ public class MCP3008Sample {
   // Main for tests
   public static void main(String... args) {
     String[] available = SPI.list();
-//    System.out.println(String.format("Available: %s",
-//      Arrays.stream(available)
-//        .collect(Collectors.joining(", "))));
     System.out.printf("Available: %s\n", String.join(", ", available));
     MCP3008 adc = new MCP3008(SPI.list()[0]);
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false));
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false, "Interrupter"));
     while (go) {
       System.out.printf("Analog value: %.04f\n", adc.getAnalog(0));
     }

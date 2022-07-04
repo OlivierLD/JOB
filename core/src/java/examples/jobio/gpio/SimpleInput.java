@@ -7,7 +7,7 @@ import job.io.GPIO;
  */
 public class SimpleInput {
 
-  private int pin = 27; // Physical pin #13
+  private final int pin = 27; // Physical pin #13
 
   public SimpleInput() {
     this.setup();
@@ -26,12 +26,10 @@ public class SimpleInput {
     }
   }
 
-  private static boolean go = true;
+  private static boolean go = true; // Global, then no need for AtomicBoolean
   public static void main(String... args) {
     SimpleInput simpleInput = new SimpleInput();
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      go = false;
-    }));
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false, "Interrupter"));
     while (go) {
       simpleInput.check(); // Constant polling...
     }
