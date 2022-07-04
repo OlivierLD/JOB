@@ -6,14 +6,14 @@
 #PATH=${JAVA_HOME}/bin:${PATH}
 mkdir build 2> /dev/null
 mkdir build/classes 2> /dev/null
-echo \>\> Compiling Java
+echo -e ">> Compiling Java"
 javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/job/io/JOBNativeInterface.java
-echo \>\> Running javah
+echo -e ">> Running javah"
 javah -jni -cp ./build/classes -o src/C/job.h job.io.JOBNativeInterface
-echo \>\> Here you should implement job.c, including job.h, and compile it
+echo -e ">> Here you should implement job.c, including job.h, and compile it"
 cd src/C
-echo \>\> Warning: Library must be named libjob-io.so and not only job-io.so
-echo \>\> Compiling C
+echo -e ">> Warning: Library must be named libjob-io.so and not only job-io.so"
+echo -e ">> Compiling C (make, for Linux)"
 make
 cd ../..
 #echo \>\> Now running \(java\) the class invoking the native lib:

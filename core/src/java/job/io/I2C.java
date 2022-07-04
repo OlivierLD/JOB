@@ -68,6 +68,7 @@ public class I2C {
     this.handle = 0;
   }
 
+  @SuppressWarnings("deprecation")
   protected void finalize() throws Throwable {
     try {
       this.close();

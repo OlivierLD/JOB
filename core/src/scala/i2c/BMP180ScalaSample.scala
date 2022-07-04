@@ -10,7 +10,7 @@ import job.devices.BMP180
  * $ scala -cp build/classes/main:build/libs/core-0.1-all.jar i2c.BMP180ScalaSample
  */
 object BMP180ScalaSample {
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     println("Hello, Scala world! Reading sensors.")
     val bmp180  = new BMP180()
     println("Device ready")

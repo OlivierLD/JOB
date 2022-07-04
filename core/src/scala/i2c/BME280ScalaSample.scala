@@ -10,7 +10,7 @@ import job.devices.BME280
  * $ scala -cp build/classes/main:build/libs/core-0.1-all.jar i2c.BME280ScalaSample
  */
 object BME280ScalaSample {
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     println("Hello, Scala world! Reading sensors.")
     val bme280  = new BME280()
     println("Device ready")

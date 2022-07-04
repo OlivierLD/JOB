@@ -2,14 +2,15 @@ plugins {
   id 'java'
   id 'scala'
   id 'idea'
-  id 'maven'
+  id 'maven-publish'
   id 'com.github.johnrengelman.shadow' version '6.0.0'  // '5.2.0'
 }
 
-compileJava.options.encoding = 'ISO-8859-1'
+compileJava.options.encoding = 'UTF-8' // ''ISO-8859-1'
 compileJava.options.compilerArgs += ["-Xlint:unchecked"]
+compileJava.options.compilerArgs += ["-Xlint:deprecation"]
 
-group = 'jhard-io'
+group = 'job-io'
 version = '0.1'
 
 tasks.withType(JavaCompile) {

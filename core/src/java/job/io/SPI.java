@@ -89,6 +89,7 @@ public class SPI {
   }
 
 
+  @SuppressWarnings("deprecation")
   protected void finalize() throws Throwable {
     try {
       close();

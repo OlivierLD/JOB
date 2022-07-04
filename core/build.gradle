@@ -1,10 +1,13 @@
+buildscript {
+  ext.scala_version = '2.13.3'
+}
 
 plugins {
   id 'java'
   id 'scala'
 //id 'kotlin'
   id 'groovy'
-  id 'maven'
+  id 'maven-publish'
   id 'com.github.johnrengelman.shadow' // version '6.0.0'
 }
 
@@ -36,8 +39,8 @@ repositories {
 }
 
 dependencies {
-  implementation 'org.scala-lang:scala-library:2.12.3'
-  implementation "org.scala-lang:scala-compiler:2.12.3"
+  implementation "org.scala-lang:scala-library:$scala_version"
+  implementation "org.scala-lang:scala-compiler:$scala_version"
   implementation 'com.typesafe.akka:akka-actor_2.11:2.3.11'
 
   implementation 'org.codehaus.groovy:groovy-all:3.0.10' // 2.4.6'
@@ -61,6 +64,13 @@ tasks.withType(JavaCompile) {
     println ">> From task $name (in $project.name), using java version ${JavaVersion.current()} "
   }
   options.encoding = 'UTF-8'
+  options.compilerArgs += ["-Xlint:unchecked"]
+  options.compilerArgs += ["-Xlint:deprecation"]
+}
+
+tasks.withType(ScalaCompile) {
+  scalaCompileOptions.additionalParameters = ["-feature", "-language:postfixOps"]
+  println ">> From task $name (in $project.name), using scala version $scala_version "
 }
 
 task runGroovyScript(type: JavaExec) {
