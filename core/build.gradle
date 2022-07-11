@@ -1,5 +1,5 @@
 buildscript {
-  ext.scala_version = '2.13.3'
+  ext.scala_version = '2.13.8'
 }
 
 plugins {
