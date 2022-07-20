@@ -61,7 +61,7 @@ See the header file `job.h`, and its corresponding implementation `job.c`.
 
 ---
 ## To build it
-You will need `javac` and `javah`.
+You will need `javac` and `javah` (for Java before version 10).
 To know if they are available, type
 ```
  $> which javac
@@ -69,6 +69,7 @@ To know if they are available, type
 ```
 > Note: `javah` has been deprecated since Java 10. Use `javac -h` instead.
 
+### For Java up to 9
 If at least one of the commands above returns nothing, then you need to update your `PATH`.
 If your `JAVA_HOME` variable is not set, set it, and update your `PATH`, as follow:
 ```
@@ -93,20 +94,33 @@ Then generate the native library:
  $> cd src/C
  $> make
 ```
-The make command invokes the `javah` utility. See the content of `Makefile`.
-By then, you should see a `libjob-io.so` library in the `C` directory.
+The `make` command invokes the `javah` utility. See the content of `Makefile`.
 
-Finally, do the `gradle` build from the project root:
+### For Java 10 and above
 ```
- $> cd ../..
- $> ../gradlew clean shadowJar
+$> javac -h src/C -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/job/io/JOBNativeInterface.java
+$> mv src/C/job_io_JOBNativeInterface.h src/C/job.h  # For compatibility with previous versions
 ```
-This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar contains all the required dependencies.
+Then generate the native library:
+```
+ $> cd src/C
+ $> make
+```
+
+### And then
+By then, you should see a `libjob-io.so` library in the `C` directory.
 
 A script _**summarizes all**_ those operations, just run
 ```
  $> ./jni.sh
 ```
+
+**Finally**, do the `gradle` build from the `core` module :
+```
+ $> ../gradlew clean shadowJar
+```
+This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar contains all the required dependencies.
+
 
 ## To run it, put it to work
 This is a work in progress... The samples can be run from a single script named `samplemenu.sh`, see how the `java.library.path` variable is set.
