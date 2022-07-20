@@ -69,6 +69,12 @@ To know if they are available, type
 ```
 > Note: `javah` has been deprecated since Java 10. Use `javac -h` instead.
 
+```
+ $> cd core
+ $> mkdir build 2> /dev/null
+ $> mkdir build/classes 2> /dev/null
+```
+
 ### For Java up to 9
 If at least one of the commands above returns nothing, then you need to update your `PATH`.
 If your `JAVA_HOME` variable is not set, set it, and update your `PATH`, as follow:
@@ -84,9 +90,6 @@ After that, the commands above should return the expected values. You can check 
 
 Compile the Java interface to the native code, from the project root:
 ```
- $> cd core
- $> mkdir build 2> /dev/null
- $> mkdir build/classes 2> /dev/null
  $> javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/job/io/JOBNativeInterface.java
 ```
 Then generate the native library:
@@ -115,7 +118,7 @@ A script _**summarizes all**_ those operations, just run
  $> ./jni.sh
 ```
 
-**Finally**, do the `gradle` build from the `core` module :
+**Finally** (for all Java versions), do the `gradle` build from the `core` module :
 ```
  $> ../gradlew clean shadowJar
 ```
