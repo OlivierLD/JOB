@@ -18,6 +18,7 @@ public class PinInterrupt {
 //  GPIO.attachInterrupt(pin, this, "buttonListener", GPIO.CHANGE); // Deprecated
         // In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
         GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonPressed, GPIO.RISING);
+        GPIO.releaseInterrupt(PinInterrupt.PIN); // Mhh ?
         GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonReleased, GPIO.FALLING);
     }
 
