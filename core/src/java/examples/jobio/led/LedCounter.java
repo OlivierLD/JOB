@@ -7,14 +7,17 @@ import java.util.Arrays;
 public class LedCounter {
   private LED[] leds;
 
-  // the Raspberry Pi has two build-in LEDs we can control
+  // the Raspberry Pi has two build-in (internal) LEDs we can control
   // led0 (green) and led1 (red)
+  private String[] available;
+
+
   public LedCounter() {
     this.setup();
   }
 
   private void setup() {
-    String[] available = LED.list();
+    available = LED.list();
     System.out.printf("Available LEDs: %s\n", String.join(", ", available));
 
     // create an object for each LED and store it in an array
@@ -30,10 +33,10 @@ public class LedCounter {
     frameCount++;
     for (int i=0; i < leds.length; i++) {
       if ((frameCount % (i + 1)) == 0) {
-        System.out.printf("Setting led %d ON\n", i);
+        System.out.printf("Setting led %d (%s) ON\n", i, available[i]);
         leds[i].brightness(1.0f);
       } else {
-        System.out.printf("Setting led %d OFF\n", i);
+        System.out.printf("Setting led %d (%s) OFF\n", i, available[i]);
         leds[i].brightness(0.0f);
       }
     }
