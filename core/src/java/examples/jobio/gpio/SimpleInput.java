@@ -8,6 +8,7 @@ import job.io.GPIO;
 public class SimpleInput {
 
   private static int pin = 27; // Physical pin #13. Override with -Dpin=12 (<- physical pin #32)
+  private final static boolean VERBOSE = "true".equals(System.getProperty("verbose"));
 
   private static boolean buttonPressed = false;
 
@@ -22,15 +23,16 @@ public class SimpleInput {
   }
 
   private void check() {
+    System.out.print(".");
     // sense the input pin
     if (GPIO.digitalRead(SimpleInput.pin) == GPIO.HIGH) {
-      if (!buttonPressed) {
-        System.out.println("High");
+      if (VERBOSE || !buttonPressed) {
+        System.out.println("\nHigh");
       }
       buttonPressed = true;
     } else {
-      if (buttonPressed) {
-        System.out.println("Low");
+      if (VERBOSE || buttonPressed) {
+        System.out.println("\nLow");
       }
       buttonPressed = false;
     }
