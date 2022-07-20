@@ -7,7 +7,7 @@ import job.io.GPIO;
  */
 public class SimpleInput {
 
-  private final int pin = 27; // Physical pin #13
+  private static int pin = 27; // Physical pin #13. Override with -Dpin=12 (<- physical 32)
 
   public SimpleInput() {
     this.setup();
@@ -28,6 +28,14 @@ public class SimpleInput {
 
   private static boolean go = true; // Global, then no need for AtomicBoolean
   public static void main(String... args) {
+
+    try {
+      pin = Integer.parseInt(System.getProperty("pin", String.valueOf(pin)));
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.err.printf("Keeping default pin value %d\n", pin);
+    }
+
     SimpleInput simpleInput = new SimpleInput();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false, "Interrupter"));
     while (go) {
