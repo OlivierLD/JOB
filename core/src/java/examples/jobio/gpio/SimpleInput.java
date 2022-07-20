@@ -7,7 +7,7 @@ import job.io.GPIO;
  */
 public class SimpleInput {
 
-  private static int pin = 27; // Physical pin #13. Override with -Dpin=12 (<- physical #32)
+  private static int pin = 27; // Physical pin #13. Override with -Dpin=12 (<- physical pin #32)
 
   private static boolean buttonPressed = false;
 
@@ -16,7 +16,9 @@ public class SimpleInput {
   }
 
   private void setup() {
-    GPIO.pinMode(this.pin, GPIO.INPUT);
+    System.out.printf("Initializing with pin #%d\n", SimpleInput.pin);
+    GPIO.pinMode(SimpleInput.pin, GPIO.INPUT);
+    System.out.printf("After setup, pin #%d is %s\n", SimpleInput.pin, GPIO.digitalRead(SimpleInput.pin) == GPIO.HIGH ? "HIGH:" : "LOW");
   }
 
   private void check() {
