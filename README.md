@@ -67,6 +67,8 @@ To know if they are available, type
  $> which javac
  $> which javah
 ```
+> Note: `javah` has been deprecated since Java 10. Use `javac -h` instead.
+
 If at least one of the commands above returns nothing, then you need to update your `PATH`.
 If your `JAVA_HOME` variable is not set, set it, and update your `PATH`, as follow:
 ```
