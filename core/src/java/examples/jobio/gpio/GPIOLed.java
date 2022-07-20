@@ -8,6 +8,7 @@ import job.io.GPIO;
 public class GPIOLed {
 
   private final int pin = 18; // Physical pin #12
+  private boolean ledIsOn = false;
 
   public GPIOLed() {
     this.setup();
@@ -27,10 +28,12 @@ public class GPIOLed {
   }
 
   private void flip() {
-    if (GPIO.digitalRead(this.pin) == GPIO.HIGH) {
+    if (this.ledIsOn) {
       GPIO.digitalWrite(this.pin, false);
+      this.ledIsOn = false;
     } else {
       GPIO.digitalWrite(this.pin, true);
+      this.ledIsOn = true;
     }
   }
 
@@ -40,7 +43,12 @@ public class GPIOLed {
     GPIOLed simpleInput = new GPIOLed();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false, "Interrupter"));
     while (go) {
-      simpleInput.check(); // Constant polling...
+      simpleInput.flip();
+      try {
+        Thread.sleep(1_000L);
+      } catch (InterruptedException ie) {
+        go = false;
+      }
     }
     System.out.println("Bye");
   }
