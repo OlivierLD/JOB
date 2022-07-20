@@ -17,14 +17,25 @@ public class PinInterrupt {
         GPIO.pinMode(PinInterrupt.PIN, GPIO.INPUT);
 //  GPIO.attachInterrupt(pin, this, "buttonListener", GPIO.CHANGE); // Deprecated
         // In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
-        GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonPressed, GPIO.RISING);
-        GPIO.releaseInterrupt(PinInterrupt.PIN); // Mhh ?
-        GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonReleased, GPIO.FALLING);
+        GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonChange, GPIO.CHANGE);
+
+//        GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonPressed, GPIO.RISING);
+//        GPIO.releaseInterrupt(PinInterrupt.PIN); // Mhh ?
+//        GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonReleased, GPIO.FALLING);
     }
 
 //  public void buttonListener(int i) {
 //    System.out.println(String.format("Interrupt! pin: %d", i));
 //  }
+
+    private void buttonChange(int i) {
+
+        if (GPIO.digitalRead(i) == GPIO.HIGH) {
+            System.out.printf("Button Changed pin: %d, -> HIGH\n", i);
+        }  else {
+            System.out.printf("Button Changed pin: %d, -> LOW\n", i);
+        }
+    }
 
     private void buttonPressed(int i) {
         System.out.printf("Button pressed pin: %d\n", i);
