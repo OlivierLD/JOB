@@ -50,6 +50,7 @@ public class GPIOLed {
         go = false;
       }
     }
+    GPIO.digitalWrite(simpleInput.pin, false); // Turn it off
     System.out.println("Bye");
   }
 }
