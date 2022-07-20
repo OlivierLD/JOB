@@ -15,10 +15,11 @@ public class LedCounter {
 
   private void setup() {
     String[] available = LED.list();
-    System.out.printf("Available: %s\n", String.join(", ", available));
+    System.out.printf("Available LEDs: %s\n", String.join(", ", available));
 
     // create an object for each LED and store it in an array
     leds = new LED[available.length];
+    // TODO A stream...
     for (int i=0; i < available.length; i++) {
       leds[i] = new LED(available[i]);
     }
@@ -29,17 +30,21 @@ public class LedCounter {
     frameCount++;
     for (int i=0; i < leds.length; i++) {
       if ((frameCount % (i + 1)) == 0) {
+        System.out.printf("Setting led %d ON\n", i);
         leds[i].brightness(1.0f);
       } else {
+        System.out.printf("Setting led %d OFF\n", i);
         leds[i].brightness(0.0f);
       }
     }
-    System.out.println(frameCount);
+    System.out.printf("FrameCount: %d\n", frameCount);
   }
 
   public void shutdown() {
+    System.out.println("Shutting down");
     // cleanup
     Arrays.stream(leds).forEach(LED::close);
+    System.out.println("Done with shutdown.");
   }
 
   public static void main(String... args) {
@@ -49,7 +54,7 @@ public class LedCounter {
 
     for (int i=0; i<10; i++) {
       ledCounter.flip();
-      try { Thread.sleep(1000L); } catch (InterruptedException ignore) {}
+      try { Thread.sleep(1_000L); } catch (InterruptedException ignore) {}
     }
     System.out.println("Bye");
   }
