@@ -23,7 +23,7 @@ public class SimpleInput {
   }
 
   private void check() {
-    System.out.print(".");
+//    System.out.print(".");
     // sense the input pin
     if (GPIO.digitalRead(SimpleInput.pin) == GPIO.HIGH) {
       if (VERBOSE || !buttonPressed) {
