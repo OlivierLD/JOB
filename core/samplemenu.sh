@@ -39,7 +39,9 @@ while [[ "${EXIT}" == "false" ]]; do
       ;;
     "2")
       echo -e "Push Button"
-      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.SimpleInput
+      EXTRA=
+      EXTRA="-Dpin=12"
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java ${EXTRA} -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.SimpleInput
       echo -en "Hit [return]"
       read a
       ;;
