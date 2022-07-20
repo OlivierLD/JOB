@@ -18,6 +18,7 @@ public class PinInterrupt {
 //  GPIO.attachInterrupt(pin, this, "buttonListener", GPIO.CHANGE); // Deprecated
         // In the line above, replace the parent and methodName with a Consumer<Integer>, and make it private.
         GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonPressed, GPIO.RISING);
+        GPIO.attachInterrupt(PinInterrupt.PIN, this::buttonReleased, GPIO.FALLING);
     }
 
 //  public void buttonListener(int i) {
@@ -28,11 +29,15 @@ public class PinInterrupt {
         System.out.printf("Button pressed pin: %d\n", i);
     }
 
+    private void buttonReleased(int i) {
+        System.out.printf("Button released pin: %d\n", i);
+    }
+
     public static void main(String... args) {
 
         try {
             PIN = Integer.parseInt(System.getProperty("pin", String.valueOf(PIN)));
-            System.out.printf("Will use pi#%d\n", PIN);
+            System.out.printf("Will use pin#%d\n", PIN);
         } catch (Exception ex) {
             ex.printStackTrace();
             System.err.printf("Keeping default pin value %d\n", PIN);
