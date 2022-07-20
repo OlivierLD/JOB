@@ -7,7 +7,7 @@ import job.io.GPIO;
  */
 public class PinInterrupt {
 
-    private static int PIN = 27; // Physical pin #13
+    private static int PIN = 27; // Physical pin #13, override with -Dpin=XX
 
     public PinInterrupt() {
         this.setup();
