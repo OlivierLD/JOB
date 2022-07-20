@@ -63,8 +63,10 @@ while [[ "${EXIT}" == "false" ]]; do
       read a
       ;;
     "5")
+      EXTRA=
+      # EXTRA="-Dpin=12"
       echo -e "GPIO Interrupt (have a push button connected on pin 27 - physical #13)"
-      sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.PinInterrupt
+      sudo NATIVEDEBUG=${NATIVEDEBUG} java ${EXTRA} -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.PinInterrupt
       echo -en "Hit [return]"
       read a
       ;;

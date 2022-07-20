@@ -7,7 +7,7 @@ import job.io.GPIO;
  */
 public class PinInterrupt {
 
-    private static final int PIN = 27; // Physical pin #13
+    private static int PIN = 27; // Physical pin #13
 
     public PinInterrupt() {
         this.setup();
@@ -29,6 +29,14 @@ public class PinInterrupt {
     }
 
     public static void main(String... args) {
+
+        try {
+            PIN = Integer.parseInt(System.getProperty("pin", String.valueOf(PIN)));
+            System.out.printf("Will use pi#%d\n", PIN);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.err.printf("Keeping default pin value %d\n", PIN);
+        }
 
         new PinInterrupt();
 
