@@ -9,6 +9,8 @@ public class SimpleInput {
 
   private static int pin = 27; // Physical pin #13. Override with -Dpin=12 (<- physical #32)
 
+  private static boolean buttonPressed = false;
+
   public SimpleInput() {
     this.setup();
   }
@@ -19,10 +21,16 @@ public class SimpleInput {
 
   private void check() {
     // sense the input pin
-    if (GPIO.digitalRead(this.pin) == GPIO.HIGH) {
-      System.out.println("High");
+    if (GPIO.digitalRead(SimpleInput.pin) == GPIO.HIGH) {
+      if (!buttonPressed) {
+        System.out.println("High");
+      }
+      buttonPressed = true;
     } else {
-      System.out.println("Low");
+      if (buttonPressed) {
+        System.out.println("Low");
+      }
+      buttonPressed = false;
     }
   }
 
@@ -39,6 +47,7 @@ public class SimpleInput {
 
     SimpleInput simpleInput = new SimpleInput();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false, "Interrupter"));
+    System.out.println("Ctrl-C to stop.");
     while (go) {
       simpleInput.check(); // Constant polling...
     }
