@@ -40,9 +40,9 @@ while [[ "${EXIT}" == "false" ]]; do
     "2")
       echo -e "Push Button"
       EXTRA=
-      EXTRA="-Dpin=12"
+      # EXTRA="-Dpin=12"
       VERBOSE=
-      VERBOSE="-Dverbose=true"
+      # VERBOSE="-Dverbose=true"
       sudo NATIVEDEBUG=${NATIVEDEBUG} java ${EXTRA} ${VERBOSE} -cp build/libs/core-0.1-all.jar -Djava.library.path=${LIB_PATH} examples.jobio.gpio.SimpleInput
       echo -en "Hit [return]"
       read a
