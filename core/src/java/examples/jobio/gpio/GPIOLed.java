@@ -41,8 +41,21 @@ public class GPIOLed {
 
   public static void main(String... args) {
     GPIOLed simpleInput = new GPIOLed();
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false, "Interrupter"));
-    while (go) {
+
+    final Thread currentThread = Thread.currentThread();
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      go = false;
+      synchronized (currentThread) {
+        try {
+          currentThread.join();
+          System.out.println("... User interrupted.");
+        } catch (InterruptedException ie) {
+          ie.printStackTrace();
+        }
+      }
+    }, "Interrupter"));
+
+    while (go) { // Flip LED every second.
       simpleInput.flip();
       try {
         Thread.sleep(1_000L);

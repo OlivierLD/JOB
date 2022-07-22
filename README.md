@@ -125,9 +125,9 @@ A script _**summarizes all**_ those operations, just run
 This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar contains all the required dependencies.
 
 
-## To run it, put it to work
+## To run it, to put it to work...
 This is a work in progress... The samples can be run from a single script named `samplemenu.sh`, see how the `java.library.path` variable is set.
-This is the one used to refer to the location of `libjavahard-io.so`.
+This is the one used to refer to the location of `libjob-io.so`.
 
 Run the script named `samplemenu.sh`:
 ```
