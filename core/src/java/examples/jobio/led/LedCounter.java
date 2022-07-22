@@ -59,6 +59,6 @@ public class LedCounter {
       ledCounter.flip();
       try { Thread.sleep(1_000L); } catch (InterruptedException ignore) {}
     }
-    System.out.println("Bye");
+    System.out.println("\nBye");
   }
 }
