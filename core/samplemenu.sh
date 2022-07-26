@@ -19,7 +19,7 @@ while [[ "${EXIT}" == "false" ]]; do
   echo -e "|  3: MCP3008 (ADC)          |  8: Servo (Direct GPIO)       |"
   echo -e "|  4: OLED SSD1306           |  9: ADS1015 (I2C ADC)         |"
   echo -e "|  5: GPIO Interrupt         | 10: PCA9685 (I2C Servos)      |"
-  echo -e "| 15: GPIO Led flip          | 11: STH10 (Pure GPIO)         |"
+  echo -e "| 15: GPIO Led/Relay flip    | 11: STH10 (Pure GPIO)         |"
   echo -e "|                            | 12: VL53L0X (I2C ToF)         |"
   echo -e "|                            | 13: TSL2561 (I2C LightSensor) |"
   echo -e "|                            | 14: HC_SR04 (GPIO RangeSensor)|"
@@ -135,7 +135,7 @@ while [[ "${EXIT}" == "false" ]]; do
       read a
       ;;
     "15")
-      echo -e "GPIO LED"
+      echo -e "GPIO LED (or relay, etc)"
       JAVA_OPTS=
       sudo NATIVEDEBUG=${NATIVEDEBUG} java -cp build/libs/core-0.1-all.jar ${JAVA_OPTS} -Djava.library.path=${LIB_PATH} examples.jobio.gpio.GPIOLed
       echo -en "Hit [return]"

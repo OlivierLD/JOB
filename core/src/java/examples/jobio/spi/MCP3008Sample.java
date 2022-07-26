@@ -20,17 +20,33 @@ import job.devices.MCP3008;
 public class MCP3008Sample {
 
   private static boolean go = true;
+  private final static int channel = 0;
 
   // Main for tests
   public static void main(String... args) {
     String[] available = SPI.list();
     System.out.printf("Available: %s\n", String.join(", ", available));
+
     MCP3008 adc = new MCP3008(SPI.list()[0]);
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> go = false, "Interrupter"));
+
+    final Thread currentThread = Thread.currentThread();
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      go = false;
+      synchronized (currentThread) {
+//                currentThread.notify(); // No thread is waiting...
+        try {
+          currentThread.join();
+          System.out.println("\n... Joining");
+        } catch (InterruptedException ie) {
+          ie.printStackTrace();
+        }
+      }
+    }, "Interrupter"));
     while (go) {
-      System.out.printf("Analog value: %.04f\n", adc.getAnalog(0));
+      System.out.printf("Analog value: %.04f\n", adc.getAnalog(channel));
     }
     adc.close();
-    System.out.println("Bye");
+    System.out.println("\nBye");
   }
 }

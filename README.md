@@ -1,6 +1,6 @@
-# JOB - *J*ava *O*n *B*oards
+# JOB - <u>J</u>ava <u>O</u>n <u>B</u>oards
 ![Java On Board](./surfing.gif)
-### An Hardware I/O library for the Raspberry PI and similar small single-board computers.
+### A Hardware I/O library for the Raspberry PI and similar small single-board computers.
 
 Deeply inspired by the work [Gottfried Haider](https://github.com/gohai/processing) (with his authorization) has done for the Raspberry PI to communicate with [Processing](http://processing.org).
 
@@ -46,8 +46,8 @@ Devices - and their pins - are considered as `Files`, and bits are sent to recei
 
 To write a Java class that communicates with `C`, you need to use the `javah` utility.
 
-To use `javah`:
-- Write a Java class, mentioning the the methods that will need to interact with `C` as `native`.
+To use `javah`, or its new equivalent `javac -h`:
+- Write a Java class, mentioning the methods that will need to interact with `C` as `native`.
 - Compile this class with `javac`.
 - Run `javah` on this compiled class
 
@@ -146,6 +146,8 @@ Run the script named `samplemenu.sh`:
    You choose >
 
 ```
+> _Note_: The menu above is a work in progress, you might see more options...
+
 Make sure the required devices are correctly wired for the demos.
 
 ## Compatibility
@@ -165,7 +167,7 @@ Then to run it:
 ```
  $> export LIB_PATH="src/C"
  $> scala -cp ./build/libs/core-0.1-all.jar:./build/classes -Djava.library.path=$LIB_PATH i2c.BME280ScalaSample
- Hello, Scala world! Reading sensors.
+ Hello, Scala world! Reading sensors (BME280).
  Device ready
  Temp:20.4 ºC, Press:1015.6 hPa, Hum:64.0 %
  $>
@@ -192,7 +194,7 @@ On a Raspberry PI, after using `SDKMan` to install `groovy`, `GROOVY_HOME` would
  $> cd src/groovy
  $> groovy SensorReader
  ==================
- Now running some RPi stuff from Groovy
+ Now running some RPi stuff from Groovy (BME280)
  ==================
  Temperature: 21.32 C
  Pressure   : 1015.65 hPa
@@ -204,7 +206,7 @@ After setting `GROOVY_HOME` and `CLASSPATH`, you can also run the script from th
 ```
  $> groovy src/main/SensorReader
  ==================
- Now running some RPi stuff from Groovy
+ Now running some RPi stuff from Groovy (BME280)
  ==================
  Temperature: 21.32 C
  Pressure   : 1015.65 hPa

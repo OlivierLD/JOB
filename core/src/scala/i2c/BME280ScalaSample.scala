@@ -11,7 +11,7 @@ import job.devices.BME280
  */
 object BME280ScalaSample {
   def main(args: Array[String]): Unit = {
-    println("Hello, Scala world! Reading sensors.")
+    println("Hello, Scala world! Reading sensors (BME280).")
     val bme280  = new BME280()
     println("Device ready")
     try {

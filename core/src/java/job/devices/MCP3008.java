@@ -7,6 +7,7 @@ import job.io.SPI;
 // datasheet: http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf
 
 /*
+ * Master is the Raspberry Pi, MCP3008n is the slave.
  * Wiring of the MCP3008-SPI (without power supply):
  * +---------++---------------------------------------------+
  * | MCP3008 || Raspberry PI                                |
@@ -14,10 +15,12 @@ import job.io.SPI;
  * |         || Pin# | Name       | GPIO    | wiringPI/PI4J |
  * +---------++------+------------+---------+---------------+
  * | CLK     ||  #23 | SPI0_CLK   | GPIO_11 |  14           |
- * | Din     ||  #21 | SPI0_MISO  | GPIO_9  |  13           |
- * | Dout    ||  #19 | SPI0_MOSI  | GPIO_10 |  12           |
+ * | Dout    ||  #21 | SPI0_MISO  | GPIO_9  |  13           |
+ * | Din     ||  #19 | SPI0_MOSI  | GPIO_10 |  12           |
  * | CS      ||  #24 | SPI0_CE0_N | GPIO_8  |  10           |
  * +---------++------+------------+---------+---------------+
+ *
+ * TODO: How to change the pins wiring?
  */
 
 public class MCP3008 extends SPI {

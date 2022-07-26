@@ -2,7 +2,7 @@ import job.devices.BME280
 import java.text.NumberFormat
 import java.text.DecimalFormat
 
-println "==================\nNow running some RPi stuff from Groovy\n=================="
+println "==================\nNow running some RPi stuff from Groovy (BME280)\n=================="
 
 try {
     BME280 bme280 = new BME280()
