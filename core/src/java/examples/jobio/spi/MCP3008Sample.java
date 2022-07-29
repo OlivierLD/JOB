@@ -24,6 +24,7 @@ public class MCP3008Sample {
 
   // Main for tests
   public static void main(String... args) {
+    System.out.println("Listing SPI devices...");
     String[] available = SPI.list();
     System.out.printf("Available: %s\n", String.join(", ", available));
 
