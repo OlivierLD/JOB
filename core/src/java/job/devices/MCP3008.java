@@ -7,7 +7,7 @@ import job.io.SPI;
 // datasheet: http://ww1.microchip.com/downloads/en/DeviceDoc/21295d.pdf
 
 /*
- * Master is the Raspberry Pi, MCP3008n is the slave.
+ * Master is the Raspberry Pi, MCP3008 is the slave.
  * Wiring of the MCP3008-SPI (without power supply):
  * +---------++---------------------------------------------+
  * | MCP3008 || Raspberry PI                                |
