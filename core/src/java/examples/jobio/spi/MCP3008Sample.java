@@ -36,7 +36,7 @@ public class MCP3008Sample {
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       go = false;
       synchronized (currentThread) {
-//                currentThread.notify(); // No thread is waiting...
+//      currentThread.notify(); // No thread is waiting...
         try {
           currentThread.join();
           System.out.println("\n... Joining");
