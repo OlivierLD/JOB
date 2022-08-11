@@ -46,14 +46,17 @@ Seems to work (as is) on 32 and 64 bits OSs (Raspberry Pi)
 The low level interactions with the pins of the GPIO Header have to be done at the system level, they have to be performed in `C`.
 Devices - and their pins - are considered as `Files`, and bits are sent to received from the devices through `ioctl` or similar `C` functions.
 
-To write a Java class that communicates with `C`, you need to use the `javah` utility.
+To write a Java class that communicates with `C`, you need to use the `javah` (or `javac -h`) utility.
 
 To use `javah`, or its new equivalent `javac -h`:
 - Write a Java class, mentioning the methods that will need to interact with `C` as `native`.
-- Compile this class with `javac`.
-- Run `javah` on this compiled class
+- Up to Java 9
+  - Compile this class with `javac`.
+  - Run `javah` on this compiled class
+- With Java 10 and higher
+  - Run `javac -h`
 
-`javah` will generate the `C` header file with the signatures of the `C` functions to implement. All you need to do is to implement them in a `C` file.
+`javah` (or `javac -h`) will generate the `C` header file with the signatures of the `C` functions to implement. All you need to do is to implement them in a `C` file.
 This `C` file will be compiled into a system library (with an `.so` extension), that will be dynamically loaded by Java at run time.
 
 Below are the detailed steps of the process.
@@ -115,6 +118,7 @@ Then generate the native library:
 ### And then
 By then, you should see a `libjob-io.so` library in the `C` directory.
 
+## Take it easy
 A script _**summarizes all**_ those operations, just run
 ```
  $> ./jni.sh
@@ -125,7 +129,6 @@ A script _**summarizes all**_ those operations, just run
  $> ../gradlew clean shadowJar
 ```
 This generates a `core-0.1-all.jar` in the `build/libs` directory. This jar contains all the required dependencies.
-
 
 ## To run it, to put it to work...
 This is a work in progress... The samples can be run from a single script named `samplemenu.sh`, see how the `java.library.path` variable is set.
@@ -246,7 +249,7 @@ groovy:000> sensor.readTemperature()
 groovy:000>
 ```
 
-## Available device implementations
+## Available device (sensors and actuators) implementations
 - SSD1306 (128x32 I<sup><small>2</small></sup>C oled screen).
 - GPIO push-button (with interrupt, or not)
 - BMP180 (I<sup><small>2</small></sup>C Pressure, temperature (=> altitude))
@@ -265,6 +268,7 @@ A lot!
 - HTU21DF (I<sup><small>2</small></sup>C Temperature, Humidity)
 - HC-SR04 (Ultra sonic Range Sensor)
 - LoRa
+- Stepper motors drivers
 - ...etc
 
 ---

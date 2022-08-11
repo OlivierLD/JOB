@@ -9,7 +9,7 @@ mkdir build/classes 2> /dev/null
 #
 JAVA_MAJOR_VERSION=$(java -version 2>&1 | sed -E -n 's/.* version "([^.-]*).*"/\1/p' | awk '{ print $1 }')
 if [[ $JAVA_MAJOR_VERSION -le 9 ]]; then
-  # For Java 8
+  # For Java 8, 9
   echo -e ">> Compiling Java"
   javac -sourcepath ./src/java -d ./build/classes -classpath ./build/classes -g ./src/java/job/io/JOBNativeInterface.java
   echo -e ">> Running javah"
