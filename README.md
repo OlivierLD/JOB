@@ -10,6 +10,8 @@ This should make the translations from `Python` or `C` code into `Java` a bit ea
 
 Based at least on Java 8 (uses lambdas, Streaming API, FunctionalInterfaces, etc).
 
+Seems to work (as is) on 32 and 64 bits OSs (Raspberry Pi)
+
 > _Note_: GPIO Pin numbers are the ones available [here](https://www.raspberrypi.org/documentation/usage/gpio/README.md), or below, in the BCM columns.
 ```
        +-----+-----+--------------+-----++-----+--------------+-----+-----+
