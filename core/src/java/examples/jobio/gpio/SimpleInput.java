@@ -7,7 +7,7 @@ import job.io.GPIO;
  */
 public class SimpleInput {
 
-  private static int pin = 27; // Physical pin #13. Override with -Dpin=12 (<- physical pin #32)
+  private static int pin = 27; // GPIO 27. Physical pin #13. Override with -Dpin=12 (<- physical pin #32)
   private final static boolean VERBOSE = "true".equals(System.getProperty("verbose"));
 
   private static boolean buttonPressed = false;
@@ -43,7 +43,7 @@ public class SimpleInput {
 
     try {
       pin = Integer.parseInt(System.getProperty("pin", String.valueOf(pin)));
-      System.out.printf("Will use pi#%d\n", pin);
+      System.out.printf("Will use pin#%d\n", pin);
     } catch (Exception ex) {
       ex.printStackTrace();
       System.err.printf("Keeping default pin value %d\n", pin);
